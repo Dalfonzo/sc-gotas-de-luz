@@ -1,9 +1,9 @@
 import { Box, Flex, Icon, Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import { Separator } from 'components/Separator/Separator'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { RoutesI } from 'shared/types'
+import { RoutesI } from '~/common/types'
+import Separator from '~/components/admin/separator'
 
 const SidebarContent = ({ routes }: { routes: RoutesI[] }) => {
   const router = useRouter()

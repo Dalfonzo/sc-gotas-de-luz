@@ -14,11 +14,10 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Separator } from 'components/Separator/Separator'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { RoutesI } from 'shared/types'
+import { RoutesI } from '~/common/types'
+import Separator from '~/components/admin/separator'
 
 export default function SidebarResponsive({ routes }: { routes: RoutesI[] }) {
   const router = useRouter()

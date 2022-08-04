@@ -1,6 +1,6 @@
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
-import routes from 'shared/routes'
+import routes from '~/common/routes'
 import SidebarContent from './SidebarContent'
 
 function Sidebar() {
