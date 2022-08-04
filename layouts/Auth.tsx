@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import Footer from 'components/Footer/Footer'
+import Footer from '~/components/admin/footer/Footer'
 import React from 'react'
 
 export default function Auth({ children }: { children: React.ReactNode }) {

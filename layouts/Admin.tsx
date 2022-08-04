@@ -1,12 +1,12 @@
 import { Portal, useDisclosure } from '@chakra-ui/react'
-import Footer from 'components/Footer/Footer'
-import AdminNavbar from 'components/Navbars/AdminNavbar'
-import Sidebar from 'components/Sidebar'
 import { useRouter } from 'next/router'
 import React from 'react'
-import MainPanel from '../components/Layout/MainPanel'
-import PanelContainer from '../components/Layout/PanelContainer'
-import PanelContent from '../components/Layout/PanelContent'
+import Footer from '~/components/admin/footer/Footer'
+import AdminNavbar from '~/components/admin/navbars/AdminNavbar'
+import Sidebar from '~/components/admin/sidebar'
+import MainPanel from '../components/admin/layout/MainPanel'
+import PanelContainer from '../components/admin/layout/PanelContainer'
+import PanelContent from '../components/admin/layout/PanelContent'
 
 export default function Admin({ children }: { children: React.ReactNode }) {
   const { onOpen } = useDisclosure()

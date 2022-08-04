@@ -1,7 +1,6 @@
 import { Flex, HTMLChakraProps, ThemingProps } from '@chakra-ui/react'
-import React from 'react'
 
-export function Separator(props: HTMLChakraProps<any> & ThemingProps) {
+const Separator = (props: HTMLChakraProps<any> & ThemingProps) => {
   const { children, ...rest } = props
 
   return (
@@ -15,3 +14,5 @@ export function Separator(props: HTMLChakraProps<any> & ThemingProps) {
     </Flex>
   )
 }
+
+export default Separator
