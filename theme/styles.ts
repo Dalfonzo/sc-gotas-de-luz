@@ -1,5 +1,3 @@
-import { mode } from '@chakra-ui/theme-tools'
-
 export const globalStyles = {
   colors: {
     gray: {
@@ -7,14 +5,20 @@ export const globalStyles = {
     },
   },
   styles: {
-    global: (props: any) => ({
+    global: {
+      '*': {
+        boxSizing: 'border-box',
+        fontFamily: 'inter',
+      },
       body: {
-        bg: mode('gray.50', 'gray.800')(props),
-        fontFamily: 'Helvetica, sans-serif',
+        padding: '0',
+        margin: '0',
+        fontFamily: 'inter, sans-serif',
       },
-      html: {
-        fontFamily: 'Helvetica, sans-serif',
+      a: {
+        color: 'inherit',
+        textDecoration: 'none',
       },
-    }),
+    },
   },
 }
