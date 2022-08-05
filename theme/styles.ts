@@ -14,7 +14,7 @@ export const globalStyles = {
         padding: '0',
         margin: '0',
         fontFamily: 'inter, sans-serif',
-        color: 'text.dark',
+        color: 'text.light',
       },
       a: {
         color: 'inherit',
