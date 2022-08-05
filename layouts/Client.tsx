@@ -1,6 +1,6 @@
 import React from 'react'
-import Footer from '~/components/client/footer'
-import Header from '~/components/client/header'
+import Footer from '~/components/client/common/footer'
+import Header from '~/components/client/common/header'
 
 const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   return (
