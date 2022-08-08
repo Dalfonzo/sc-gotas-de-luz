@@ -32,7 +32,7 @@ const Text = {
     normal: {
       fontWeight: '400',
       fontSize: '18px',
-      lineHeight: '1.5',
+      lineHeight: '200%',
       color: 'text.light',
     },
   },

@@ -8,6 +8,7 @@ import { PanelContentComponent } from './additions/layout/PanelContent'
 import { badgeStyles } from './components/badge'
 import { buttonStyles } from './components/button'
 import { drawerStyles } from './components/drawer'
+import { Form } from './components/form'
 import { linkStyles } from './components/link'
 import { TextComponent } from './components/text'
 import { breakpoints } from './foundations/breakpoints'
@@ -26,5 +27,6 @@ export default extendTheme(
   CardHeaderComponent,
   MainPanelComponent,
   PanelContentComponent,
-  PanelContainerComponent
+  PanelContainerComponent,
+  Form
 )
