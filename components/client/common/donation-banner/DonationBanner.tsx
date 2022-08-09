@@ -3,7 +3,15 @@ import LinkButton from '~/components/client/common/link-button'
 
 const DonationBanner = () => {
   return (
-    <Box padding="2rem" background="yellow" maxW="7xl" margin="auto" borderRadius="5px" display="flex" marginTop="4rem">
+    <Box
+      padding="2rem"
+      background="yellow"
+      maxW="7xl"
+      margin="auto"
+      borderRadius="5px"
+      display="flex"
+      marginTop="14rem"
+    >
       <Box width="50%">
         <Text as="h2" variant="subtitle-no-decoration" marginBottom="2rem">
           Súmate a la movida y <br />

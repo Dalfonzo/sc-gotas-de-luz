@@ -20,6 +20,9 @@ const Header = () => {
             <li>
               <Link href="/events">Eventos</Link>
             </li>
+            <Box as="li" color="aqua.light">
+              <Link href="/donate">Donaciones</Link>
+            </Box>
           </Flex>
         </Box>
       </Box>
