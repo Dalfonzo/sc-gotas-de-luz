@@ -11,11 +11,9 @@ import { drawerStyles } from './components/drawer'
 import { Form } from './components/form'
 import { linkStyles } from './components/link'
 import { TextComponent } from './components/text'
-import { breakpoints } from './foundations/breakpoints'
 import { globalStyles } from './styles'
 
 export default extendTheme(
-  { breakpoints },
   TextComponent,
   globalStyles,
   buttonStyles,
