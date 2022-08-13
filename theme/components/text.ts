@@ -1,14 +1,16 @@
+import { responsiveProperty } from '~/theme/utils'
+
 const Text = {
   variants: {
     title: {
       fontWeight: 'bold',
-      fontSize: '72px',
+      fontSize: responsiveProperty({ mobileSize: 25, desktopSize: 72 }),
       color: 'text.dark',
       lineHeight: 1.2,
     },
     subtitle: {
       fontWeight: 'bold',
-      fontSize: '45px',
+      fontSize: responsiveProperty({ mobileSize: 20, desktopSize: 45 }),
       color: 'text.dark',
       position: 'relative',
       lineHeight: 1.2,
@@ -25,13 +27,13 @@ const Text = {
     },
     'subtitle-no-decoration': {
       fontWeight: 'bold',
-      fontSize: '45px',
+      fontSize: responsiveProperty({ mobileSize: 20, desktopSize: 45 }),
       color: 'text.dark',
       lineHeight: 1.2,
     },
     normal: {
       fontWeight: '400',
-      fontSize: '18px',
+      fontSize: responsiveProperty({ mobileSize: 12, desktopSize: 18 }),
       lineHeight: '200%',
       color: 'text.light',
     },
