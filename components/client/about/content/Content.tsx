@@ -2,7 +2,12 @@ import { Grid, GridItem, Text } from '@chakra-ui/react'
 
 const Content = () => {
   return (
-    <Grid templateColumns="repeat(2,1fr)" templateRows="repeat(2,1fr)" columnGap="1rem" as="section">
+    <Grid
+      templateColumns={{ base: 'repeat(1,1fr)', md: 'repeat(2,1fr)' }}
+      templateRows={{ base: 'repeat(3,max-content)', md: 'repeat(2,1fr)' }}
+      columnGap="1rem"
+      as="section"
+    >
       <GridItem padding="3rem">
         <Text as="h2" variant="subtitle">
           Misión
@@ -12,7 +17,7 @@ const Content = () => {
           vida de la población, instituciones y centros de cuidados menos favorecidos.
         </Text>
       </GridItem>
-      <GridItem gridRow="span 2" padding="3rem" backgroundColor="#F9F9F9">
+      <GridItem gridRow={{ base: '2', md: 'span 2' }} padding="3rem" backgroundColor="#F9F9F9">
         <Text as="h2" variant="subtitle">
           Trayectoria
         </Text>
