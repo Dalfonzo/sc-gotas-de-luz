@@ -27,14 +27,14 @@ const Hero = () => {
             variant="title"
             marginBottom={responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' })}
             textAlign={{ base: 'center', sm: 'unset' }}
-            width={{ base: '90%', sm: '100%' }}
+            width={{ base: '95%', sm: '100%' }}
           >
             Iluminando momentos para generar vida
           </Text>
           <Text
             variant="normal"
             width={responsiveProperty({ mobileSize: 85, desktopSize: 60, unit: '%' })}
-            fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 25 })}
+            fontSize={responsiveProperty({ mobileSize: 13, desktopSize: 25 })}
             marginBottom={responsiveProperty({ mobileSize: 1, desktopSize: 2.5, unit: 'rem' })}
             textAlign={{ base: 'center', sm: 'unset' }}
           >

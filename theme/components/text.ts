@@ -4,13 +4,13 @@ const Text = {
   variants: {
     title: {
       fontWeight: 'bold',
-      fontSize: responsiveProperty({ mobileSize: 25, desktopSize: 72 }),
+      fontSize: responsiveProperty({ mobileSize: 22, desktopSize: 72 }),
       color: 'text.dark',
       lineHeight: 1.2,
     },
     subtitle: {
       fontWeight: 'bold',
-      fontSize: responsiveProperty({ mobileSize: 20, desktopSize: 45 }),
+      fontSize: responsiveProperty({ mobileSize: 18, desktopSize: 45 }),
       color: 'text.dark',
       position: 'relative',
       lineHeight: 1.2,
@@ -27,7 +27,7 @@ const Text = {
     },
     'subtitle-no-decoration': {
       fontWeight: 'bold',
-      fontSize: responsiveProperty({ mobileSize: 20, desktopSize: 45 }),
+      fontSize: responsiveProperty({ mobileSize: 18, desktopSize: 45 }),
       color: 'text.dark',
       lineHeight: 1.2,
     },
