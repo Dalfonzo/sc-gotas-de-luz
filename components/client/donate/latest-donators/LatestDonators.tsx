@@ -1,15 +1,21 @@
 import { Box, Button, Image, Text } from '@chakra-ui/react'
+import { responsiveProperty } from '~/theme/utils'
 import DonatorCard from './DonatorCard'
 
 const LatestDonators = () => {
   return (
-    <Box as="section">
-      <Box display="flex" alignItems="center">
-        <Box width="40%">
+    <Box as="section" px="1rem">
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap={{ base: '2rem', md: '3rem', lg: '4rem' }}
+      >
+        <Box width={{ base: '100%', lg: '40%' }} alignSelf={{ base: 'flex-start', lg: 'unset' }}>
           <Text variant="subtitle" as="h2">
             Nuestros últimos benefactores
           </Text>
-          <Text variant="normal" marginTop="2rem">
+          <Text variant="normal" marginTop={responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' })}>
             ¡Gracias a todos los que hacen esto posible!
           </Text>
         </Box>
@@ -18,7 +24,7 @@ const LatestDonators = () => {
           display="flex"
           flexDirection="column"
           gap="1.5rem"
-          marginLeft="auto"
+          marginLeft={{ base: 'unset', sm: '130px', lg: 'auto' }}
           position="relative"
         >
           <Image
@@ -27,11 +33,12 @@ const LatestDonators = () => {
             position="absolute"
             top="50%"
             transform="translateY(-50%)"
-            left="-30%"
+            left={responsiveProperty({ mobileSize: -40, desktopSize: -30, unit: '%' })}
+            display={{ base: 'none', sm: 'unset' }}
           />
-          <DonatorCard marginLeft="-2rem" />
+          <DonatorCard marginLeft={{ base: 'unset', sm: '-2rem' }} />
           <DonatorCard />
-          <DonatorCard marginLeft="-5rem" />
+          <DonatorCard marginLeft={{ base: 'unset', sm: '-5rem' }} />
         </Box>
       </Box>
       <Button
@@ -40,7 +47,7 @@ const LatestDonators = () => {
         margin="auto"
         variant="btn-white-border"
         color="aqua.light"
-        marginTop="4rem"
+        marginTop={{ base: '2rem', sm: '3rem', md: '4rem' }}
       >
         Ver todos
       </Button>

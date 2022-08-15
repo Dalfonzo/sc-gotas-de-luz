@@ -1,8 +1,15 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
+import { responsiveProperty } from '~/theme/utils'
 
 const DonatorCard = (props: BoxProps) => {
   return (
-    <Box padding="2rem" boxShadow=" 0px 0px 20px 0px #0000001A" borderRadius="5px" maxW="450px" {...props}>
+    <Box
+      padding={responsiveProperty({ mobileSize: 1, desktopSize: 2, unit: 'rem' })}
+      boxShadow=" 0px 0px 20px 0px #0000001A"
+      borderRadius="5px"
+      maxW={responsiveProperty({ mobileSize: 300, desktopSize: 450 })}
+      {...props}
+    >
       <Box display="flex" alignItems="center" marginBottom="1rem">
         <Box
           borderRadius="50%"
@@ -10,7 +17,7 @@ const DonatorCard = (props: BoxProps) => {
           display="inline-block"
           height="3em"
           width="3em"
-          fontSize="18px"
+          fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 18 })}
           position="relative"
         >
           <Text
@@ -24,14 +31,24 @@ const DonatorCard = (props: BoxProps) => {
             LP
           </Text>
         </Box>
-        <Text marginLeft="25px" fontSize="18px" fontWeight="bold" color="text.dark">
+        <Text
+          marginLeft="25px"
+          fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 18 })}
+          fontWeight="bold"
+          color="text.dark"
+        >
           Lester Peñaloza
         </Text>
-        <Text marginLeft="auto" fontSize="25px" color="aqua.light" fontWeight="bold">
+        <Text
+          marginLeft="auto"
+          fontSize={responsiveProperty({ mobileSize: 16, desktopSize: 25 })}
+          color="aqua.light"
+          fontWeight="bold"
+        >
           20$
         </Text>
       </Box>
-      <Text>“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</Text>
+      <Text variant="normal">“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</Text>
     </Box>
   )
 }
