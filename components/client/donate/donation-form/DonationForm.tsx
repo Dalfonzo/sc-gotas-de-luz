@@ -5,7 +5,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -15,6 +14,7 @@ import {
 import { isDate, parse } from 'date-fns'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { responsiveProperty } from '~/theme/utils'
 
 const DonationForm = () => {
   const formik = useFormik({
@@ -46,8 +46,14 @@ const DonationForm = () => {
   })
 
   return (
-    <Box as="section">
-      <Text variant="subtitle" as="h2" margin="6rem 0 2rem 0">
+    <Box as="section" px="1rem">
+      <Text
+        variant="subtitle"
+        as="h2"
+        mx="0"
+        marginTop={responsiveProperty({ mobileSize: 2, desktopSize: 6, unit: 'rem' })}
+        marginBottom="2rem"
+      >
         ¡Aparece aquí!
       </Text>
       <Text variant="normal" my="2rem">
@@ -72,11 +78,12 @@ const DonationForm = () => {
               <FormErrorMessage>{formik.errors.last_name}</FormErrorMessage>
             )}
           </FormControl>
-          <HStack alignItems="flex-start">
+          <Box alignItems="flex-start" display="flex" flexDir={{ base: 'column', md: 'row' }} gap={{ base: 6, md: 3 }}>
             <FormControl
               variant="floating"
               isRequired
               isInvalid={Boolean(formik.errors.id_number && formik.touched.id_number)}
+              // marginLeft={{ base: 0, md: '0.5rem' }}
             >
               <Input
                 placeholder=" "
@@ -94,6 +101,7 @@ const DonationForm = () => {
               variant="floating"
               isRequired
               isInvalid={Boolean(formik.errors.donation_date && formik.touched.donation_date)}
+              // marginLeft={{ base: 0, md: '0.5rem' }}
             >
               <Input
                 placeholder=" "
@@ -111,6 +119,7 @@ const DonationForm = () => {
               variant="floating"
               isRequired
               isInvalid={Boolean(formik.errors.amount && formik.touched.amount)}
+              // marginLeft={{ base: 0, md: '0.5rem' }}
             >
               <InputGroup alignItems="center">
                 <InputRightElement pointerEvents="none" fontSize="1.2em" top="unset">
@@ -129,7 +138,7 @@ const DonationForm = () => {
                 <FormErrorMessage>{formik.errors.amount}</FormErrorMessage>
               )}
             </FormControl>
-          </HStack>
+          </Box>
           <FormControl
             variant="floating"
             isRequired

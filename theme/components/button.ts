@@ -6,7 +6,7 @@ const commonBtnStyles = {
   paddingBottom: responsiveProperty({ mobileSize: 0.5, desktopSize: 1, unit: 'rem' }),
   paddingLeft: responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' }),
   paddingRight: responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' }),
-  fontSize: responsiveProperty({ mobileSize: 14, desktopSize: 18, unit: 'px' }),
+  fontSize: responsiveProperty({ mobileSize: 12, desktopSize: 18, unit: 'px' }),
   display: 'inline-block',
   borderRadius: '5px',
   height: 'unset',
