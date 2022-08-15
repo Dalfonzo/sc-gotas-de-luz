@@ -1,8 +1,9 @@
 import { Box, Text } from '@chakra-ui/react'
+import { responsiveProperty } from '~/theme/utils'
 
 const Heading = () => {
   return (
-    <Box my="7rem" as="section">
+    <Box my={responsiveProperty({ desktopSize: 7, mobileSize: 2, unit: 'rem' })} as="section">
       <Text as="h1" variant="title" marginBottom="4rem" textAlign="center">
         Acerca de nosotros
       </Text>
