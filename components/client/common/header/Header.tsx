@@ -10,6 +10,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import { useEffect } from 'react'
 import { BiMenuAltRight } from 'react-icons/bi'
 import NavLinks from './NavLinks'
@@ -31,7 +32,9 @@ const Header = () => {
   return (
     <Box as="header">
       <Box maxW="7xl" margin="auto" display="flex" justifyContent="space-between" alignItems="center" padding="16px">
-        <Image src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
+        <Link href="/">
+          <Image src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
+        </Link>
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
         <Icon
           as={BiMenuAltRight}
