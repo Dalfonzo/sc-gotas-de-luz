@@ -43,6 +43,7 @@ const Footer = () => {
               <ListItem>Dona</ListItem>
               <ListItem>Voluntariado</ListItem>
               <ListItem>Eventos</ListItem>
+              <ListItem>Novedades</ListItem>
             </List>
             <List spacing="0.5rem">
               <Box
