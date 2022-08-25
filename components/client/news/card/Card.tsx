@@ -1,9 +1,12 @@
+import { TimeIcon } from '@chakra-ui/icons'
 import { Box, Image, Text } from '@chakra-ui/react'
+import { formatDistanceToNow } from 'date-fns'
+import { es } from 'date-fns/locale'
 import Link from 'next/link'
 import { responsiveProperty } from '~/theme/utils'
 import CardI from './CardI'
 
-const NewsCard = ({ imgSrc, title, content, date, id, ...rest }: CardI) => {
+const NewsCard = ({ img, title, content, date, id, ...rest }: CardI) => {
   const padding = responsiveProperty({ mobileSize: 1, desktopSize: 2, unit: 'rem' })
   const link = '/news/' + id
   return (
@@ -27,7 +30,7 @@ const NewsCard = ({ imgSrc, title, content, date, id, ...rest }: CardI) => {
         <Link href={link}>
           <Image
             paddingX={responsiveProperty({ mobileSize: -1, desktopSize: -2, unit: 'rem' })}
-            src={imgSrc}
+            src={img}
             width="100%"
             alt=""
             marginBottom="1rem"
@@ -35,7 +38,8 @@ const NewsCard = ({ imgSrc, title, content, date, id, ...rest }: CardI) => {
           />
         </Link>
         <Text paddingX={padding} fontWeight="thin" fontSize="sm" marginBottom="1rem">
-          {date}
+          <TimeIcon /> &nbsp;
+          {formatDistanceToNow(date, { locale: es, addSuffix: true })}
         </Text>
         <Text paddingX={padding} noOfLines={4} variant="normal">
           {content}

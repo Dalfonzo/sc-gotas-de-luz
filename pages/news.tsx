@@ -1,10 +1,14 @@
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
-import News from '~/components/client/news/content/News'
+import NewsList from '~/components/client/news/card/List'
 import Heading from '~/components/client/news/heading/Heading'
 import ClientLayout from '~/layouts/Client'
-
-const NewsPage = () => {
+import { NewsI } from '~/lib/models/news'
+import prisma from '~/lib/prisma'
+interface Props {
+  news: NewsI[]
+}
+const NewsPage = ({ news }: Props) => {
   return (
     <ClientLayout>
       <Head>
@@ -14,10 +18,17 @@ const NewsPage = () => {
       </Head>
       <Box>
         <Heading />
-        <News />
+        <NewsList news={news} />
       </Box>
     </ClientLayout>
   )
+}
+
+export async function getStaticProps() {
+  const news = await prisma.news.findMany()
+  return {
+    props: { news },
+  }
 }
 
 export default NewsPage
