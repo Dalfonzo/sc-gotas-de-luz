@@ -5,7 +5,7 @@ const Heading = () => {
   return (
     <Box my={responsiveProperty({ desktopSize: 7, mobileSize: 2, unit: 'rem' })} as="section">
       <Text as="h1" variant="title" marginBottom="4rem" textAlign="center">
-        Noticias
+        Eventos
       </Text>
       <Text variant="normal" px="2rem">
         Labore ea Lorem cillum laborum sint duis esse enim adipisicing adipisicing non. Laborum anim ullamco amet aute
