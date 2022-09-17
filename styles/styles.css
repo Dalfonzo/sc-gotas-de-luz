@@ -7,3 +7,9 @@
 .fade:hover {
   opacity: 0.4;
 }
+@media screen and (max-width: 900px) {
+  .rbc-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+}

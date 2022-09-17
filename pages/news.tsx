@@ -24,8 +24,8 @@ const NewsPage = ({ news }: Props) => {
   )
 }
 
-export async function getStaticProps() {
-  const news = await prisma.news.findMany()
+export async function getServerSideProps() {
+  const news = await prisma.news.findMany({ orderBy: { date: 'desc' } })
   return {
     props: { news },
   }

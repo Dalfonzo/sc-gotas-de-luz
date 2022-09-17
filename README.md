@@ -2,7 +2,21 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies:
+
+```bash
+yarn install
+```
+
+### 2. Setup config:
+
+    1. Create `.env`
+    2. Create database (no need to create tables manually), then run migrations
+    ```bash
+    npx prisma migrate dev --name init
+    ```
+
+### 3. Run the development server:
 
 ```bash
 npm run dev
