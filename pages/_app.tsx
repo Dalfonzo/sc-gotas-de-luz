@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
+
 import type { AppProps } from 'next/app'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import theme from 'theme/theme'

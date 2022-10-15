@@ -33,7 +33,7 @@ const Header = () => {
     <Box as="header">
       <Box maxW="7xl" margin="auto" display="flex" justifyContent="space-between" alignItems="center" padding="16px">
         <Link href="/">
-          <Image src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
+          <Image cursor="pointer" src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
         </Link>
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
         <Icon
