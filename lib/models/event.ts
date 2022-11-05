@@ -1,8 +1,8 @@
-export interface EventI {
+import { DateRange } from './common'
+
+export interface EventI extends DateRange {
   id: number
   title: string
   description?: string
-  link?: string
-  start: Date
-  end: Date
+  img?: string
 }

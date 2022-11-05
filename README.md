@@ -16,6 +16,11 @@ yarn install
     npx prisma migrate dev --name init
     ```
 
+    On changes to `schema.prisma`
+    ```bash
+    npx prisma generate
+    ```
+
 ### 3. Run the development server:
 
 ```bash

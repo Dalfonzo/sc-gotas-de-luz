@@ -17,3 +17,12 @@ model News{
   img String
   date DateTime @default(now())
 }
+
+model Event {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  start DateTime
+  end DateTime
+  img  String 
+}

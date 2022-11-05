@@ -1,32 +1,47 @@
-import { TimeIcon } from '@chakra-ui/icons'
-import { Box, Center, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Icon, IconButton, Image, Text } from '@chakra-ui/react'
 import { compareAsc, format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import BasicModal, { CommonModalProps } from '~/components/common/Modal'
 import { EventI } from '~/lib/models/event'
-import LinkButton from '../../common/link-button'
 
 interface Props extends Omit<CommonModalProps, 'body' | 'title'> {
   event: EventI
 }
 function formatDate(date: Date) {
-  return format(date, `d 'de' MMMM`, { locale: es })
+  return format(date, `d 'de' MMMM hh:mmaaa`, { locale: es })
 }
 export default function EventModal({ event, onClose, visible }: Props) {
   const eventBody = (
     <Box>
-      <Text mb="3" fontSize="sm">
-        <TimeIcon />{' '}
-        {compareAsc(event.end, event.start)
-          ? `${formatDate(event.start)} al ${formatDate(event.end)}`
-          : `${formatDate(event.start)}`}
+      <Flex mb="3" justify="space-between">
+        {/* <TimeIcon /> */}{' '}
+        <Text fontSize="sm">
+          <b>Inicia: </b>
+          {formatDate(event.start)}
+        </Text>
+        {compareAsc(event.end, event.start) > 0 && (
+          <Text fontSize="sm">
+            <b>Hasta:</b> {formatDate(event.end)}
+          </Text>
+        )}
+      </Flex>
+
+      {event.img && <Image mb="3" src={event.img} alt="" width="100%" fit="cover" height="12rem" />}
+      <Text mb="3" textAlign="justify">
+        {event.description}
       </Text>
-      <Text textAlign="justify">{event.description}</Text>
-      {event.link && (
-        <Center width="100%">
-          <LinkButton variant="lnk-btn-white" mt="5" content="Ver más" href={event.link} />
-        </Center>
-      )}
+      <Text textAlign="right" fontSize="sm">
+        Para más detalles, contáctanos:
+      </Text>
+      <Container width="fit-content" display="block" ml="auto" mr={0} pr={0}>
+        <IconButton variant="ghost" aria-label="Whatsapp">
+          <Icon as={FaWhatsapp} />
+        </IconButton>
+        <IconButton variant="ghost" aria-label="Instagram">
+          <Icon as={FaInstagram} />
+        </IconButton>
+      </Container>
     </Box>
   )
   return <BasicModal size="lg" title={event.title} body={eventBody} visible={visible} onClose={onClose} />

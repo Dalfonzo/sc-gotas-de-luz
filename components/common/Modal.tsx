@@ -35,7 +35,7 @@ export default function BasicModal({
           <ModalCloseButton />
           <ModalBody>{body}</ModalBody>
 
-          <ModalFooter>{footer}</ModalFooter>
+          {footer && <ModalFooter>{footer}</ModalFooter>}
         </ModalContent>
       </Modal>
     </>
