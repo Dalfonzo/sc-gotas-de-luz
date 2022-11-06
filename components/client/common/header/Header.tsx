@@ -13,6 +13,7 @@ import {
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { BiMenuAltRight } from 'react-icons/bi'
+import LinkButton from '../../common/link-button'
 import NavLinks from './NavLinks'
 
 const Header = () => {
@@ -31,11 +32,29 @@ const Header = () => {
 
   return (
     <Box as="header">
-      <Box maxW="7xl" margin="auto" display="flex" justifyContent="space-between" alignItems="center" padding="16px">
+      <Box
+        maxW="7xl"
+        margin="auto"
+        display="flex"
+        justifyContent={{ base: 'flex-start', md: 'space-between' }}
+        alignItems="center"
+        padding="16px"
+      >
         <Link href="/">
           <Image src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
         </Link>
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
+        <LinkButton
+          href="/donate"
+          variant="lnk-btn-black"
+          content="Donar"
+          position="relative"
+          display="block"
+          width="fit-content"
+          withArrow={false}
+          marginLeft={{ base: 'auto', lg: 'unset' }}
+          marginRight={{ base: '1rem', lg: 'unset' }}
+        />
         <Icon
           as={BiMenuAltRight}
           onClick={onOpen}

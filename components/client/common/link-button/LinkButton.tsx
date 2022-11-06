@@ -5,13 +5,14 @@ import NextLink from 'next/link'
 interface LinkButtonI extends LinkProps {
   href: string
   content: string
+  withArrow?: boolean
 }
 
-const LinkButton = ({ href, variant, content, ...rest }: LinkButtonI) => {
+const LinkButton = ({ href, variant, content, withArrow = true, ...rest }: LinkButtonI) => {
   return (
     <NextLink href={href} passHref>
       <Link variant={variant} {...rest}>
-        {content} <ArrowForwardIcon />
+        {content} {withArrow && <ArrowForwardIcon />}
       </Link>
     </NextLink>
   )
