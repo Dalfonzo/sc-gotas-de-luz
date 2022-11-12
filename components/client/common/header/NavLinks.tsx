@@ -29,9 +29,6 @@ const NavLinks = (props: BoxProps) => {
         <li>
           <Link href="/news">Novedades</Link>
         </li>
-        <Box as="li" color="aqua.light">
-          <Link href="/donate">Donaciones</Link>
-        </Box>
       </Flex>
     </Box>
   )

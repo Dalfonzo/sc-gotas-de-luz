@@ -1,10 +1,8 @@
 import Head from 'next/head'
-import DonationBanner from '~/components/client/common/donation-banner'
 import AboutUs from '~/components/client/landing/about-us'
+import AditionalInformation from '~/components/client/landing/aditional-information'
 import Hero from '~/components/client/landing/hero'
-import IncomingEvents from '~/components/client/landing/incoming-events'
 import SupportUs from '~/components/client/landing/support-us'
-import Volunteers from '~/components/client/landing/volunteers'
 import ClientLayout from '~/layouts/Client'
 
 const Home = () => {
@@ -18,10 +16,8 @@ const Home = () => {
         </Head>
         <Hero />
         <AboutUs />
+        <AditionalInformation />
         <SupportUs />
-        <Volunteers />
-        <IncomingEvents />
-        <DonationBanner />
       </div>
     </ClientLayout>
   )

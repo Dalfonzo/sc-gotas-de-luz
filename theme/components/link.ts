@@ -2,11 +2,11 @@ import { responsiveProperty } from '~/theme/utils'
 
 const commonBtnLinkStyles = {
   fontWeight: 'bold',
-  paddingTop: responsiveProperty({ mobileSize: 0.5, desktopSize: 1, unit: 'rem' }),
-  paddingBottom: responsiveProperty({ mobileSize: 0.5, desktopSize: 1, unit: 'rem' }),
-  paddingLeft: responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' }),
-  paddingRight: responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' }),
-  fontSize: responsiveProperty({ mobileSize: 12, desktopSize: 18, unit: 'px' }),
+  paddingTop: responsiveProperty({ mobileSize: 1, desktopSize: 1, unit: 'rem' }),
+  paddingBottom: responsiveProperty({ mobileSize: 1, desktopSize: 1, unit: 'rem' }),
+  paddingLeft: responsiveProperty({ mobileSize: 1.5, desktopSize: 2, unit: 'rem' }),
+  paddingRight: responsiveProperty({ mobileSize: 1.5, desktopSize: 2, unit: 'rem' }),
+  fontSize: responsiveProperty({ mobileSize: 14, desktopSize: 18, unit: 'px' }),
   display: 'inline-block',
   borderRadius: '5px',
 }
@@ -49,6 +49,12 @@ export const linkStyles = {
           background: 'white',
           ...commonIconBtnLinkStyles,
           color: 'text.dark',
+        },
+        'lnk-btn-black': {
+          ...commonBtnLinkStyles,
+          background: 'text.dark',
+          ...commonIconBtnLinkStyles,
+          color: 'white',
         },
       },
     },

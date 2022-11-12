@@ -1,64 +1,68 @@
 import { Box, Flex, Image, List, ListItem, Text } from '@chakra-ui/react'
+import Link from 'next/link'
 import { responsiveProperty } from '~/theme/utils'
 
 const Footer = () => {
   return (
     <Box as="footer" color="white" marginTop="8rem">
-      <Image src="assets/svg/footer-bg.svg" alt="footer background" width="100%" />
-      <Box padding="5rem 2rem" background="aqua.light" marginTop="-9vw">
+      <Box padding="5rem 2rem" background="aqua.light">
+        <Box
+          maxW="7xl"
+          margin="2rem auto 4rem"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDir={'column'}
+          gap={{ base: '1.5rem', sm: 'unset' }}
+        >
+          <Image src="assets/svg/logo-footer.svg" alt="gotas de luz" />
+          <Text variant="subtitle-no-decoration" color="white" mt="2rem" textAlign={'center'}>
+            Cambiemos al mundo, juntos.
+          </Text>
+          <div>
+            <Text textAlign={'center'}>Existen muchas formas en que puedes</Text>
+            <Text textAlign={'center'}> colaborar con nosotros. </Text>
+          </div>
+        </Box>
         <Flex
           maxW="7xl"
+          gap={responsiveProperty({ mobileSize: 2, desktopSize: 5, unit: 'rem' })}
           margin="auto"
-          fontSize={responsiveProperty({ mobileSize: 12, desktopSize: 18 })}
-          justifyContent="space-between"
-          flexDir={{ base: 'column', md: 'row' }}
-          alignItems={{ base: 'center', md: 'unset' }}
-          gap="2rem"
+          justifyContent={'space-evenly'}
+          flexDir={{ base: 'column', sm: 'row' }}
         >
-          <Box
-            display="flex"
-            alignItems="center"
-            flexDir={{ base: 'column', sm: 'row' }}
-            gap={{ base: '1.5rem', sm: 'unset' }}
-          >
-            <Image src="assets/svg/logo-footer.svg" alt="gotas de luz" />
-            <Box marginLeft="2rem" width="80%">
-              <Text fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 25 })} fontWeight="bold">
-                Cambiemos al mundo, juntos.
-              </Text>
-              <Text>Existen muchas formas en que puedes colaborar con nosotros. </Text>
-            </Box>
-          </Box>
-          <Flex gap={responsiveProperty({ mobileSize: 2, desktopSize: 5, unit: 'rem' })}>
-            <List spacing="0.5rem">
-              <ListItem
-                as="li"
-                fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 25 })}
-                fontWeight="bold"
-                marginBottom="1rem"
-              >
+          <List spacing="0.5rem" textAlign={{ base: 'center', sm: 'unset' }}>
+            <ListItem as="li">
+              <Text variant="subtitle-no-decoration" color="white" marginY="0.5em">
                 Sitio
-              </ListItem>
-              <ListItem>Acerca</ListItem>
-              <ListItem>Dona</ListItem>
-              <ListItem>Voluntariado</ListItem>
-              <ListItem>Eventos</ListItem>
-              <ListItem>Novedades</ListItem>
-            </List>
-            <List spacing="0.5rem">
-              <Box
-                as="li"
-                fontSize={responsiveProperty({ mobileSize: 14, desktopSize: 25 })}
-                fontWeight="bold"
-                marginBottom="1rem"
-              >
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Link href="about">Acerca</Link>
+            </ListItem>
+            <ListItem>
+              <Link href="donate">Dona</Link>
+            </ListItem>
+            <ListItem>
+              <Link href="volunteers">Voluntariado</Link>
+            </ListItem>
+            <ListItem>
+              <Link href="events">Eventos</Link>
+            </ListItem>
+            <ListItem>
+              <Link href="news">Novedades</Link>
+            </ListItem>
+          </List>
+          <List spacing="0.5rem" textAlign={{ base: 'center', sm: 'unset' }}>
+            <Box as="li">
+              <Text variant="subtitle-no-decoration" color="white" marginY="0.5em">
                 Contacto
-              </Box>
-              <ListItem>@gotasdeluz.ve</ListItem>
-              <ListItem>(0414)-123456</ListItem>
-              <ListItem>(0212)-71225215</ListItem>
-            </List>
-          </Flex>
+              </Text>
+            </Box>
+            <ListItem>@gotasdeluz.ve</ListItem>
+            <ListItem>(0414)-123456</ListItem>
+            <ListItem>(0212)-71225215</ListItem>
+          </List>
         </Flex>
       </Box>
     </Box>

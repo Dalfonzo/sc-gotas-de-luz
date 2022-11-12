@@ -15,6 +15,12 @@ const Fonts = () => (
         font-weight: 400;
         font-display: swap;
     };
+    @font-face {
+      font-family: 'inter';
+      src: url('assets/fonts/inter-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-display: swap;
+  };
 `}
   />
 )
