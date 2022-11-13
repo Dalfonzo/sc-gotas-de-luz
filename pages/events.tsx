@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
-import events from '~/components/client/events/calendar/dummy'
 import Calendar from '~/components/client/events/calendar/index'
 import Heading from '~/components/client/events/heading/Heading'
 import ClientLayout from '~/layouts/Client'
@@ -14,10 +13,9 @@ const Events = () => {
       </Head>
       <Box>
         <Heading />
-        <Calendar events={events} />
+        <Calendar />
       </Box>
     </ClientLayout>
   )
 }
-// TODO: fetch from DB
 export default Events

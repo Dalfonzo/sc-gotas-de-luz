@@ -1,4 +1,4 @@
-import { DateRange } from './common'
+import { DateRange, StringDates } from './common'
 
 export interface EventI extends DateRange {
   id: number
@@ -6,3 +6,5 @@ export interface EventI extends DateRange {
   description?: string
   img?: string
 }
+
+export type EventApiI = StringDates<EventI>

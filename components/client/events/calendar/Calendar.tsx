@@ -1,5 +1,4 @@
-import { Box, useBoolean, useDisclosure } from '@chakra-ui/react'
-import { endOfMonth, startOfMonth } from 'date-fns/esm'
+import { Flex, Spinner, useDisclosure } from '@chakra-ui/react'
 import format from 'date-fns/format'
 import getDay from 'date-fns/getDay'
 import { es } from 'date-fns/locale'
@@ -9,7 +8,7 @@ import { useState } from 'react'
 import { Calendar, CalendarProps, dateFnsLocalizer } from 'react-big-calendar'
 import { DateRange } from '~/lib/models/common'
 import { EventI } from '~/lib/models/event'
-import prisma from '~/lib/prisma'
+import { useFetcher } from '~/lib/swr/fetcher'
 import EventModal from './EventModal'
 const locales = {
   es: es,
@@ -23,7 +22,8 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 interface Props extends Omit<CalendarProps, 'localizer' | 'events' | 'onSelectEvent'> {
-  /*events: EventI[]
+  /*
+  events: EventI[]
   views?: ViewsProps<EventI, object>
   defaultView?: View
   */
@@ -41,39 +41,34 @@ const lang = {
 }
 const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }: Props) => {
   const [event, setEvent] = useState<EventI | undefined>()
-  const [events, setEvents] = useState<EventI[]>([])
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [loading, setLoading] = useBoolean(false)
+  const [range, setRange] = useState<DateRange | undefined>(undefined)
+  // TODO: error display
+  const {
+    data: events,
+    isError,
+    isLoading,
+  } = useFetcher<EventI[]>(`/api/events`, {
+    query: { start: range?.start, end: range?.end },
+    dates: ['start', 'end'],
+  })
   const handleEvent = (event: EventI) => {
     setEvent(event)
     onOpen()
   }
+
   const handleRange = (range: DateRange | Date[]) => {
     console.log({ range })
     if ('start' in range) {
-      getEvents(range)
+      setRange({ start: new Date(range.start), end: new Date(range.end) })
     }
-  }
-  const getEvents = async (range?: DateRange) => {
-    if (!range) {
-      const now = new Date()
-      range = {
-        start: startOfMonth(now),
-        end: endOfMonth(now),
-      }
-    }
-    const events = await prisma.event.findMany({
-      where: { AND: { start: { gte: range.start }, end: { lte: range.end } } },
-    })
-    setEvents(events)
-    setLoading.on()
-    setLoading.off()
   }
 
   return (
     <div>
       {event && <EventModal event={event} visible={isOpen} onClose={onClose} />}
-      <Box marginX={['0.5rem', '2rem']}>
+      <Flex direction="column" justify="center" marginX={['0.5rem', '2rem']}>
+        {isLoading && <Spinner marginBottom="3" marginX="auto" />}
         <Calendar
           culture="es"
           localizer={localizer}
@@ -88,7 +83,7 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
           onRangeChange={handleRange}
           {...rest}
         />
-      </Box>
+      </Flex>
     </div>
   )
 }

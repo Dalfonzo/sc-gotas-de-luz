@@ -8,7 +8,10 @@ import { EventI } from '~/lib/models/event'
 interface Props extends Omit<CommonModalProps, 'body' | 'title'> {
   event: EventI
 }
-function formatDate(date: Date) {
+function formatDate(date: Date | string) {
+  if (typeof date == 'string') {
+    date = new Date(date)
+  }
   return format(date, `d 'de' MMMM hh:mmaaa`, { locale: es })
 }
 export default function EventModal({ event, onClose, visible }: Props) {
