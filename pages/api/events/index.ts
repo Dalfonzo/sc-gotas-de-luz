@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { endOfMonth, startOfMonth } from 'date-fns'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import prisma from '~/lib/db/prisma'
 import { EventI } from '~/lib/models/event'
-import prisma from '~/lib/prisma'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<EventI[]>) {
   let { start, end } = req.query
