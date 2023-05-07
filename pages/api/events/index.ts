@@ -13,13 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const events = await prisma.event.findMany({
       where: { AND: { start: { gte: startDate }, end: { lte: endDate } } },
     })
-
-    console.log({
-      start: start || startDate,
-      end: end || endDate,
-      events: events.length,
-      date: typeof events.at(0)?.start,
-    })
     res.send(events)
   } catch (error) {
     console.error(error)
