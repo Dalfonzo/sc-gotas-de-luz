@@ -1,6 +1,5 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons'
 import { Link, LinkProps } from '@chakra-ui/react'
-import NextLink from 'next/link'
 
 interface LinkButtonI extends LinkProps {
   href: string
@@ -10,11 +9,9 @@ interface LinkButtonI extends LinkProps {
 
 const LinkButton = ({ href, variant, content, withArrow = true, ...rest }: LinkButtonI) => {
   return (
-    <NextLink href={href} passHref>
-      <Link variant={variant} {...rest}>
-        {content} {withArrow && <ArrowForwardIcon />}
-      </Link>
-    </NextLink>
+    <Link variant={variant} href={href} {...rest}>
+      {content} {withArrow && <ArrowForwardIcon />}
+    </Link>
   )
 }
 
