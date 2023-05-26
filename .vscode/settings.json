@@ -38,5 +38,7 @@
     "Vercel",
     "Viewports",
     "WEBP"
-  ]
+  ],
+  "WillLuke.nextjs.hasPrompted": true,
+  "nuxt.isNuxtApp": false
 }

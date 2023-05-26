@@ -3,8 +3,8 @@ import Head from 'next/head'
 import NewsList from '~/components/client/news/card/List'
 import Heading from '~/components/client/news/heading/Heading'
 import ClientLayout from '~/layouts/Client'
+import prisma from '~/lib/db/prisma'
 import { NewsI } from '~/lib/models/news'
-import prisma from '~/lib/prisma'
 interface Props {
   news: NewsI[]
 }
@@ -24,8 +24,8 @@ const NewsPage = ({ news }: Props) => {
   )
 }
 
-export async function getStaticProps() {
-  const news = await prisma.news.findMany()
+export async function getServerSideProps() {
+  const news = await prisma.news.findMany({ orderBy: { date: 'desc' } })
   return {
     props: { news },
   }
