@@ -6,9 +6,11 @@ import { EventI } from '~/lib/models/event'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<EventI[]>) {
   let { start, end } = req.query
+
   const now = new Date()
   const startDate = typeof start == 'string' ? new Date(start) : startOfMonth(now)
   const endDate = typeof end == 'string' ? new Date(end) : endOfMonth(now)
+
   try {
     const events = await prisma.event.findMany({
       where: { AND: { start: { gte: startDate }, end: { lte: endDate } } },

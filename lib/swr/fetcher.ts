@@ -1,11 +1,13 @@
 import useSWR from 'swr'
+import { BareFetcher, PublicConfiguration } from 'swr/_internal'
 import { Unpack } from '../models/common'
 interface extraOptions<Response> {
   query?: Record<string, string | Date | undefined>
   dates?: Array<keyof Response>
+  config?: Partial<PublicConfiguration<Response, Error, BareFetcher<Response>>>
 }
 
-function parseDates<T>(item: any, dates: string[]) {
+function parseDates(item: any, dates: string[]) {
   function parse(item: any) {
     if (typeof item == 'object') {
       Object.entries(item).forEach(([key, value]) => {
@@ -20,16 +22,15 @@ function parseDates<T>(item: any, dates: string[]) {
   else return parse(item)
 }
 
-export const fetcher = async <Response>(
-  url: string,
-  options?: Pick<extraOptions<Response>, 'dates'>
-): Promise<Response> => {
+interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates'> {}
+
+export const fetcher = async <Response>(url: string, options?: FetcherOptions<Response>): Promise<Response> => {
   return fetch(url)
     .then((res) => res.json())
     .then((data) => (options?.dates ? parseDates(data, options.dates as string[]) : data))
 }
 
-export const useFetcher = <Response>(url: string, { query, dates }: extraOptions<Unpack<Response>>) => {
+export const useFetcher = <Response>(url: string, { query, dates, config }: extraOptions<Unpack<Response>>) => {
   let extra = ''
   if (query) {
     extra += '?'
@@ -42,12 +43,14 @@ export const useFetcher = <Response>(url: string, { query, dates }: extraOptions
       }
     })
   }
-
-  const { data, error } = useSWR<Response, Error>([url + extra, { dates }], fetcher)
-
+  const { data, error, ...rest } = useSWR<Response, Error>(
+    [url + extra, { dates }],
+    ([url, dto]: [string, FetcherOptions<Response>]) => fetcher(url, dto),
+    config as any
+  )
   return {
     data: data,
-    isLoading: !error && !data,
     isError: error,
+    ...rest,
   }
 }
