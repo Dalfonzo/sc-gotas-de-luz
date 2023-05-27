@@ -10,7 +10,7 @@ const NewsCard = ({ img, title, content, date, id, ...rest }: CardI) => {
   const padding = responsiveProperty({ mobileSize: 1, desktopSize: 2, unit: 'rem' })
   const link = '/news/' + id
   return (
-    <Box>
+    <Box maxWidth="99vw">
       <Text
         fontSize={responsiveProperty({ mobileSize: 16, desktopSize: 20 })}
         fontWeight="bold"

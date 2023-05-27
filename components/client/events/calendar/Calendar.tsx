@@ -6,9 +6,11 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import { useState } from 'react'
 import { Calendar, CalendarProps, dateFnsLocalizer } from 'react-big-calendar'
+import useSWR from 'swr'
 import { DateRange } from '~/lib/models/common'
 import { EventI } from '~/lib/models/event'
-import { useFetcher } from '~/lib/swr/fetcher'
+import { useFetcher, useFetcherParams } from '~/lib/swr/fetcher'
+import UiFeedback from '../../common/feedback/UiFeedback'
 import EventModal from './EventModal'
 const locales = {
   es: es,
@@ -21,13 +23,7 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 })
-interface Props extends Omit<CalendarProps, 'localizer' | 'events' | 'onSelectEvent'> {
-  /*
-  events: EventI[]
-  views?: ViewsProps<EventI, object>
-  defaultView?: View
-  */
-}
+interface Props extends Omit<CalendarProps, 'localizer' | 'events' | 'onSelectEvent'> {}
 
 const lang = {
   week: 'Semana',
@@ -43,29 +39,36 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
   const [event, setEvent] = useState<EventI | undefined>()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [range, setRange] = useState<DateRange | undefined>(undefined)
-  // TODO: error display
+
+  const { fetcher } = useFetcher<EventI[]>()
   const {
     data: events,
-    isError,
+    error,
     isLoading,
-  } = useFetcher<EventI[]>(`/api/events`, {
-    query: { start: range?.start, end: range?.end },
-    dates: ['start', 'end'],
-  })
+  } = useSWR<EventI[]>(
+    [
+      `/api/events`,
+      {
+        query: { start: range?.start, end: range?.end },
+        dates: ['start', 'end'],
+      },
+    ],
+    ([url, dto]: useFetcherParams<EventI[]>) => fetcher(url, dto)
+  )
+
   const handleEvent = (event: EventI) => {
     setEvent(event)
     onOpen()
   }
 
   const handleRange = (range: DateRange | Date[]) => {
-    console.log({ range })
     if ('start' in range) {
       setRange({ start: new Date(range.start), end: new Date(range.end) })
     }
   }
 
   return (
-    <div>
+    <UiFeedback error={error}>
       {event && <EventModal event={event} visible={isOpen} onClose={onClose} />}
       <Flex direction="column" justify="center" marginX={['0.5rem', '2rem']}>
         {isLoading && <Spinner marginBottom="3" marginX="auto" />}
@@ -84,7 +87,7 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
           {...rest}
         />
       </Flex>
-    </div>
+    </UiFeedback>
   )
 }
 export default MyCalendar
