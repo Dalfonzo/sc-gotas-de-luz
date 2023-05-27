@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react'
 import useSWR from 'swr'
+import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
 import { NewsI } from '~/lib/models/news'
-import { useFetcher, useFetcherParams } from '~/lib/swr/fetcher'
-import UiFeedback from '../common/feedback/UiFeedback'
+import UiFeedback from '../../common/feedback/UiFeedback'
 import NewsList from './card/List'
 import Heading from './heading/Heading'
 

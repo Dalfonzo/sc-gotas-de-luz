@@ -1,5 +1,5 @@
 import { BareFetcher, PublicConfiguration } from 'swr/_internal'
-import { Unpack } from '../models/common'
+import { Unpack } from '../lib/models/common'
 interface extraOptions<Response> {
   query?: Record<string, string | Date | undefined>
   dates?: Array<keyof Response>

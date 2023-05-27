@@ -7,10 +7,10 @@ import startOfWeek from 'date-fns/startOfWeek'
 import { useState } from 'react'
 import { Calendar, CalendarProps, dateFnsLocalizer } from 'react-big-calendar'
 import useSWR from 'swr'
+import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
 import { DateRange } from '~/lib/models/common'
 import { EventI } from '~/lib/models/event'
-import { useFetcher, useFetcherParams } from '~/lib/swr/fetcher'
-import UiFeedback from '../../common/feedback/UiFeedback'
+import UiFeedback from '../../../common/feedback/UiFeedback'
 import EventModal from './EventModal'
 const locales = {
   es: es,
