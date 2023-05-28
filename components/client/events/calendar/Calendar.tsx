@@ -47,7 +47,7 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
     isLoading,
   } = useSWR<EventI[]>(
     [
-      `/api/events`,
+      `/api/calendar`,
       {
         query: { start: range?.start, end: range?.end },
         dates: ['start', 'end'],

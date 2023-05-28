@@ -1,22 +1,21 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { endOfMonth, startOfMonth } from 'date-fns'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { basicHandler } from '~/lib/api/handler'
+import { Event, Prisma } from '@prisma/client'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { BadRequestError } from '~/lib/api/errors/api-error'
+import { paginationHandler } from '~/lib/api/handler'
+import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { EventI } from '~/lib/models/event'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<EventI[]>) {
-  const callback = async () => {
-    let { start, end } = req.query
-
-    const now = new Date()
-    const startDate = typeof start == 'string' ? new Date(start) : startOfMonth(now)
-    const endDate = typeof end == 'string' ? new Date(end) : endOfMonth(now)
-
-    const events = await prisma.event.findMany({
-      where: { AND: { start: { gte: startDate }, end: { lte: endDate } } },
-    })
-    return events
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const model = prisma.event
+  const get = async () =>
+    await paginationHandler<EventI[], Prisma.EventFindManyArgs>(req, res, model, { orderBy: { start: 'desc' } })
+  const post = async () => {
+    const event: Event = req.body
+    if (event.start > event.end) {
+      throw new BadRequestError('Start date should preceed end date')
+    }
+    return await model.create({ data: { ...req.body } })
   }
-  await basicHandler(callback, req, res)
+  await methodRouter(req, res, { get, post })
 }

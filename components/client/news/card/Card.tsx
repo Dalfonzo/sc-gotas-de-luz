@@ -32,18 +32,25 @@ const NewsCard = ({ img, title, content, date, id, ...rest }: CardI) => {
             paddingX={responsiveProperty({ mobileSize: -1, desktopSize: -2, unit: 'rem' })}
             src={img}
             width="100%"
+            height="15rem"
             alt=""
             marginBottom="1rem"
             className="fade"
+            objectFit="cover"
           />
         </Link>
         <Text paddingX={padding} fontWeight="thin" fontSize="sm" marginBottom="1rem">
           <TimeIcon /> &nbsp;
           {formatDistanceToNow(date, { locale: es, addSuffix: true })}
         </Text>
-        <Text paddingX={padding} noOfLines={4} variant="normal">
-          {content}
-        </Text>
+        <Text
+          paddingX={padding}
+          noOfLines={4}
+          variant="normal"
+          dangerouslySetInnerHTML={{
+            __html: content,
+          }}
+        ></Text>
         <Box
           paddingX={padding}
           display="block"
