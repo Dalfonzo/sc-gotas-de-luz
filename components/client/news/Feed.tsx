@@ -25,7 +25,7 @@ export const NewsFeed = () => {
           dates: ['date'],
           query: {
             page: pageIndex,
-            size: 1,
+            size: 8,
           },
           usePagination: true,
         },
