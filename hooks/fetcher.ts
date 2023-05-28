@@ -21,12 +21,21 @@ function parseDates(item: any, dates: string[]) {
   else return parse(item)
 }
 
-interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates' | 'query'> {}
+interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates' | 'query'> {
+  usePagination: boolean
+}
 
-export type useFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>>]
+export type useFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: false }]
+export type usePaginationFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: true }]
 
 export const useFetcher = <Response>() => {
-  const fetcher = async (url: string, options?: FetcherOptions<Unpack<Response>>): Promise<Response> => {
+  function fetcher(url: string, options: FetcherOptions<Unpack<Response>> & { usePagination: false }): Promise<Response>
+  function fetcher(
+    url: string,
+    options: FetcherOptions<Unpack<Response>> & { usePagination: true }
+  ): Promise<{ records: Response; total: number; lastPage: number }>
+
+  async function fetcher(url: string, options?: FetcherOptions<Unpack<Response>>): Promise<unknown> {
     let extra = ''
     if (options?.query) {
       extra += '?'
@@ -40,9 +49,19 @@ export const useFetcher = <Response>() => {
       })
     }
 
-    return fetch(url + extra)
-      .then((res) => res.json())
-      .then((data) => (options?.dates ? parseDates(data, options.dates as string[]) : data))
+    const res = await fetch(url + extra)
+    const data = await res.json()
+    const parsedData = options?.dates ? parseDates(data, options.dates as string[]) : data
+    if (options?.usePagination === true) {
+      const total = Number(res.headers.get('total-count'))
+      const lastPage = Number(res.headers.get('last-page'))
+      return {
+        total,
+        lastPage,
+        records: parsedData,
+      }
+    }
+    return parsedData
   }
 
   return { fetcher }
