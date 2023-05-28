@@ -17,7 +17,7 @@ export async function basicHandler<Response>(
 
 export async function paginationHandler<T, Args>(req: NextApiRequest, res: NextApiResponse, model: any, args?: Args) {
   try {
-    const paginate = paginator()
+    const paginate = paginator({ pageZero: true, page: 0 })
     const result = await paginate<T, Args>(model, req, args)
     res.setHeader('total-count', result.meta.total)
     res.setHeader('last-page', result.meta.lastPage)

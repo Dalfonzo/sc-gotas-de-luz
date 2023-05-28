@@ -1,9 +1,9 @@
-import { BareFetcher, PublicConfiguration } from 'swr/_internal'
 import { Unpack } from '../lib/models/common'
 interface extraOptions<Response> {
+  // Query params to pass to fetch function
   query?: Record<string, string | Date | undefined>
+  // !IMPORTANT: next/prisma has an issue with dates, so if a response has date fields, they need to be specified to be parsed when received
   dates?: Array<keyof Response>
-  config?: Partial<PublicConfiguration<Response, Error, BareFetcher<Response>>>
 }
 
 function parseDates(item: any, dates: string[]) {
@@ -27,18 +27,26 @@ interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates' 
 
 export type useFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: false }]
 export type usePaginationFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: true }]
+export interface usePaginationFetcherResponse<Response> {
+  total: number
+  lastPage: number
+  records: Response
+}
 
 export const useFetcher = <Response>() => {
   function fetcher(url: string, options: FetcherOptions<Unpack<Response>> & { usePagination: false }): Promise<Response>
   function fetcher(
     url: string,
     options: FetcherOptions<Unpack<Response>> & { usePagination: true }
-  ): Promise<{ records: Response; total: number; lastPage: number }>
+  ): Promise<usePaginationFetcherResponse<Response>>
 
   async function fetcher(url: string, options?: FetcherOptions<Unpack<Response>>): Promise<unknown> {
     let extra = ''
     if (options?.query) {
       extra += '?'
+      if (options.usePagination) {
+        options.query = { pageZero: 'true', ...options.query }
+      }
       Object.entries(options.query).forEach(([name, value], index, array) => {
         if (value != undefined) {
           extra += `${name}=${value}`

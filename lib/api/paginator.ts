@@ -14,7 +14,7 @@ export interface PaginatedResult<T> {
   }
 }
 
-export type PaginateOptions = { page?: number | string; perPage?: number | string }
+export type PaginateOptions = { page?: number | string; perPage?: number | string; pageZero: boolean }
 export type PaginateFunction = <Result, Conditions>(
   model: any,
   req: NextApiRequest,
@@ -26,8 +26,12 @@ export const paginator = (defaultOptions?: PaginateOptions): PaginateFunction =>
     const options: PaginateOptions = {
       page: req.query.page as string | undefined,
       perPage: req.query.size as string | undefined,
+      pageZero: !!req.query.pageZero && req.query.pageZero !== 'false',
     }
-    const page = Number(options?.page || defaultOptions?.page) || 1
+    let page = Number(options?.page || defaultOptions?.page)
+    if (options.pageZero) {
+      page += 1
+    }
     const perPage = Number(options?.perPage || defaultOptions?.perPage) || 10
     const skip = page > 0 ? perPage * (page - 1) : 0
     const [total, data] = await Promise.all([

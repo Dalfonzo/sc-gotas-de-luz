@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
+import { Box } from '@chakra-ui/react'
+import { useInView } from 'react-intersection-observer'
 import useSWRInfinite, { SWRInfiniteConfiguration, SWRInfiniteKeyLoader } from 'swr/infinite'
 import { Loader } from '../components/common/feedback/Loader'
-import { useInView } from 'react-intersection-observer'
-import { Box } from '@chakra-ui/react'
 
 export const useInfiniteList = (cb: SWRInfiniteKeyLoader, fetcher: any, options: SWRInfiniteConfiguration) => {
   const { data, size, setSize, error, isValidating } = useSWRInfinite(cb, fetcher, options)

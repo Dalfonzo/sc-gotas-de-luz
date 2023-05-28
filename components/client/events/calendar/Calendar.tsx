@@ -68,7 +68,7 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
   }
 
   return (
-    <UiFeedback error={error}>
+    <UiFeedback isError={!!error}>
       {event && <EventModal event={event} visible={isOpen} onClose={onClose} />}
       <Flex direction="column" justify="center" marginX={['0.5rem', '2rem']}>
         {isLoading && <Spinner marginBottom="3" marginX="auto" />}

@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
-import useSWR from 'swr'
-import { useFetcher, usePaginationFetcherParams } from '~/hooks/fetcher'
+import { useFetcher, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
+import { useInfiniteList } from '~/hooks/useInfiniteList'
 import { NewsI } from '~/lib/models/news'
 import UiFeedback from '../../common/feedback/UiFeedback'
 import NewsList from './card/List'
@@ -9,36 +9,47 @@ import Heading from './heading/Heading'
 export const NewsFeed = () => {
   const { fetcher } = useFetcher<NewsI[]>()
   const {
-    data: news,
-    error,
+    rows: news,
+    error: isError,
+    isEmpty,
     isLoading,
-  } = useSWR(
-    [
-      `/api/news`,
-      {
-        dates: ['date'],
-        query: {
-          page: 1,
+    isValidating,
+    isLoadingInitialData,
+    InfiniteListFetcherTrigger,
+  } = useInfiniteList(
+    (pageIndex, previousPageData?: usePaginationFetcherResponse<NewsI[]>) => {
+      if (previousPageData?.lastPage && previousPageData?.lastPage < pageIndex) return null
+      return [
+        `/api/news`,
+        {
+          dates: ['date'],
+          query: {
+            page: pageIndex,
+            size: 1,
+          },
+          usePagination: true,
         },
-        usePagination: true,
-      },
-    ],
-    ([url, dto]: usePaginationFetcherParams<NewsI[]>) => fetcher(url, dto)
+      ]
+    },
+    ([url, dto]: usePaginationFetcherParams<NewsI[]>) => fetcher(url, dto),
+    {}
   )
   return (
     <Box>
       <Heading />
 
       <UiFeedback
-        isLoading={isLoading}
-        isEmpty={!news?.records?.length}
-        error={error}
+        isLoading={isLoadingInitialData}
+        isEmpty={isEmpty}
+        isError={!!isError}
+        isValidating={isValidating}
         emptyMsg={[
           'Aún no hay noticias',
           'Pronto encontrarás todos los emocionantes sucesos que tenemos que compartir',
         ]}
       >
-        <NewsList news={news?.records || []} />
+        <NewsList news={news || []} />
+        <InfiniteListFetcherTrigger />
       </UiFeedback>
     </Box>
   )
