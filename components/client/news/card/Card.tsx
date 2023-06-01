@@ -5,14 +5,15 @@ import { es } from 'date-fns/locale'
 import Link from 'next/link'
 import { responsiveProperty } from '~/theme/utils'
 import CardI, { CardPreviewI } from './CardI'
+import { ApiImg } from '~/components/common/api-img/ApiImg'
 
 const NewsCard = ({ img, title, content, date, ...rest }: CardI | CardPreviewI) => {
   const padding = responsiveProperty({ mobileSize: 1, desktopSize: 2, unit: 'rem' })
   const link = 'id' in rest && '/news/' + rest.id
   const CardImg = (
-    <Image
+    <ApiImg
       paddingX={responsiveProperty({ mobileSize: -1, desktopSize: -2, unit: 'rem' })}
-      src={img}
+      url={img}
       width="100%"
       height="15rem"
       alt="imagen"

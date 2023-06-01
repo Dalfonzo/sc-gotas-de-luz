@@ -2,7 +2,6 @@ import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Tex
 import { News } from '@prisma/client'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import NewsCard from '~/components/client/news/card/Card'
 import TextEditor from '~/components/common/text-editor/TextEditor'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { getFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -12,19 +11,19 @@ import { responsiveProperty } from '~/theme/utils'
 interface NewsFormProps {
   initialState?: News
 }
-
+// TODO: change image url input to file input
 export default function NewsForm({ initialState }: NewsFormProps) {
   const formik = useFormik<CreateNews>({
     initialValues: {
       title: '',
       content: '',
-      img: '',
+      news: undefined,
       ...initialState,
     },
     validationSchema: Yup.object<CreateNews>({
       title: Yup.string().trim().required('El título es requerido'),
       content: Yup.string().trim().required('EL contenido del artículo es requerido'),
-      img: Yup.string().trim().url('La imagen debe ser un enlace').required('Imagen requerida'),
+      // img: Yup.string().trim().url('La imagen debe ser un enlace').required('Imagen requerida'),
     }),
     onSubmit: async (values) => {
       const customFetcher = getFetcherInstance()
@@ -42,11 +41,11 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     },
     success: { message: 'Noticia añadida' },
   })
-  const Preview = (
+  const Preview = <></> /* (
     <Box mx="auto" maxWidth="95%">
       <NewsCard {...formik.values} date={new Date()} />
     </Box>
-  )
+  )*/
   return (
     <Box>
       <Text
@@ -70,11 +69,11 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
             </FormControl>
             {/* <ImgInput<CreateNews> label="Imagen (link)" formik={formik} formKey="img" /> */}
-            <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.img && formik.touched.img)}>
+            {/*     <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.img && formik.touched.img)}>
               <Input placeholder=" " name="img" onChange={formik.handleChange} value={formik.values.img} />
               <FormLabel htmlFor="img">Imagen (link)</FormLabel>
               <FormErrorMessage>{formik.errors.img}</FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
             <FormControl
               variant="floating"
               isRequired

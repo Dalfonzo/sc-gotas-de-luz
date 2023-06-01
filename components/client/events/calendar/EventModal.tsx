@@ -1,8 +1,9 @@
-import { Box, Container, Flex, Icon, IconButton, Image, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
 import { compareAsc, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import BasicModal, { CommonModalProps } from '~/components/common/Modal'
+import { ApiImg } from '~/components/common/api-img/ApiImg'
 import { EventI } from '~/lib/models/event'
 
 interface Props extends Omit<CommonModalProps, 'body' | 'title'> {
@@ -30,7 +31,7 @@ export default function EventModal({ event, onClose, visible }: Props) {
         )}
       </Flex>
 
-      {event.img && <Image mb="3" src={event.img} alt="" width="100%" fit="cover" height="12rem" />}
+      {event.img && <ApiImg mb="3" url={event.img} alt="" width="100%" fit="cover" height="12rem" />}
       <Text mb="3" textAlign="justify">
         {event.description}
       </Text>
