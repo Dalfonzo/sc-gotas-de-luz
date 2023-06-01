@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const events = await prisma.event.findMany({
       where: { AND: { start: { gte: startDate }, end: { lte: endDate } } },
+      include: { img: true },
     })
     return events
   }

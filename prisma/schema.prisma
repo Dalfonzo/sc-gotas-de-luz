@@ -10,11 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model FileDb{
+  id Int @id @default(autoincrement())
+  path String
+  name String 
+  url String 
+  news News?
+  event Event?
+}
+
 model News{
   id Int @id @default(autoincrement())
   title String 
   content String
-  img String
+  img FileDb @relation(fields: [imgId], references: [id])
+  imgId Int @unique
   date DateTime @default(now())
 }
 
@@ -24,5 +34,6 @@ model Event {
   description String
   start DateTime
   end DateTime
-  img  String 
+  img FileDb @relation(fields: [imgId], references: [id])
+  imgId Int @unique
 }
