@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import type ReactQuillType from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import './editor-styles.module.css'
+import styles from './editor-styles.module.css'
 interface Props {
   value: string
   onChange: (value: string) => void
@@ -26,7 +26,7 @@ export default function TextEditor({ value, onChange }: Props) {
     <div>
       <ReactQuill
         modules={{ toolbar: toolbarOptions }}
-        className="editor"
+        className={styles.editor}
         theme="snow"
         value={value}
         onChange={onChange}

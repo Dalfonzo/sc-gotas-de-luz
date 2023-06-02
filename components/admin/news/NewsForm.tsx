@@ -2,6 +2,7 @@ import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Tex
 import { News } from '@prisma/client'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import FileUpload from '~/components/common/file-upload/FileUpload'
 import TextEditor from '~/components/common/text-editor/TextEditor'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { getFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -11,8 +12,13 @@ import { responsiveProperty } from '~/theme/utils'
 interface NewsFormProps {
   initialState?: News
 }
-// TODO: change image url input to file input
+
 export default function NewsForm({ initialState }: NewsFormProps) {
+  const parseValues = (values: CreateNews) => {
+    const formData = new FormData()
+    Object.entries(values).forEach(([key, value]) => value && formData.append(key, value))
+    return formData
+  }
   const formik = useFormik<CreateNews>({
     initialValues: {
       title: '',
@@ -23,29 +29,31 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     validationSchema: Yup.object<CreateNews>({
       title: Yup.string().trim().required('El título es requerido'),
       content: Yup.string().trim().required('EL contenido del artículo es requerido'),
-      // img: Yup.string().trim().url('La imagen debe ser un enlace').required('Imagen requerida'),
+      news: Yup.string().required('Imagen requerida'),
     }),
     onSubmit: async (values) => {
       const customFetcher = getFetcherInstance()
+      const parsed = parseValues(values)
       if (initialState) {
-        return await customFetcher.put(`/api/news/${initialState.id}`, values)
+        return await customFetcher.put(`/api/news/${initialState.id}`, parsed)
       }
-      await customFetcher.post('/api/news', values)
+      await customFetcher.post('/api/news', parsed)
+      return true
     },
     validateOnBlur: true,
   })
+
   const { onSubmit, loadingSubmit } = useSubmitHandler<void>({
     callback: async () => {
-      await formik.submitForm()
-      formik.resetForm()
+      const result = await formik.submitForm()
+      if (result) {
+        formik.resetForm()
+        return true
+      }
     },
     success: { message: 'Noticia añadida' },
   })
-  const Preview = <></> /* (
-    <Box mx="auto" maxWidth="95%">
-      <NewsCard {...formik.values} date={new Date()} />
-    </Box>
-  )*/
+
   return (
     <Box>
       <Text
@@ -68,23 +76,20 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               <FormLabel htmlFor="title">Título</FormLabel>
               <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
             </FormControl>
-            {/* <ImgInput<CreateNews> label="Imagen (link)" formik={formik} formKey="img" /> */}
-            {/*     <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.img && formik.touched.img)}>
-              <Input placeholder=" " name="img" onChange={formik.handleChange} value={formik.values.img} />
-              <FormLabel htmlFor="img">Imagen (link)</FormLabel>
-              <FormErrorMessage>{formik.errors.img}</FormErrorMessage>
-            </FormControl> */}
-            <FormControl
-              variant="floating"
-              isRequired
-              isInvalid={Boolean(formik.errors.content && formik.touched.content)}
-            >
+            <FormControl variant="" isRequired isInvalid={Boolean(formik.errors.content && formik.touched.content)}>
               {' '}
-              <FormLabel marginBottom="1em" htmlFor="title">
-                Contenido del artículo
-              </FormLabel>
+              <FormLabel htmlFor="content">Contenido del artículo</FormLabel>
               <TextEditor value={formik.values.content} onChange={(value) => formik.setFieldValue('content', value)} />
               <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired isInvalid={Boolean(formik.errors.news && formik.touched.news)}>
+              <FileUpload
+                name="news"
+                label="Portada"
+                file={formik.values.news}
+                setFile={(file) => formik.setFieldValue('news', file)}
+              />
+              <FormErrorMessage>{formik.errors.news}</FormErrorMessage>
             </FormControl>
             <Button
               isLoading={loadingSubmit}
@@ -96,7 +101,6 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               Añadir
             </Button>
           </Flex>
-          {Preview}
         </Flex>
       </form>
     </Box>

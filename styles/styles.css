@@ -7,9 +7,25 @@
 .fade:hover {
   opacity: 0.4;
 }
+
 @media screen and (max-width: 900px) {
   .rbc-toolbar {
     flex-direction: column;
     align-items: center;
   }
+}
+/* For quill editor */
+.ql-container {
+  min-height: 12rem;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-editor {
+  height: 100%;
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
 }

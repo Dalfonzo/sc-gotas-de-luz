@@ -11,7 +11,7 @@ export default function useSubmitHandler<T>({
   //errorMap,
   success,
 }: {
-  callback: (values: T) => Promise<any>
+  callback: (values: T) => Promise<boolean | undefined>
   //errorMap: ErrorMap
   success?: {
     message: string
@@ -25,8 +25,8 @@ export default function useSubmitHandler<T>({
     setLoadingSubmit(true)
     setSubmitError(undefined)
     try {
-      await callback(values)
-      if (success) {
+      const result = await callback(values)
+      if (success && result) {
         toast({
           description: success.message,
           title: success.title,

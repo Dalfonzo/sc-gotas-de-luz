@@ -17,27 +17,31 @@ export class CustomFetcher {
     const data: R = await res.json()
     return data
   }
-
-  async post<R = void>(url: string, body: Object, config?: FetcherConfig) {
+  private async sendBody<R>(url: string, method: string, body: Object, config?: FetcherConfig) {
+    const content =
+      body instanceof FormData
+        ? {
+            body,
+          }
+        : {
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
     return await this.customFetch<R>(url, {
       ...config,
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      method: method,
+      ...content,
     })
   }
 
+  async post<R = void>(url: string, body: Object, config?: FetcherConfig) {
+    return await this.sendBody<R>(url, 'POST', body, config)
+  }
+
   async put<R = void>(url: string, body: Object, config?: FetcherConfig) {
-    return await this.customFetch<R>(url, {
-      ...config,
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    return await this.sendBody<R>(url, 'PUT', body, config)
   }
 
   async get<R = any>(url: string, config?: FetcherConfig) {
