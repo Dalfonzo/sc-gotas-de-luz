@@ -11,7 +11,15 @@ const NewsList = ({ news, ...rest }: ListI) => {
     <UnorderedList justifyContent="center" flexWrap="wrap" listStyleType="none" display="flex" flexDirection="row">
       {news.map((newsElement) => (
         <ListItem key={newsElement.id} margin="1rem">
-          <Card key={newsElement.id} {...newsElement} {...rest}></Card>
+          <Card
+            key={newsElement.id}
+            title={newsElement.title}
+            content={newsElement.content}
+            date={newsElement.date}
+            id={newsElement.id}
+            img={newsElement.img}
+            {...rest}
+          ></Card>
         </ListItem>
       ))}
     </UnorderedList>

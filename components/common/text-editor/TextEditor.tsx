@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import type ReactQuillType from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import styles from './editor-styles.module.css'
 interface Props {
   value: string

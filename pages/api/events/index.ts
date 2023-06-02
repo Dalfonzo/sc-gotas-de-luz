@@ -18,7 +18,10 @@ export const config = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const model = prisma.event
   const get = async () =>
-    await paginationHandler<EventI[], Prisma.EventFindManyArgs>(req, res, model, { orderBy: { start: 'desc' } })
+    await paginationHandler<EventI[], Prisma.EventFindManyArgs>(req, res, model, {
+      orderBy: { start: 'desc' },
+      include: { img: true },
+    })
   const post = async () => {
     const files = await fileUploadHandler(req)
     const event: Prisma.EventCreateInput = req.body

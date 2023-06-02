@@ -13,7 +13,7 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = Number(req.query.id)
-  const get = async () => await prisma.news.findFirstOrThrow({ where: { id: id } })
+  const get = async () => await prisma.news.findFirstOrThrow({ where: { id: id }, include: { img: true } })
   const put = async () => {
     const files = await fileUploadHandler(req, { throwOnEmpty: false })
     const newsFile = files[FILE_UPLOAD_FIELDS.NEWS]

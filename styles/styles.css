@@ -29,3 +29,15 @@
   overflow-y: auto;
   width: 100%;
 }
+
+/* chakra for base headings */
+h1 {
+  font-weight: var(--chakra-fontWeights-bold);
+  font-size: var(--chakra-fontSizes-3xl);
+  line-height: 1.2;
+}
+h2 {
+  font-weight: var(--chakra-fontWeights-bold);
+  font-size: var(--chakra-fontSizes-xl);
+  line-height: 1.2;
+}

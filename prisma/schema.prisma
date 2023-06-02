@@ -9,7 +9,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+// TODO: añadir hook para borrar archivo anterior cuando es actualizado
 model FileDb{
   id Int @id @default(autoincrement())
   path String

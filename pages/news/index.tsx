@@ -1,11 +1,8 @@
 import Head from 'next/head'
 import { NewsFeed } from '~/components/client/news/Feed'
 import ClientLayout from '~/layouts/Client'
-import { NewsI } from '~/lib/models/news'
-interface Props {
-  news: NewsI[]
-}
-const NewsPage = ({ news }: Props) => {
+
+const NewsPage = () => {
   return (
     <ClientLayout>
       <Head>

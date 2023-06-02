@@ -1,3 +1,4 @@
-.editor p {
+.editor p,
+.editor li {
   font-size: 16px;
 }

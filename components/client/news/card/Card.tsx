@@ -1,11 +1,11 @@
 import { TimeIcon } from '@chakra-ui/icons'
-import { Box, Image, Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Link from 'next/link'
+import { ApiImg } from '~/components/common/api-img/ApiImg'
 import { responsiveProperty } from '~/theme/utils'
 import CardI, { CardPreviewI } from './CardI'
-import { ApiImg } from '~/components/common/api-img/ApiImg'
 
 const NewsCard = ({ img, title, content, date, ...rest }: CardI | CardPreviewI) => {
   const padding = responsiveProperty({ mobileSize: 1, desktopSize: 2, unit: 'rem' })

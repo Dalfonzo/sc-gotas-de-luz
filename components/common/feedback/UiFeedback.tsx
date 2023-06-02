@@ -23,11 +23,13 @@ export default function UiFeedback({
   errorMsg = ['Lo sentimos', 'Ha ocurrido un error inesperado, intenta recargar la página'],
 }: Props) {
   const Centered = ({ children }: { children: ReactNode }) => (
-    <Center width="100%" height="100%">
-      <Box width="25rem" maxWidth="100%" display="flex" justifyContent="center" alignItems="center">
-        {children}
-      </Box>
-    </Center>
+    <Box height="100%" my="auto">
+      <Center width="100%" my="10" height="100%">
+        <Box width="25rem" maxWidth="100%" display="flex" justifyContent="center" alignItems="center">
+          {children}
+        </Box>
+      </Center>
+    </Box>
   )
   if (isLoading || (!isLoading && isError && isValidating)) {
     return (

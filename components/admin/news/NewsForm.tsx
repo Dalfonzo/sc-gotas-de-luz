@@ -1,7 +1,21 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { News } from '@prisma/client'
 import { useFormik } from 'formik'
+import { FaEye } from 'react-icons/fa'
 import * as Yup from 'yup'
+import { NewsArticle } from '~/components/client/news/article/Article'
+import BasicModal from '~/components/common/Modal'
 import FileUpload from '~/components/common/file-upload/FileUpload'
 import TextEditor from '~/components/common/text-editor/TextEditor'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
@@ -53,7 +67,16 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     },
     success: { message: 'Noticia añadida' },
   })
-
+  const { isOpen, onToggle } = useDisclosure()
+  const Preview = (
+    <BasicModal
+      size="4xl"
+      title={'Vista de artículo'}
+      body={<NewsArticle news={{ ...formik.values, id: 1, date: new Date(), imgSrc: formik.values.news?.src }} />}
+      visible={isOpen}
+      onClose={onToggle}
+    />
+  )
   return (
     <Box>
       <Text
@@ -78,7 +101,7 @@ export default function NewsForm({ initialState }: NewsFormProps) {
             </FormControl>
             <FormControl variant="" isRequired isInvalid={Boolean(formik.errors.content && formik.touched.content)}>
               {' '}
-              <FormLabel htmlFor="content">Contenido del artículo</FormLabel>
+              <FormLabel htmlFor="content">Cuerpo </FormLabel>
               <TextEditor value={formik.values.content} onChange={(value) => formik.setFieldValue('content', value)} />
               <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
             </FormControl>
@@ -91,18 +114,24 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               />
               <FormErrorMessage>{formik.errors.news}</FormErrorMessage>
             </FormControl>
-            <Button
-              isLoading={loadingSubmit}
-              onClick={() => onSubmit()}
-              loadingText="Procesando"
-              mb="2rem"
-              variant="btn-primary"
-            >
-              Añadir
-            </Button>
+            <Flex my="2rem" gap="5" height="3rem">
+              <Button
+                leftIcon={<AddIcon />}
+                isLoading={loadingSubmit}
+                onClick={() => onSubmit()}
+                loadingText="Procesando"
+                variant="btn-primary"
+              >
+                Añadir
+              </Button>
+              <Button leftIcon={<FaEye />} height="100%" variant="btn-white-border" onClick={onToggle} mb="2rem">
+                Visualizar
+              </Button>
+            </Flex>
           </Flex>
         </Flex>
       </form>
+      {Preview}
     </Box>
   )
 }

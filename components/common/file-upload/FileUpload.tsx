@@ -22,7 +22,7 @@ function FileUpload({ file, setFile, accept = 'image/png,image/jpeg', label, ...
       if (newFile?.type.startsWith('image')) {
         const buffer = await newFile.arrayBuffer()
         const fileBuffer = Buffer.from(buffer)
-        setFile(assign(newFile, { src: fileBuffer.toString('base64') }))
+        setFile(assign(newFile, { src: `data:image/*;base64,${fileBuffer.toString('base64')}` }))
         return
       }
       setFile(newFile)
@@ -33,18 +33,13 @@ function FileUpload({ file, setFile, accept = 'image/png,image/jpeg', label, ...
     inputRef.current?.click()
   }
 
-  const getSrc = () => {
-    if (file?.src) {
-      return `data:image/*;base64,${file.src}`
-    }
-  }
   const FileCard = ({ file }: { file?: FileI }) => {
     if (file)
       return (
         <Card mx="5" height="100%" width="fit-content" align="center">
           <CardBody p="0" height="100%">
             {file?.src ? (
-              <Image src={getSrc()} alt="file" borderRadius="lg" height="100%" objectFit="cover" />
+              <Image src={file.src} alt="file" borderRadius="lg" height="100%" objectFit="cover" />
             ) : (
               <CopyIcon height="100%" />
             )}
