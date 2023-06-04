@@ -1,10 +1,27 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, useColorModeValue } from '@chakra-ui/react'
 import Auth from 'layouts/Auth'
-import React from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { FormEventHandler, useState } from 'react'
 
 function SignIn() {
   const titleColor = useColorModeValue('teal.300', 'teal.200')
   const textColor = useColorModeValue('gray.400', 'white')
+  const [userInfo, setUserInfo] = useState({ email: '', password: '' })
+  const session = useSession()
+  console.log({ session })
+  const handleSubmit: FormEventHandler<HTMLDivElement> = async (e) => {
+    // validate your userinfo
+    e.preventDefault()
+    console.log(userInfo)
+    const res = await signIn('credentials', {
+      email: userInfo.email,
+      password: userInfo.password,
+      redirect: true,
+      callbackUrl: '/admin/dashboard',
+    })
+
+    console.log(res)
+  }
 
   return (
     <Auth>
@@ -31,7 +48,7 @@ function SignIn() {
               <Text mb="36px" ms="4px" color={textColor} fontWeight="bold" fontSize="14px">
                 Introduce tu correo y contraseña para continuar
               </Text>
-              <FormControl>
+              <FormControl onSubmit={handleSubmit} as="form">
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                   Email
                 </FormLabel>
@@ -42,6 +59,8 @@ function SignIn() {
                   type="text"
                   placeholder="Tu dirección de correo"
                   size="lg"
+                  value={userInfo.email}
+                  onChange={({ target }) => setUserInfo({ ...userInfo, email: target.value })}
                 />
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                   Contraseña
@@ -53,6 +72,8 @@ function SignIn() {
                   type="password"
                   placeholder="Tu contraseña"
                   size="lg"
+                  value={userInfo.password}
+                  onChange={({ target }) => setUserInfo({ ...userInfo, password: target.value })}
                 />
                 <Button
                   fontSize="1rem"

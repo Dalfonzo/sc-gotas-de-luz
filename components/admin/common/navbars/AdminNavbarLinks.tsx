@@ -1,6 +1,6 @@
 import { Flex, UseDisclosureReturn } from '@chakra-ui/react'
 import routes from '~/common/routes'
-import SidebarResponsive from '~/components/admin/sidebar/SidebarResponsive'
+import SidebarResponsive from '~/components/admin/common/sidebar/SidebarResponsive'
 
 interface AdminNavBarLinksI {
   logoText: string

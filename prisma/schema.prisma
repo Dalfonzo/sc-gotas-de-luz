@@ -9,31 +9,70 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 // TODO: añadir hook para borrar archivo anterior cuando es actualizado
-model FileDb{
-  id Int @id @default(autoincrement())
-  path String
-  name String 
-  url String 
-  news News?
+model FileDb {
+  id    Int    @id @default(autoincrement())
+  path  String
+  name  String
+  url   String
+  news  News?
   event Event?
 }
 
-model News{
-  id Int @id @default(autoincrement())
-  title String 
+model News {
+  id      Int      @id @default(autoincrement())
+  title   String
   content String
-  img FileDb @relation(fields: [imgId], references: [id])
-  imgId Int @unique
-  date DateTime @default(now())
+  img     FileDb   @relation(fields: [imgId], references: [id])
+  imgId   Int      @unique
+  date    DateTime @default(now())
 }
 
 model Event {
-  id Int @id @default(autoincrement())
-  title String
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  start DateTime
-  end DateTime
-  img FileDb @relation(fields: [imgId], references: [id])
-  imgId Int @unique
+  start       DateTime
+  end         DateTime
+  img         FileDb   @relation(fields: [imgId], references: [id])
+  imgId       Int      @unique
+}
+
+model Users {
+  id       String @id @default(uuid())
+  name     String
+  lastName String
+  email    String @unique
+  password String
+  roles    Roles  @relation(fields: [fkRole], references: [id])
+  fkRole   String
+}
+
+model Roles {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  description String?
+  users       Users[]
+  permissions Permissions[]
+}
+
+model Permissions {
+  create     Boolean    @default(false)
+  update     Boolean    @default(false)
+  delete     Boolean    @default(false)
+  read       Boolean    @default(false)
+  roles      Roles?     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId     String
+  resources  Resources? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String
+
+  @@id([roleId, resourceId])
+}
+
+model Resources {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  roles       Permissions[]
 }

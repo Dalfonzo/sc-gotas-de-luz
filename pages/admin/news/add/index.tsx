@@ -1,10 +1,10 @@
-import Admin from 'layouts/Admin'
+import { AdminLayout } from 'layouts/Admin'
 import NewsForm from '~/components/admin/news/NewsForm'
 
 export default function AddNews() {
   return (
-    <Admin>
+    <AdminLayout title="noticias">
       <NewsForm />
-    </Admin>
+    </AdminLayout>
   )
 }

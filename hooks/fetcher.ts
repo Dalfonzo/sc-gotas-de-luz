@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import { Unpack } from '../lib/models/common'
 interface extraOptions<Response> {
   // Query params to pass to fetch function
@@ -40,6 +41,9 @@ export const useFetcher = <Response>() => {
     options: FetcherOptions<Unpack<Response>> & { usePagination: true }
   ): Promise<usePaginationFetcherResponse<Response>>
 
+  const { data: sessionData } = useSession()
+  const accessToken = sessionData?.user.accessToken
+
   async function fetcher(url: string, options?: FetcherOptions<Unpack<Response>>): Promise<unknown> {
     let extra = ''
     if (options?.query) {
@@ -57,7 +61,9 @@ export const useFetcher = <Response>() => {
       })
     }
 
-    const res = await fetch(url + extra)
+    const res = await fetch(url + extra, {
+      headers: { ...(accessToken && { Authorization: `Bearer ${accessToken}` }) },
+    })
     const data = await res.json()
     const parsedData = options?.dates ? parseDates(data, options.dates as string[]) : data
     if (options?.usePagination === true) {

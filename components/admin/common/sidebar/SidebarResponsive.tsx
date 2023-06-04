@@ -17,7 +17,7 @@ import {
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { RoutesI } from '~/common/types'
-import Separator from '~/components/admin/separator'
+import Separator from '~/components/admin/common/separator'
 
 export default function SidebarResponsive({ routes }: { routes: RoutesI[] }) {
   const router = useRouter()
