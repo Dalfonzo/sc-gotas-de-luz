@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
+import { RESOURCES } from '~/utils/constants'
 const prisma = new PrismaClient()
 
 async function main() {
@@ -8,7 +9,7 @@ async function main() {
     data: { name: 'admin' },
   })
 
-  const resources = ['news', 'roles', 'users']
+  const resources = Object.values(RESOURCES)
   // TODO:  Probar estos seeds luego
   await Promise.all(
     resources.map(async (resource) => {

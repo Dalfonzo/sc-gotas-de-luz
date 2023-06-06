@@ -7,6 +7,8 @@ import { paginationHandler } from '~/lib/api/handler'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { EventI } from '~/lib/models/event'
+import { RESOURCES } from '~/utils/constants'
+import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 
 // Important for NextJS file uploads!
 export const config = {
@@ -15,7 +17,7 @@ export const config = {
   },
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const model = prisma.event
   const get = async () =>
     await paginationHandler<EventI[], Prisma.EventFindManyArgs>(req, res, model, {
@@ -31,4 +33,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return await model.create({ data: { ...event, img: { create: { ...files[FILE_UPLOAD_FIELDS.EVENTS] } } } })
   }
   await methodRouter(req, res, { get, post })
-}
+}, RESOURCES.EVENTS)

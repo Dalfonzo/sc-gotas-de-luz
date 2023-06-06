@@ -12,6 +12,7 @@ export const RESOURCES = {
   NEWS: 'NEWS',
   USERS: 'USERS',
   ROLES: 'ROLES',
+  EVENTS: 'EVENTS',
 }
 
 export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
