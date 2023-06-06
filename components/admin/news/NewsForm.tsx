@@ -121,10 +121,18 @@ export default function NewsForm({ initialState }: NewsFormProps) {
                 onClick={() => onSubmit()}
                 loadingText="Procesando"
                 variant="btn-primary"
+                width="11rem"
               >
                 Añadir
               </Button>
-              <Button leftIcon={<FaEye />} height="100%" variant="btn-white-border" onClick={onToggle} mb="2rem">
+              <Button
+                width="11rem"
+                leftIcon={<FaEye />}
+                height="100%"
+                variant="btn-white-border"
+                onClick={onToggle}
+                mb="2rem"
+              >
                 Visualizar
               </Button>
             </Flex>

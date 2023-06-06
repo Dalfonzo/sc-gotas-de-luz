@@ -14,6 +14,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <Fonts />
       <ChildComponent {...pageProps} />
+      <script
+        async
+        defer
+        crossOrigin="anonymous"
+        src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v17.0"
+        nonce="IVSYEDcT"
+      ></script>
     </ChakraProvider>
   )
 }

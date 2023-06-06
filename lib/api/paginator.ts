@@ -17,7 +17,7 @@ export interface PaginatedResult<T> {
 export type PaginateOptions = { page?: number | string; perPage?: number | string; pageZero: boolean }
 export type PaginateFunction = <Result, Conditions>(
   model: any,
-  req: NextApiRequest,
+  req: Pick<NextApiRequest, 'query'>,
   args?: Conditions
 ) => Promise<PaginatedResult<Result>>
 
@@ -43,7 +43,7 @@ export const paginator = (defaultOptions?: PaginateOptions): PaginateFunction =>
       }),
     ])
     const lastPage = Math.ceil(total / perPage)
-
+    
     return {
       data,
       meta: {
