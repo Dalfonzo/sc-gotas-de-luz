@@ -80,6 +80,7 @@ function Table<T>({
               padding: `${theme.spacing.md} !important`,
               fontSize: theme.fontSizes.sm,
               position: 'relative',
+              textWrap: 'balance',
             },
           },
         },

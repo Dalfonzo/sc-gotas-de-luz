@@ -1,5 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { MantineProvider } from '@mantine/core'
+import { ModalsProvider } from '@mantine/modals'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -14,20 +15,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   const ChildComponent = Component as any
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <RouterTransition />
-      <ChakraProvider theme={theme}>
-        <Fonts />
-        <SessionProvider session={pageProps.session}>
-          <ChildComponent {...pageProps} />
-        </SessionProvider>
-      </ChakraProvider>
-      <script
-        async
-        defer
-        crossOrigin="anonymous"
-        src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v17.0"
-        nonce="IVSYEDcT"
-      ></script>
+      <ModalsProvider>
+        <RouterTransition />
+        <ChakraProvider theme={theme}>
+          <Fonts />
+          <SessionProvider session={pageProps.session}>
+            <ChildComponent {...pageProps} />
+          </SessionProvider>
+        </ChakraProvider>
+        <script
+          async
+          defer
+          crossOrigin="anonymous"
+          src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v17.0"
+          nonce="IVSYEDcT"
+        ></script>
+      </ModalsProvider>
     </MantineProvider>
   )
 }

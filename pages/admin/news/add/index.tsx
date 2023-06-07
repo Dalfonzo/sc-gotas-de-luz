@@ -1,10 +1,12 @@
-import { AdminLayout } from 'layouts/Admin'
 import NewsForm from '~/components/admin/news/NewsForm'
+import { withProtectedRoute } from '~/hoc/withProtectedRoute'
+import { OPERATION_METHODS, RESOURCES } from '~/utils/constants'
 
-export default function AddNews() {
-  return (
-    <AdminLayout title="noticias">
-      <NewsForm />
-    </AdminLayout>
-  )
+function AddNews() {
+  return <NewsForm />
 }
+export default withProtectedRoute(AddNews, {
+  operation: OPERATION_METHODS.CREATE,
+  resource: RESOURCES.NEWS,
+  title: 'noticias',
+})

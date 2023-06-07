@@ -12,25 +12,31 @@ import {
 } from '@chakra-ui/react'
 import { News } from '@prisma/client'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 import { FaEye } from 'react-icons/fa'
 import * as Yup from 'yup'
+import { BackButton } from '~/components/client/common/back-button/BackButton'
 import { NewsArticle } from '~/components/client/news/article/Article'
 import BasicModal from '~/components/common/Modal'
+import { ApiImg } from '~/components/common/api-img/ApiImg'
 import FileUpload from '~/components/common/file-upload/FileUpload'
 import TextEditor from '~/components/common/text-editor/TextEditor'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
-import { getFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { CreateNews } from '~/prisma/types'
-import { responsiveProperty } from '~/theme/utils'
 
 interface NewsFormProps {
-  initialState?: News
+  initialState?: News & { img: any }
 }
 
 export default function NewsForm({ initialState }: NewsFormProps) {
+  const customFetcher = useFetcherInstance()
+  const router = useRouter()
   const parseValues = (values: CreateNews) => {
     const formData = new FormData()
-    Object.entries(values).forEach(([key, value]) => value && formData.append(key, value))
+    Object.entries({ title: values.title, news: values.news, content: values.content }).forEach(
+      ([key, value]) => value && formData.append(key, value)
+    )
     return formData
   }
   const formik = useFormik<CreateNews>({
@@ -43,15 +49,21 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     validationSchema: Yup.object<CreateNews>({
       title: Yup.string().trim().required('El título es requerido'),
       content: Yup.string().trim().required('EL contenido del artículo es requerido'),
-      news: Yup.string().required('Imagen requerida'),
+      news: Yup.string().test('img test', function (value: any) {
+        if (!value && !initialState) {
+          return this.createError({ path: this.path, message: 'La portada es requerida' })
+        }
+        return true
+      }),
     }),
     onSubmit: async (values) => {
-      const customFetcher = getFetcherInstance()
       const parsed = parseValues(values)
       if (initialState) {
-        return await customFetcher.put(`/api/news/${initialState.id}`, parsed)
+        await customFetcher.put(`/api/admin/news/${initialState.id}`, parsed)
+      } else {
+        await customFetcher.post('/api/admin/news', parsed)
       }
-      await customFetcher.post('/api/news', parsed)
+      router.replace('/admin/news')
       return true
     },
     validateOnBlur: true,
@@ -60,10 +72,7 @@ export default function NewsForm({ initialState }: NewsFormProps) {
   const { onSubmit, loadingSubmit } = useSubmitHandler<void>({
     callback: async () => {
       const result = await formik.submitForm()
-      if (result) {
-        formik.resetForm()
-        return true
-      }
+      return !!result
     },
     success: { message: 'Noticia añadida' },
   })
@@ -79,13 +88,8 @@ export default function NewsForm({ initialState }: NewsFormProps) {
   )
   return (
     <Box>
-      <Text
-        variant="subtitle"
-        as="h2"
-        mx="0"
-        marginTop={responsiveProperty({ mobileSize: 2, desktopSize: 6, unit: 'rem' })}
-        marginBottom="2rem"
-      >
+      <BackButton />
+      <Text variant="subtitle" as="h2" mx="0" marginTop={3} marginBottom="2rem">
         Añade un artículo
       </Text>
       <Text variant="normal" mt="2rem">
@@ -106,12 +110,17 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               <FormErrorMessage>{formik.errors.content}</FormErrorMessage>
             </FormControl>
             <FormControl isRequired isInvalid={Boolean(formik.errors.news && formik.touched.news)}>
-              <FileUpload
-                name="news"
-                label="Portada"
-                file={formik.values.news}
-                setFile={(file) => formik.setFieldValue('news', file)}
-              />
+              <Flex gap={5} align="center">
+                <FileUpload
+                  name="news"
+                  label="Portada"
+                  file={formik.values.news}
+                  setFile={(file) => formik.setFieldValue('news', file)}
+                />
+                {initialState && !formik.values.news && (
+                  <ApiImg url={initialState.img} alt="file" borderRadius="lg" w="5rem" h="5rem" objectFit="cover" />
+                )}
+              </Flex>
               <FormErrorMessage>{formik.errors.news}</FormErrorMessage>
             </FormControl>
             <Flex my="2rem" gap="5" height="3rem">

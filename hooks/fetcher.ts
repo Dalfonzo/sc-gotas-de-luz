@@ -35,14 +35,16 @@ export interface usePaginationFetcherResponse<Response> {
 }
 
 export const useFetcher = <Response>() => {
+  const { data: sessionData } = useSession()
+  const accessToken = sessionData?.user.accessToken
+  
   function fetcher(url: string, options: FetcherOptions<Unpack<Response>> & { usePagination: false }): Promise<Response>
   function fetcher(
     url: string,
     options: FetcherOptions<Unpack<Response>> & { usePagination: true }
   ): Promise<usePaginationFetcherResponse<Response>>
 
-  const { data: sessionData } = useSession()
-  const accessToken = sessionData?.user.accessToken
+
 
   async function fetcher(url: string, options?: FetcherOptions<Unpack<Response>>): Promise<unknown> {
     let extra = ''

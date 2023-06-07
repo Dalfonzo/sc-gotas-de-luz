@@ -13,6 +13,22 @@ interface Props extends InputProps {
   accept?: string
   label: string
 }
+export const FileCard = ({ file }: { file?: FileI }) => {
+  if (file)
+    return (
+      <Card mx="5" height="100%" width="fit-content" align="center">
+        <CardBody p="0" height="100%">
+          {file?.src ? (
+            <Image src={file.src} alt="file" borderRadius="lg" height="100%" objectFit="cover" />
+          ) : (
+            <CopyIcon height="100%" />
+          )}
+          <FormHelperText textAlign="center">...{file.name.slice(-12)}</FormHelperText>
+        </CardBody>
+      </Card>
+    )
+  return <></>
+}
 
 function FileUpload({ file, setFile, accept = 'image/png,image/jpeg', label, ...rest }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -33,22 +49,6 @@ function FileUpload({ file, setFile, accept = 'image/png,image/jpeg', label, ...
     inputRef.current?.click()
   }
 
-  const FileCard = ({ file }: { file?: FileI }) => {
-    if (file)
-      return (
-        <Card mx="5" height="100%" width="fit-content" align="center">
-          <CardBody p="0" height="100%">
-            {file?.src ? (
-              <Image src={file.src} alt="file" borderRadius="lg" height="100%" objectFit="cover" />
-            ) : (
-              <CopyIcon height="100%" />
-            )}
-            <FormHelperText textAlign="center">...{file.name.slice(-12)}</FormHelperText>
-          </CardBody>
-        </Card>
-      )
-    return <></>
-  }
   return (
     <div>
       <FormLabel htmlFor={rest.name}>{label}</FormLabel>
