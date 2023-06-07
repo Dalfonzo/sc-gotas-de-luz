@@ -1,20 +1,15 @@
 import { Box, Container, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
-import { compareAsc, format } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { compareAsc } from 'date-fns'
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import BasicModal, { CommonModalProps } from '~/components/common/Modal'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
+import { formatDate } from '~/lib/mappers/map-dates'
 import { EventI } from '~/lib/models/event'
 
 interface Props extends Omit<CommonModalProps, 'body' | 'title'> {
   event: EventI
 }
-function formatDate(date: Date | string) {
-  if (typeof date == 'string') {
-    date = new Date(date)
-  }
-  return format(date, `d 'de' MMMM hh:mmaaa`, { locale: es })
-}
+
 export default function EventModal({ event, onClose, visible }: Props) {
   const eventBody = (
     <Box>

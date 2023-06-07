@@ -17,7 +17,7 @@ export const apiRouteAccessGuard =
       include: {
         permissions: {
           where: {
-            resources: { name: resourceName.toLowerCase() },
+            resources: { name: resourceName.toUpperCase() },
             ...(method === HTTP_METHODS.POST && { create: true }),
             ...((method === HTTP_METHODS.PUT || method === HTTP_METHODS.PATCH) && { update: true }),
             ...(method === HTTP_METHODS.GET && { read: true }),
@@ -28,7 +28,6 @@ export const apiRouteAccessGuard =
     })
 
     const operationAllowed = !!rows?.permissions.length
-
     if (!operationAllowed || !Object.keys(HTTP_METHODS).includes(method!)) {
       return res.status(403).json({ message: 'You do not have permission to do that operation on this resource.' })
     }

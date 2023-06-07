@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (req) => {
   const id = Number(req.params?.id)
   try {
     const current = await getNewsId(id)
-    console.log({ current })
     return {
       props: { news: current },
     }

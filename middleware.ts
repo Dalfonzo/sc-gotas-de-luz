@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
     }
   } else if (isClientRoute(pathname)) {
     const { cookies } = req
-    const token = cookies.get('next-auth.session-token')
+    const token = cookies.get('next-auth.session-token') || cookies.get('next-auth.session-token.0')
     if (!token) return NextResponse.redirect(new URL('/sign-in', req.url))
   }
   return NextResponse.next()

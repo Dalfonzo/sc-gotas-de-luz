@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
-import { RESOURCES } from '~/utils/constants'
+import { RESOURCES } from '../utils/constants'
 const prisma = new PrismaClient()
 
 async function main() {
