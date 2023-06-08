@@ -24,6 +24,7 @@ function parseDates(item: any, dates: string[]) {
 
 interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates' | 'query'> {
   usePagination: boolean
+  pageZero?: boolean
 }
 
 export type useFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: false }]
@@ -37,20 +38,18 @@ export interface usePaginationFetcherResponse<Response> {
 export const useFetcher = <Response>() => {
   const { data: sessionData } = useSession()
   const accessToken = sessionData?.user.accessToken
-  
+
   function fetcher(url: string, options: FetcherOptions<Unpack<Response>> & { usePagination: false }): Promise<Response>
   function fetcher(
     url: string,
     options: FetcherOptions<Unpack<Response>> & { usePagination: true }
   ): Promise<usePaginationFetcherResponse<Response>>
 
-
-
   async function fetcher(url: string, options?: FetcherOptions<Unpack<Response>>): Promise<unknown> {
     let extra = ''
     if (options?.query) {
       extra += '?'
-      if (options.usePagination) {
+      if (options.usePagination && options.pageZero) {
         options.query = { pageZero: 'true', ...options.query }
       }
       Object.entries(options.query).forEach(([name, value], index, array) => {

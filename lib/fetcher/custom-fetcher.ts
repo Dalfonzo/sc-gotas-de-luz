@@ -9,7 +9,6 @@ export class CustomFetcher {
   }
 
   private async customFetch<R>(url: string, init: RequestInit) {
-    // TODO: probably add auth  token here
     const res = await fetch(url, { ...this.config, ...init, headers: { ...this.config?.headers, ...init.headers } })
     if (!res.ok) {
       throw new ApiError(`Request failed`, res.status)

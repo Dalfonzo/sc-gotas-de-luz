@@ -1,5 +1,6 @@
 import { Box, Container, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
 import { compareAsc } from 'date-fns'
+import Link from 'next/link'
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import BasicModal, { CommonModalProps } from '~/components/common/Modal'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
@@ -34,12 +35,16 @@ export default function EventModal({ event, onClose, visible }: Props) {
         Para más detalles, contáctanos:
       </Text>
       <Container width="fit-content" display="block" ml="auto" mr={0} pr={0}>
-        <IconButton variant="ghost" aria-label="Whatsapp">
-          <Icon as={FaWhatsapp} />
-        </IconButton>
-        <IconButton variant="ghost" aria-label="Instagram">
-          <Icon as={FaInstagram} />
-        </IconButton>
+        <Link href={process.env.NEXT_PUBLIC_WA_LINK || ''} target="_blank">
+          <IconButton variant="ghost" aria-label="Whatsapp">
+            <Icon as={FaWhatsapp} />
+          </IconButton>
+        </Link>
+        <Link href={process.env.NEXT_PUBLIC_IG_LINK || ''} target="_blank">
+          <IconButton variant="ghost" aria-label="Instagram">
+            <Icon as={FaInstagram} />
+          </IconButton>
+        </Link>
       </Container>
     </Box>
   )

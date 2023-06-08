@@ -36,7 +36,7 @@ function Table<T>({
   const onPageChangeHandler = (page: number) => {
     setCurrentPage(page)
     router.replace({
-      ...router,
+      // ...router,
       query: { ...router.query, page },
     })
   }
@@ -52,7 +52,7 @@ function Table<T>({
   return (
     <DataTable
       paginationColor="cyan"
-      recordsPerPage={RECORDS_PER_PAGE || recordsPerPage}
+      recordsPerPage={recordsPerPage || RECORDS_PER_PAGE}
       page={currentPage}
       onPageChange={onPageChangeHandler}
       classNames={classes}

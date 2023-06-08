@@ -3,11 +3,12 @@ import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { Event } from '@prisma/client'
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 import BasicModal from '~/components/common/Modal'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
-import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
+import { useFetcher, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -15,16 +16,24 @@ import { formatDate } from '~/lib/mappers/map-dates'
 import { RESOURCES } from '~/utils/constants'
 import Table from '../common/table/Table'
 import EventsForm from './Form'
+
+type FetcherResponse = usePaginationFetcherResponse<(Event & { img: any })[]>
+const PER_PAGE = 10
+
 export default function EventsManager() {
+  const router = useRouter()
   const { fetcher } = useFetcher<(Event & { img: any })[]>()
   const {
     data: events,
     error,
     mutate,
     isLoading,
-  } = useSWR<(Event & { img: any })[]>(
-    [`/api/admin/events`, { dates: ['start', 'end'] }],
-    ([url, dto]: useFetcherParams<Event[]>) => fetcher(url, dto)
+  } = useSWR<FetcherResponse>(
+    [
+      `/api/admin/events`,
+      { dates: ['start', 'end'], usePagination: true, query: { page: router.query.page, size: PER_PAGE } },
+    ],
+    ([url, dto]: usePaginationFetcherParams<Event[]>) => fetcher(url, dto)
   )
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.EVENTS })
   const fetcherInstance = useFetcherInstance()
@@ -71,8 +80,9 @@ export default function EventsManager() {
       <Table
         fetching={isLoading}
         idAccessor="id"
-        records={events}
-        totalRecords={events?.length}
+        recordsPerPage={PER_PAGE}
+        records={events?.records}
+        totalRecords={events?.total}
         columns={[
           {
             accessor: 'title',

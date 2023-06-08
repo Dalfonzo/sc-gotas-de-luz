@@ -6,25 +6,32 @@ import { IconEdit, IconEye, IconPlus, IconTrash } from '@tabler/icons-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { NewsArticle } from '~/components/client/news/article/Article'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
-import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
+import { useFetcher, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { RESOURCES } from '~/utils/constants'
 import Table from '../common/table/Table'
+
+type FetcherResponse = usePaginationFetcherResponse<(News & { img: any })[]>
+const PER_PAGE = 10
+
 export default function NewsMain() {
+  const router = useRouter()
   const { fetcher } = useFetcher<(News & { img: any })[]>()
   const {
     data: news,
     error,
     mutate,
     isLoading,
-  } = useSWR<(News & { img: any })[]>([`/api/admin/news`, { dates: 'date' }], ([url, dto]: useFetcherParams<News[]>) =>
-    fetcher(url, dto)
+  } = useSWR<FetcherResponse>(
+    [`/api/admin/news`, { dates: 'date', usePagination: true, query: { page: router.query.page, size: PER_PAGE } }],
+    ([url, dto]: usePaginationFetcherParams<News[]>) => fetcher(url, dto)
   )
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.NEWS })
   const [selected, setSelected] = useState<News | null>(null)
@@ -66,8 +73,9 @@ export default function NewsMain() {
       <Table
         fetching={isLoading}
         idAccessor="id"
-        records={news}
-        totalRecords={news?.length}
+        records={news?.records}
+        totalRecords={news?.total}
+        recordsPerPage={PER_PAGE}
         columns={[
           {
             accessor: 'title',

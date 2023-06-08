@@ -180,7 +180,7 @@ export default function EventsForm({ initialState, onSuccess }: EventFormProps) 
               onSubmit()
             }}
             loading={loadingSubmit}
-            color="green"
+            color="cyan"
             mb="lg"
             size="lg"
             mr="auto"
