@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
@@ -7,16 +7,23 @@ import { PrismaClient } from '@prisma/client'
 // Learn more:
 // https://pris.ly/d/help/next-js-best-practices
 
-let prisma: PrismaClient
+const MIDDLEWARES: Prisma.Middleware[] = []
 
+const getNewInstance = (): PrismaClient => {
+  const instance = new PrismaClient()
+  MIDDLEWARES.forEach((middleware) => instance.$use(middleware))
+  return instance
+}
+
+let prisma: PrismaClient
 if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
+  prisma = getNewInstance()
 } else {
   let globalWithPrisma = global as typeof globalThis & {
     prisma: PrismaClient
   }
   if (!globalWithPrisma.prisma) {
-    globalWithPrisma.prisma = new PrismaClient()
+    globalWithPrisma.prisma = getNewInstance()
   }
   prisma = globalWithPrisma.prisma
 }
