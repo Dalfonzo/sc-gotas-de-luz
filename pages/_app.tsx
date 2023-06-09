@@ -6,6 +6,7 @@ import type { AppProps } from 'next/app'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-quill/dist/quill.snow.css'
 import theme from 'theme/theme'
+import { ContextButton } from '~/components/admin/common/context-button/ContextButton'
 import { RouterTransition } from '~/components/common/router-transition/RouterTransition'
 import Fonts from '~/theme/foundations/fonts'
 import '../styles/styles.css'
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Fonts />
           <SessionProvider session={pageProps.session}>
             <ChildComponent {...pageProps} />
+            <ContextButton />
           </SessionProvider>
         </ChakraProvider>
         <script

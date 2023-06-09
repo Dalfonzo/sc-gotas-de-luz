@@ -46,12 +46,11 @@ export default function EventsForm({ initialState, onSuccess }: EventFormProps) 
 
   const formik = useFormik<CreateEvent>({
     initialValues: {
-      title: '',
-      description: '',
+      title: initialState?.title || '',
+      description: initialState?.description || '',
       events: undefined,
       start: '',
       end: '',
-      ...initialState,
       ...(initialState && {
         start: formatDateTimeLocal(initialState.start),
         end: formatDateTimeLocal(initialState.end),
@@ -72,7 +71,10 @@ export default function EventsForm({ initialState, onSuccess }: EventFormProps) 
         .test('end test', function (value: string) {
           const start = formik.values.start
           if (start && start > value) {
-            return this.createError({ path: this.path, message: 'La fecha final debe ser después de la fecha inicial' })
+            return this.createError({
+              path: this.path,
+              message: 'La fecha final debe ser después de la fecha inicial',
+            })
           }
           return true
         }),
