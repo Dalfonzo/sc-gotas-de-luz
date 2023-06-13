@@ -1,6 +1,7 @@
 import { Box, Flex, Image, List, ListItem, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { responsiveProperty } from '~/theme/utils'
+import { SocialMedia } from '../social-media/SocialMedia'
 
 const Footer = () => {
   return (
@@ -62,6 +63,9 @@ const Footer = () => {
             <ListItem>@gotasdeluz.ve</ListItem>
             <ListItem>(0414)-123456</ListItem>
             <ListItem>(0212)-71225215</ListItem>
+            <ListItem>
+              <SocialMedia />
+            </ListItem>
           </List>
         </Flex>
       </Box>
