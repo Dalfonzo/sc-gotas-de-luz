@@ -90,7 +90,7 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     <Box>
       <BackButton />
       <Text variant="subtitle" as="h2" mx="0" marginTop={3} marginBottom="2rem">
-        Añade un artículo
+        {initialState ? 'Actualizar artículo' : 'Añade un artículo'}
       </Text>
       <Text variant="normal" mt="2rem">
         Llena los campos para agregar este artículo a la sección de <i>Noticias</i>
@@ -123,25 +123,17 @@ export default function NewsForm({ initialState }: NewsFormProps) {
               </Flex>
               <FormErrorMessage>{formik.errors.news}</FormErrorMessage>
             </FormControl>
-            <Flex my="2rem" gap="5" height="3rem">
+            <Flex my="2rem" gap="5">
               <Button
                 leftIcon={<AddIcon />}
                 isLoading={loadingSubmit}
                 onClick={() => onSubmit()}
-                loadingText="Procesando"
                 variant="btn-primary"
-                width="11rem"
+                width="12rem"
               >
-                Añadir
+                {initialState ? 'Actualizar' : 'Añadir'}
               </Button>
-              <Button
-                width="11rem"
-                leftIcon={<FaEye />}
-                height="100%"
-                variant="btn-white-border"
-                onClick={onToggle}
-                mb="2rem"
-              >
+              <Button width="12rem" leftIcon={<FaEye />} variant="btn-white-border" onClick={onToggle}>
                 Visualizar
               </Button>
             </Flex>

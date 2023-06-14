@@ -1,4 +1,4 @@
-import { Flex, Spinner, useDisclosure } from '@chakra-ui/react'
+import { Flex, useDisclosure } from '@chakra-ui/react'
 import format from 'date-fns/format'
 import getDay from 'date-fns/getDay'
 import { es } from 'date-fns/locale'
@@ -68,10 +68,9 @@ const MyCalendar = ({ views = { month: true }, defaultView = 'month', ...rest }:
   }
 
   return (
-    <UiFeedback isError={!!error}>
+    <UiFeedback isError={!!error} isLoading={isLoading}>
       {event && <EventModal event={event} visible={isOpen} onClose={onClose} />}
       <Flex direction="column" justify="center" marginX={['0.5rem', '2rem']}>
-        {isLoading && <Spinner marginBottom="3" marginX="auto" />}
         <Calendar
           culture="es"
           localizer={localizer}

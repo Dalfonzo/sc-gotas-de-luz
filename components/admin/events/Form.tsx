@@ -187,7 +187,7 @@ export default function EventsForm({ initialState, onSuccess }: EventFormProps) 
             size="lg"
             mr="auto"
           >
-            Agregar
+            {initialState ? 'Actualizar' : 'Agregar'}
           </Button>
         </Flex>
       </form>
