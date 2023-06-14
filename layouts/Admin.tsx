@@ -25,13 +25,15 @@ import {
   IconUserHeart,
   IconUsersGroup,
 } from '@tabler/icons-react'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { useFetcher } from '~/hooks/fetcher'
+import { useUserStore } from '~/store/users/useUserStore'
 import { SWR_KEYS } from '~/utils/constants'
+
 const useStyles = createStyles((theme) => ({
   navbar: {
     backgroundColor: theme.colors.cyan[4],
@@ -143,7 +145,14 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <a
+          href="#"
+          className={classes.link}
+          onClick={(event) => {
+            event.preventDefault()
+            signOut({ redirect: true, callbackUrl: '/sign-in' })
+          }}
+        >
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
             <div>{isOpen && <Text ml="sm">Logout</Text>}</div>
@@ -172,6 +181,13 @@ const PageHeading = ({ title }: { title: string }) => {
 export const AdminLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
   const [opened, setOpened] = useState(true)
   const { data } = useSession()
+  const { loadUser } = useUserStore(({ loadUser }) => ({
+    loadUser,
+  }))
+
+  useEffect(() => {
+    loadUser()
+  }, [loadUser])
 
   return (
     <AppShell
