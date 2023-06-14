@@ -34,16 +34,21 @@ export const paginator = (defaultOptions?: PaginateOptions): PaginateFunction =>
     }
     const perPage = Number(options?.perPage || defaultOptions?.perPage) || 10
     const skip = page > 0 ? perPage * (page - 1) : 0
+
+    // set sorting
+    const { sortBy, dir } = req.query
+
     const [total, data] = await Promise.all([
       model.count({ where: args.where }),
       model.findMany({
         ...args,
+        ...(typeof sortBy === 'string' && { orderBy: { [sortBy]: dir || 'asc' } }),
         take: perPage,
         skip,
       }),
     ])
     const lastPage = Math.ceil(total / perPage)
-    
+
     return {
       data,
       meta: {

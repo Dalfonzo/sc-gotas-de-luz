@@ -31,7 +31,11 @@ export default function EventsManager() {
   } = useSWR<FetcherResponse>(
     [
       `/api/admin/events`,
-      { dates: ['start', 'end'], usePagination: true, query: { page: router.query.page, size: PER_PAGE } },
+      {
+        dates: ['start', 'end'],
+        usePagination: true,
+        query: { page: router.query.page, size: PER_PAGE, sortBy: router.query.sortBy, dir: router.query.dir },
+      },
     ],
     ([url, dto]: usePaginationFetcherParams<Event[]>) => fetcher(url, dto)
   )

@@ -30,7 +30,14 @@ export default function NewsMain() {
     mutate,
     isLoading,
   } = useSWR<FetcherResponse>(
-    [`/api/admin/news`, { dates: 'date', usePagination: true, query: { page: router.query.page, size: PER_PAGE } }],
+    [
+      `/api/admin/news`,
+      {
+        dates: 'date',
+        usePagination: true,
+        query: { page: router.query.page, size: PER_PAGE, sortBy: router.query.sortBy, dir: router.query.dir },
+      },
+    ],
     ([url, dto]: usePaginationFetcherParams<News[]>) => fetcher(url, dto)
   )
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.NEWS })
@@ -90,7 +97,6 @@ export default function NewsMain() {
             title: 'Cuerpo',
             width: 250,
             ellipsis: true,
-            sortable: true,
             render: ({ content }) => (
               <Text
                 lineClamp={3}
