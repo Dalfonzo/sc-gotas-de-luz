@@ -8,7 +8,6 @@ export const globalStyles = {
     global: {
       '*': {
         boxSizing: 'border-box',
-        fontFamily: 'inter',
       },
       body: {
         padding: '0',

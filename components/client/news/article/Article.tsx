@@ -52,7 +52,7 @@ export const NewsArticle = ({ news }: Props) => {
     <Box maxW="100%" p="2rem" width="1080px" mx="auto">
       <Heading mb="5">{news.title}</Heading>
       <Divider my="3" />
-      <Flex px="1" fontWeight="thin" fontSize="sm" gap={1} my="3" wrap="wrap" justifyContent="space-between">
+      <Flex px="1" fontWeight="light" fontSize="sm" gap={1} my="3" wrap="wrap" justifyContent="space-between">
         <Flex align="center">
           <BiUser />
           <Text>&nbsp; Por: {news.author || 'Gotas de Luz'}</Text>

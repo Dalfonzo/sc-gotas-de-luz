@@ -29,5 +29,5 @@ export function formatDateTimeLocal(date: Date | string) {
   if (typeof date == 'string') {
     date = new Date(date)
   }
-  return format(date, `yyyy-MM-dd\'T\'HH:mm`, {})
+  return format(date, `yyyy-MM-dd'T'HH:mm`, {})
 }

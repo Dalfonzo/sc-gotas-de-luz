@@ -44,7 +44,7 @@ const NewsCard = ({ img, title, content, date, ...rest }: CardI | CardPreviewI) 
         </Text>
         <Flex align="center" gap={2} paddingX={padding} marginBottom="1rem">
           <TimeIcon />
-          <Text fontWeight="thin" fontSize="sm">
+          <Text fontWeight="light" fontSize="sm">
             {formatDistanceToNow(date, { locale: es, addSuffix: true })}
           </Text>
         </Flex>
