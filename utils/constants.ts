@@ -7,12 +7,13 @@ export const HTTP_METHODS = {
   POST: 'POST',
   PATCH: 'PATCH',
 }
-
+// TODO: quizás cambiar los nombres de recursos a español para mostrarlos en el admin
 export const RESOURCES = {
   NEWS: 'NEWS',
   USERS: 'USERS',
   ROLES: 'ROLES',
   EVENTS: 'EVENTS',
+  VOLUNTEERS: 'VOLUNTEERS',
 }
 
 export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
