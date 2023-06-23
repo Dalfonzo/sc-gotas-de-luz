@@ -12,11 +12,10 @@ import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 */
 export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const get = async () => {
-    const formId = process.env.GOOGLE_FORM_VOLUNTEERS_ID
+    const formId = process.env.NEXT_PUBLIC_GOOGLE_FORM_VOLUNTEERS_ID
     const googleInstance = getGoogleInstance()
     const { page, size } = req.query
     const form = await googleInstance.get({ formId: formId })
-    console.log({ page })
     const responses = await googleInstance.responses.list({
       formId: formId,
       pageSize: Number(size || 10),
