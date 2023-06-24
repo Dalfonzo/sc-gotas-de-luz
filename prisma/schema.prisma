@@ -75,3 +75,14 @@ model Resources {
   description String?
   roles       Permissions[]
 }
+
+model Volunteer{
+  id              String    @id @default(uuid())
+  name            String 
+  phone           String 
+  email           String 
+  birthDate       String 
+  formReference   String    @unique
+  isActive        Boolean   @default(false)
+  date            DateTime  @default(now())
+}
