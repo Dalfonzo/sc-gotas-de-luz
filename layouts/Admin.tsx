@@ -15,7 +15,15 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { IconCalendar, IconHome, IconLock, IconLogout, IconNews, IconUsersGroup } from '@tabler/icons-react'
+import {
+  IconCalendar,
+  IconHome,
+  IconLock,
+  IconLogout,
+  IconNews,
+  IconUserHeart,
+  IconUsersGroup,
+} from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -78,6 +86,8 @@ const linksRows = [
   { link: '/admin/dashboard', label: 'tablero', icon: IconHome },
   { link: '/admin/roles', label: 'roles', icon: IconLock },
   { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
+  // TODO: add pending volunteers indicator
+  { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart },
   { link: '/admin/events', label: 'calendario', icon: IconCalendar },
   { link: '/admin/news', label: 'noticias', icon: IconNews },
 ]

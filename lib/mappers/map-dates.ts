@@ -18,11 +18,11 @@ export function mapDates<T extends Record<string, any>, Keys extends keyof T>(
   })
 }
 
-export function formatDate(date: Date | string) {
+export function formatDate(date: Date | string, simple = false) {
   if (typeof date == 'string') {
     date = new Date(date)
   }
-  return format(date, `d 'de' MMMM hh:mmaaa`, { locale: es })
+  return format(date, simple ? `d-M-yyyy` : `d 'de' MMMM hh:mmaaa`, { locale: es })
 }
 
 export function formatDateTimeLocal(date: Date | string) {

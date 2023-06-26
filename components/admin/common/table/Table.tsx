@@ -1,4 +1,5 @@
-import { createStyles } from '@mantine/core'
+import { Center, Stack, Text, ThemeIcon, createStyles } from '@mantine/core'
+import { IconDatabaseOff } from '@tabler/icons-react'
 import { DataTable, DataTableProps, DataTableSortStatus } from 'mantine-datatable'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -56,6 +57,16 @@ function Table<T>({
       page={currentPage}
       onPageChange={onPageChangeHandler}
       classNames={classes}
+      emptyState={
+        <Center>
+          <Stack align="center" spacing="0">
+            <ThemeIcon color="gray" variant="light">
+              <IconDatabaseOff />
+            </ThemeIcon>
+            <Text fz="sm">Sin registros</Text>
+          </Stack>
+        </Center>
+      }
       sx={(theme) => ({
         margin: 'auto',
         padding: `${theme.spacing.lg} !important`,

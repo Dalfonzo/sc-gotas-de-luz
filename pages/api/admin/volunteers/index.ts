@@ -15,8 +15,12 @@ import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const model = prisma.volunteer
   const get = async () => {
+    const { active } = req.query
     await paginationHandler<Volunteer[], Prisma.VolunteerFindManyArgs>(req, res, model, {
       orderBy: { date: 'desc' },
+      where: {
+        ...(active && { isActive: active !== 'false' }),
+      },
     })
   }
   await methodRouter(req, res, { get })
