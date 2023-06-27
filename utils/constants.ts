@@ -22,3 +22,7 @@ export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
   DELETE: 'DELETE',
   UPDATE: 'UPDATE',
 }
+
+export const SWR_KEYS = {
+  PENDING_VOLUNTEERS: '/api/admin/volunteers/pending',
+}

@@ -7,6 +7,7 @@ import {
   Flex,
   Group,
   Header,
+  Indicator,
   MediaQuery,
   Navbar,
   NavbarProps,
@@ -28,7 +29,9 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-
+import useSWR from 'swr'
+import { useFetcher } from '~/hooks/fetcher'
+import { SWR_KEYS } from '~/utils/constants'
 const useStyles = createStyles((theme) => ({
   navbar: {
     backgroundColor: theme.colors.cyan[4],
@@ -86,8 +89,7 @@ const linksRows = [
   { link: '/admin/dashboard', label: 'tablero', icon: IconHome },
   { link: '/admin/roles', label: 'roles', icon: IconLock },
   { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
-  // TODO: add pending volunteers indicator
-  { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart },
+  { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart, swr: SWR_KEYS.PENDING_VOLUNTEERS },
   { link: '/admin/events', label: 'calendario', icon: IconCalendar },
   { link: '/admin/news', label: 'noticias', icon: IconNews },
 ]
@@ -95,6 +97,11 @@ const linksRows = [
 export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> & { isOpen: boolean }) {
   const { classes, cx } = useStyles()
   const router = useRouter()
+  const { fetcher } = useFetcher<{ pending: number }>()
+  const { data: volunteerData } = useSWR<{ pending: number }>(SWR_KEYS.PENDING_VOLUNTEERS, fetcher)
+  const swrIndicators = {
+    [SWR_KEYS.PENDING_VOLUNTEERS]: volunteerData,
+  }
   const links = linksRows.map((item) => (
     <Link
       className={cx(classes.link, { [classes.linkActive]: router.asPath.startsWith(item.link) })}
@@ -104,7 +111,15 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
         router.push(item.link)
       }}
     >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <Indicator
+        label={item.swr && swrIndicators[item.swr]?.pending}
+        disabled={!item.swr || !swrIndicators[item.swr]?.pending}
+        inline
+        size={16}
+      >
+        <item.icon className={classes.linkIcon} stroke={1.5} />
+      </Indicator>
+
       <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
         <div>
           {isOpen && (
