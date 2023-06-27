@@ -26,3 +26,7 @@ export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
 export const SWR_KEYS = {
   PENDING_VOLUNTEERS: '/api/admin/volunteers/pending',
 }
+
+export const LINKS = {
+  VOLUNTEER_FORM: `https://docs.google.com/forms/d/${process.env.NEXT_PUBLIC_GOOGLE_FORM_VOLUNTEERS_ID}/viewform?ts=60be461e&edit_requested=true`,
+}

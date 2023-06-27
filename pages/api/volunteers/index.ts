@@ -31,8 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new BadRequestError(`Response <${body.respondentEmail}> doesn't exist`)
     }
 
-    console.log(body)
-
     if (!entry.responseId) {
       throw new Error(`Response id couln't be retrieved`)
     }

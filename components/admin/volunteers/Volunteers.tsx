@@ -44,17 +44,20 @@ export default function VolunteersTable({ showActives }: Props) {
     ([url, dto]: usePaginationFetcherParams<Volunteer[]>) => fetcher(url, dto)
   )
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.VOLUNTEERS })
-  const { onDelete } = useVolunteerActions({ afterDelete: mutate, afterUpdate: mutate })
+  const { onDelete, VolunteerModal, toggleCreateModal } = useVolunteerActions({
+    afterDelete: mutate,
+    afterUpdate: mutate,
+    afterCreate: mutate,
+  })
+
   return (
     <>
       <Flex ml="auto" w="fit-content" my="lg" gap={10}>
         <GFormsButton />
         {showActives && (
-          <Link href="/admin/volunteers/add">
-            <Button w="10rem" leftIcon={<IconPlus />} color="green">
-              Agregar
-            </Button>
-          </Link>
+          <Button w="10rem" leftIcon={<IconPlus />} onClick={() => toggleCreateModal()} color="green">
+            Agregar
+          </Button>
         )}
       </Flex>
       <Table
@@ -108,7 +111,7 @@ export default function VolunteersTable({ showActives }: Props) {
                   </ActionIcon>
                 </Link>
                 {canUpdate && showActives && (
-                  <ActionIcon variant="light" color="orange">
+                  <ActionIcon onClick={() => toggleCreateModal(item)} variant="light" color="orange">
                     <IconEdit size="1rem" />
                   </ActionIcon>
                 )}
@@ -127,6 +130,7 @@ export default function VolunteersTable({ showActives }: Props) {
           },
         ]}
       />
+      {VolunteerModal}
     </>
   )
 }

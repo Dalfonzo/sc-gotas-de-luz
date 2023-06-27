@@ -2,6 +2,7 @@ import { Flex, Link, Text } from '@chakra-ui/react'
 import { useScrollIntoView } from '@mantine/hooks'
 import NextLink from 'next/link'
 import { BsEmojiLaughing, BsHeart, BsHeartPulse, BsLightbulb, BsPeople } from 'react-icons/bs'
+import { LINKS } from '~/utils/constants'
 import LinkButton from '../common/link-button/LinkButton'
 import { InfoCard, InfoCardProps } from './Card'
 import VHeading from './Heading'
@@ -54,7 +55,7 @@ const cards: InfoCardProps[] = [
 ]
 export const VolunteersLayout = () => {
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLParagraphElement>({ offset: 80 })
-  const formLink = `https://docs.google.com/forms/d/${process.env.NEXT_PUBLIC_GOOGLE_FORM_VOLUNTEERS_ID}/viewform?ts=60be461e&edit_requested=true`
+  const formLink = LINKS.VOLUNTEER_FORM
   return (
     <Flex direction="column" align="center" maxW="7xl" margin="auto" px="5">
       <VHeading onScroll={scrollIntoView} />

@@ -16,12 +16,15 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const model = prisma.volunteer
   const get = async () => {
     const { active } = req.query
-    await paginationHandler<Volunteer[], Prisma.VolunteerFindManyArgs>(req, res, model, {
+    return await paginationHandler<Volunteer[], Prisma.VolunteerFindManyArgs>(req, res, model, {
       orderBy: { date: 'desc' },
       where: {
         ...(active && { isActive: active !== 'false' }),
       },
     })
   }
-  await methodRouter(req, res, { get })
+  const post = async () => {
+    return await model.create({ data: { ...req.body, isActive: true } })
+  }
+  await methodRouter(req, res, { get, post })
 }, RESOURCES.VOLUNTEERS)

@@ -1,17 +1,46 @@
 import { Group, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { Volunteer } from '@prisma/client'
+import { useState } from 'react'
+import BasicModal from '~/components/common/Modal'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import VolunteersForm from './Form'
 
 interface Props {
   afterDelete?: () => Promise<any>
   afterUpdate?: () => Promise<any>
+  afterCreate?: () => Promise<any>
 }
 
-export const useVolunteerActions = ({ afterDelete, afterUpdate }: Props) => {
+export const useVolunteerActions = ({ afterDelete, afterUpdate, afterCreate }: Props) => {
   const fetcherInstance = useFetcherInstance()
+  const [selected, setSelected] = useState<Volunteer | null>(null)
+  const [createModal, { toggle }] = useDisclosure(false)
 
+  const toggleCreateModal = (selected?: Volunteer): void => {
+    selected ? setSelected(selected) : setSelected(null)
+    toggle()
+  }
+
+  const VolunteerModal = (
+    <BasicModal
+      title={'Registrar voluntario'}
+      visible={createModal}
+      onClose={toggleCreateModal}
+      size="2xl"
+      body={
+        <VolunteersForm
+          initialState={selected}
+          onSuccess={async () => {
+            afterCreate && (await afterCreate())
+            toggleCreateModal()
+          }}
+        />
+      }
+    />
+  )
   const { onSubmit: onUpdate, loadingSubmit: loadingUpdate } = useSubmitHandler<string>({
     callback: async (id) => {
       await fetcherInstance.put(`/api/admin/volunteers/${id}/approve`, { isActive: true })
@@ -74,9 +103,10 @@ export const useVolunteerActions = ({ afterDelete, afterUpdate }: Props) => {
       confirmProps: { color: 'red', loading: loadingDelete },
       onConfirm: async () => await onDelete(item.id),
     })
-  // TODO: add on update
   return {
     onDelete: openDeleteModal,
     onApprove: openUpdateModal,
+    toggleCreateModal,
+    VolunteerModal,
   }
 }

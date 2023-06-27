@@ -82,7 +82,7 @@ model Volunteer{
   phone           String 
   email           String 
   birthDate       String 
-  formReference   String    @unique
+  formReference   String?   @unique 
   isActive        Boolean   @default(false)
   date            DateTime  @default(now())
 }

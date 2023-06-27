@@ -27,12 +27,15 @@ export const VolunteerDetails = ({ volunteer }: Props) => {
   const router = useRouter()
   const [isApproved, setIsApproved] = useState(volunteer.values.isActive)
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.VOLUNTEERS })
-  const { onDelete, onApprove } = useVolunteerActions({
+  const { onDelete, onApprove, toggleCreateModal, VolunteerModal } = useVolunteerActions({
     afterDelete: async () => {
       await router.replace('/admin/volunteers')
     },
     afterUpdate: async () => {
       setIsApproved(true)
+    },
+    afterCreate: async () => {
+      await router.replace(router.asPath)
     },
   })
   const brief = [
@@ -110,7 +113,7 @@ export const VolunteerDetails = ({ volunteer }: Props) => {
         {isApproved && canUpdate && (
           <Button
             onClick={() => {
-              /* TODO: onUpdate */
+              toggleCreateModal(volunteer.values)
             }}
             color="orange"
             leftIcon={<IconEdit />}
@@ -173,6 +176,7 @@ export const VolunteerDetails = ({ volunteer }: Props) => {
       {BriefCard}
       {Form}
       {Actions}
+      {VolunteerModal}
     </Stack>
   )
 }
