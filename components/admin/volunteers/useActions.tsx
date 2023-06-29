@@ -3,9 +3,11 @@ import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { Volunteer } from '@prisma/client'
 import { useState } from 'react'
+import { useSWRConfig } from 'swr'
 import BasicModal from '~/components/common/Modal'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import { SWR_KEYS } from '~/utils/constants'
 import VolunteersForm from './Form'
 
 interface Props {
@@ -18,7 +20,7 @@ export const useVolunteerActions = ({ afterDelete, afterUpdate, afterCreate }: P
   const fetcherInstance = useFetcherInstance()
   const [selected, setSelected] = useState<Volunteer | null>(null)
   const [createModal, { toggle }] = useDisclosure(false)
-
+  const { mutate } = useSWRConfig()
   const toggleCreateModal = (selected?: Volunteer): void => {
     selected ? setSelected(selected) : setSelected(null)
     toggle()
@@ -44,6 +46,7 @@ export const useVolunteerActions = ({ afterDelete, afterUpdate, afterCreate }: P
   const { onSubmit: onUpdate, loadingSubmit: loadingUpdate } = useSubmitHandler<string>({
     callback: async (id) => {
       await fetcherInstance.put(`/api/admin/volunteers/${id}/approve`, { isActive: true })
+      await mutate(SWR_KEYS.PENDING_VOLUNTEERS)
       afterUpdate && (await afterUpdate())
       return true
     },

@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import { google } from 'googleapis'
 export const getGoogleInstance = () => {
   const auth = new google.auth.GoogleAuth({
@@ -16,4 +17,14 @@ export const getGoogleInstance = () => {
   google.options({ auth: auth })
 
   return google.forms('v1').forms
+}
+type GoogleCreds = {
+  client_id: string
+  private_key: string
+} | null
+export const getGoogleCredentials = (): GoogleCreds => {
+  const file = process.env.GOOGLE_AUTH_TOKEN_PATH ? process.env.GOOGLE_AUTH_TOKEN_PATH : null
+  if (!file) return null
+  const raw = readFileSync(file)
+  return JSON.parse(raw.toString())
 }
