@@ -44,7 +44,7 @@ export default function VolunteersTable({ showActives }: Props) {
     ([url, dto]: usePaginationFetcherParams<Volunteer[]>) => fetcher(url, dto)
   )
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.VOLUNTEERS })
-  const { onDelete, VolunteerModal, toggleCreateModal } = useVolunteerActions({
+  const { onDelete, VolunteerModal, toggleCreateModal, onApprove } = useVolunteerActions({
     afterDelete: mutate,
     afterUpdate: mutate,
     afterCreate: mutate,
@@ -116,7 +116,7 @@ export default function VolunteersTable({ showActives }: Props) {
                   </ActionIcon>
                 )}
                 {canUpdate && !showActives && (
-                  <ActionIcon variant="light" color="green">
+                  <ActionIcon onClick={() => onApprove(item)} variant="light" color="green">
                     <IconUserCheck size="1rem" />
                   </ActionIcon>
                 )}

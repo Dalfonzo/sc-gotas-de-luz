@@ -59,7 +59,8 @@ export const useVolunteerActions = ({ afterDelete, afterUpdate, afterCreate }: P
       centered: true,
       children: (
         <Text size="sm">
-          El voluntario será notificado respecto a tu decición.
+          Asegúrate de haber chequeado todos los aspectos para aprobar su solicitud. El voluntario será notificado
+          respecto a tu decición.
           <Group position="apart" spacing="sm" mt="md" mb="lg">
             <span>
               Nombre: <b>{item.name}</b>{' '}

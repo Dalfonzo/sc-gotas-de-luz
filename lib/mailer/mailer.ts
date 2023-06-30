@@ -8,6 +8,7 @@ export interface EmailDataDto<Data = Record<string, any>> {
   name?: string
   title?: string
   data?: Data
+  button?: string
 }
 
 export interface EmailSendDto<Data = Record<string, any>> {
@@ -56,9 +57,17 @@ class NodemailerAdapter {
     if (!existsSync(templatePath)) {
       throw new Error(`Email template [${templatePath}] not found`)
     }
+    const websiteURL = process.env.NEXT_PUBLIC_SITE_URL
+
+    const meta = {
+      //TODO: add contact phone
+      phone: '',
+      email: process.env.EMAIL_MAIL,
+      websiteURL,
+    }
     return new Promise((resolve, reject) => {
       this.email
-        .render(templatePath, context)
+        .render(templatePath, { url: websiteURL, ...context, meta })
         .then((result) => {
           resolve(result)
         })
@@ -70,10 +79,8 @@ class NodemailerAdapter {
 
   async sendEmail({ to, subject, templatePath, data = {}, attachments = [] }: EmailSendDto) {
     let template: string
-    const adminClientURL = process.env.ADMIN_CLIENT_URL
     try {
       template = await this.loadTemplate(templatePath, {
-        url: adminClientURL,
         ...data,
       })
     } catch (error: any) {

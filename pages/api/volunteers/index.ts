@@ -4,6 +4,8 @@ import { BadRequestError } from '~/lib/api/errors/api-error'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { getGoogleInstance } from '~/lib/google/google-apis'
+import { mailer } from '~/lib/mailer/mailer'
+import { MAIL_TEMPLATES } from '~/lib/mailer/templates'
 
 interface FormBody {
   respondentEmail: string
@@ -35,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error(`Response id couln't be retrieved`)
     }
 
-    await prisma.volunteer.create({
+    const registered = await prisma.volunteer.create({
       data: {
         name: body.name,
         birthDate: body.birthDate,
@@ -43,6 +45,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         phone: body.phone,
         formReference: entry.responseId,
       },
+    })
+    mailer.sendEmail({
+      to: registered.email,
+      ...MAIL_TEMPLATES.VOLUNTEER_RECEIVED,
+      data: { button: 'Visitar Sitio', name: registered.name, title: 'Solicitud Recibida' },
     })
     res.status(200).end()
   }

@@ -69,7 +69,6 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const get = async () => {
     return getVolunteerDetails(id)
   }
-  // TODO: approve volunteer
   const put = async () => {
     return await model.update({
       data: { ...req.body },
