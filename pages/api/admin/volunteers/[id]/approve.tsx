@@ -20,8 +20,7 @@ export const approveVolunteer = async (id: string) => {
     await mailer.sendEmail({
       to: volunteer.email,
       ...MAIL_TEMPLATES.VOLUNTEER_APPROVED,
-      // TODO: determine email action
-      data: { name: volunteer.name, title: `Voluntariado Aceptado`, button: 'TBD', url: '' },
+      data: { name: volunteer.name, title: `Voluntariado Aceptado` },
     })
     return updated
   })
