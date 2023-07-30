@@ -147,8 +147,8 @@ export const VolunteerDetails = ({ volunteer }: Props) => {
             <Box key={index} mb="md">
               <Text>{answer.title}</Text>
               <List ml="md">
-                {answer.textAnswers?.answers?.map((ans) => (
-                  <List.Item>{ans.value}</List.Item>
+                {answer.textAnswers?.answers?.map((ans, idx) => (
+                  <List.Item key={idx}>{ans.value}</List.Item>
                 ))}
               </List>
             </Box>

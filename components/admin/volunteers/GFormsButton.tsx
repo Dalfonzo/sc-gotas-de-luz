@@ -2,7 +2,7 @@ import { Button } from '@mantine/core'
 import { IconBrandGoogle } from '@tabler/icons-react'
 import Link from 'next/link'
 interface Props {
-  response?: string
+  response?: string | null
 }
 export const GFormsButton = ({ response }: Props) => {
   const getLink = () =>
