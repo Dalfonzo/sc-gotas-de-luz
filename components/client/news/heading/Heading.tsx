@@ -3,14 +3,14 @@ import { responsiveProperty } from '~/theme/utils'
 
 const Heading = () => {
   return (
-    <Box my={responsiveProperty({ desktopSize: 7, mobileSize: 2, unit: 'rem' })} as="section">
+    <Box maxW="1080px" mx="auto" my={responsiveProperty({ desktopSize: 7, mobileSize: 2, unit: 'rem' })} as="section">
       <Text as="h1" variant="title" marginBottom="4rem" textAlign="center">
         Novedades
       </Text>
       <Text variant="normal" px="2rem">
-        Labore ea Lorem cillum laborum sint duis esse enim adipisicing adipisicing non. Laborum anim ullamco amet aute
-        commodo. Nostrud nulla commodo anim id ullamco officia do aliqua amet. Sint amet ut commodo deserunt deserunt
-        qui. Deserunt exercitation est labore ea elit.
+        ¡Bienvenido a la sección de noticias! Acá compartimos historias, reflexiones y actualizaciones sobre nuestros
+        esfuerzos y el impacto que estamos causando en nuestra comunidad. Redactados desde el corazón, esperamos que
+        estos artículos eduquen, informen e inspiren a involucrarse para marcar la diferencia ❤️
       </Text>
     </Box>
   )

@@ -1,5 +1,5 @@
 import { TimeIcon } from '@chakra-ui/icons'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Link from 'next/link'
@@ -12,40 +12,42 @@ const NewsCard = ({ img, title, content, date, ...rest }: CardI | CardPreviewI) 
   const link = 'id' in rest && '/news/' + rest.id
   const CardImg = (
     <ApiImg
-      paddingX={responsiveProperty({ mobileSize: -1, desktopSize: -2, unit: 'rem' })}
       url={img}
       width="100%"
       height="15rem"
       alt="imagen"
       marginBottom="1rem"
       className="fade"
+      borderTopRadius="lg"
       objectFit="cover"
     />
   )
   return (
     <Box maxWidth="100%">
-      <Text
-        fontSize={responsiveProperty({ mobileSize: 16, desktopSize: 20 })}
-        fontWeight="bold"
-        color="text.dark"
-        marginBottom="1rem"
-      >
-        {link ? <Link href={link}>{title}</Link> : title}
-      </Text>
-
       <Box
         paddingBottom={padding}
-        boxShadow=" 0px 0px 20px 0px #0000001A"
-        borderRadius="5px"
+        boxShadow=" 5px 5px 15px 1px #0000001A"
+        borderRadius="lg"
         width={400}
         maxWidth={'100%'}
         {...rest}
       >
         {link ? <Link href={link}>{CardImg}</Link> : CardImg}
-        <Text paddingX={padding} fontWeight="thin" fontSize="sm" marginBottom="1rem">
-          <TimeIcon /> &nbsp;
-          {formatDistanceToNow(date, { locale: es, addSuffix: true })}
+        <Text
+          fontSize={responsiveProperty({ mobileSize: 18, desktopSize: 22 })}
+          fontWeight="bold"
+          color="text.dark"
+          marginBottom="1rem"
+          paddingX={padding}
+        >
+          {link ? <Link href={link}>{title}</Link> : title}
         </Text>
+        <Flex align="center" gap={2} paddingX={padding} marginBottom="1rem">
+          <TimeIcon />
+          <Text fontWeight="light" fontSize="sm">
+            {formatDistanceToNow(date, { locale: es, addSuffix: true })}
+          </Text>
+        </Flex>
         <Text
           paddingX={padding}
           noOfLines={4}
@@ -62,7 +64,7 @@ const NewsCard = ({ img, title, content, date, ...rest }: CardI | CardPreviewI) 
             marginLeft="auto"
             marginTop="1rem"
             fontWeight="bold"
-            color="yellow"
+            color="blue.400"
           >
             <Link href={link}>Leer más</Link>
           </Box>

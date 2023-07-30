@@ -5,6 +5,7 @@ import { ArticleProvider } from '~/components/client/news/article/Provider'
 import UiFeedback from '~/components/common/feedback/UiFeedback'
 import ClientLayout from '~/layouts/Client'
 import prisma from '~/lib/db/prisma'
+import { getNewsId } from '../api/admin/news/[id]'
 
 type Props = {
   current?: News | null
@@ -31,7 +32,7 @@ const NewsArticlePage = ({ current, next, previous, error }: Props) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (req) => {
   const id = Number(req.params?.id)
   try {
-    const current = await prisma.news.findUnique({ where: { id: id }, include: { img: true } })
+    const current = await getNewsId(id)
     const next = await prisma.news.findFirst({ where: { id: { gt: id } }, orderBy: { id: 'asc' } })
     const previous = await prisma.news.findFirst({ where: { id: { lt: id } }, orderBy: { id: 'desc' } })
     return {

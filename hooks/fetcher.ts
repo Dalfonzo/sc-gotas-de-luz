@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import { Unpack } from '../lib/models/common'
 interface extraOptions<Response> {
   // Query params to pass to fetch function
@@ -23,6 +24,7 @@ function parseDates(item: any, dates: string[]) {
 
 interface FetcherOptions<Response> extends Pick<extraOptions<Response>, 'dates' | 'query'> {
   usePagination: boolean
+  pageZero?: boolean
 }
 
 export type useFetcherParams<Response> = [string, FetcherOptions<Unpack<Response>> & { usePagination: false }]
@@ -34,6 +36,9 @@ export interface usePaginationFetcherResponse<Response> {
 }
 
 export const useFetcher = <Response>() => {
+  const { data: sessionData } = useSession()
+  const accessToken = sessionData?.user.accessToken
+
   function fetcher(url: string, options: FetcherOptions<Unpack<Response>> & { usePagination: false }): Promise<Response>
   function fetcher(
     url: string,
@@ -44,7 +49,7 @@ export const useFetcher = <Response>() => {
     let extra = ''
     if (options?.query) {
       extra += '?'
-      if (options.usePagination) {
+      if (options.usePagination && options.pageZero) {
         options.query = { pageZero: 'true', ...options.query }
       }
       Object.entries(options.query).forEach(([name, value], index, array) => {
@@ -57,7 +62,9 @@ export const useFetcher = <Response>() => {
       })
     }
 
-    const res = await fetch(url + extra)
+    const res = await fetch(url + extra, {
+      headers: { ...(accessToken && { Authorization: `Bearer ${accessToken}` }) },
+    })
     const data = await res.json()
     const parsedData = options?.dates ? parseDates(data, options.dates as string[]) : data
     if (options?.usePagination === true) {

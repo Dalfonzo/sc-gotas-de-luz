@@ -28,6 +28,7 @@ export const NewsFeed = () => {
             size: 8,
           },
           usePagination: true,
+          pageZero: true,
         },
       ]
     },

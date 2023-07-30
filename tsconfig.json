@@ -19,6 +19,6 @@
       "~/*": ["./*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", ".d.ts", "pages/api/auth/[...nextauth]"],
   "exclude": ["node_modules"]
 }

@@ -1,20 +1,15 @@
-import { Box, Container, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
-import { compareAsc, format } from 'date-fns'
-import { es } from 'date-fns/locale'
-import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
+import { Box, Container, Flex, Text } from '@chakra-ui/react'
+import { compareAsc } from 'date-fns'
 import BasicModal, { CommonModalProps } from '~/components/common/Modal'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
+import { formatDate } from '~/lib/mappers/map-dates'
 import { EventI } from '~/lib/models/event'
+import { SocialMedia } from '../../common/social-media/SocialMedia'
 
 interface Props extends Omit<CommonModalProps, 'body' | 'title'> {
   event: EventI
 }
-function formatDate(date: Date | string) {
-  if (typeof date == 'string') {
-    date = new Date(date)
-  }
-  return format(date, `d 'de' MMMM hh:mmaaa`, { locale: es })
-}
+
 export default function EventModal({ event, onClose, visible }: Props) {
   const eventBody = (
     <Box>
@@ -39,12 +34,7 @@ export default function EventModal({ event, onClose, visible }: Props) {
         Para más detalles, contáctanos:
       </Text>
       <Container width="fit-content" display="block" ml="auto" mr={0} pr={0}>
-        <IconButton variant="ghost" aria-label="Whatsapp">
-          <Icon as={FaWhatsapp} />
-        </IconButton>
-        <IconButton variant="ghost" aria-label="Instagram">
-          <Icon as={FaInstagram} />
-        </IconButton>
+        <SocialMedia />
       </Container>
     </Box>
   )
