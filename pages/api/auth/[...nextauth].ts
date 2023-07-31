@@ -12,7 +12,7 @@ export default NextAuth({
       type: 'credentials',
       credentials: {},
       async authorize(credentials: any, req) {
-        const res = await fetch('http://localhost:3000/api/login', {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
