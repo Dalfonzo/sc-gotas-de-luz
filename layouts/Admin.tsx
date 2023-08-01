@@ -209,19 +209,16 @@ export const AdminLayout = ({ children, title }: { children: React.ReactNode; ti
             sm: opened ? 300 : 80,
             base: opened ? 80 : '0px',
           }}
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <Flex align="center">
-            <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-              <Burger opened={false} onClick={() => setOpened((o) => !o)} size="sm" mr="xl" color="gray" />
-            </div>
-            <Box ml="auto">
-              {data && (
-                <Avatar color="indigo" radius="xl" tt="uppercase">
-                  {data.user?.name?.[0]}
-                </Avatar>
-              )}
-            </Box>
-          </Flex>
+          <Burger opened={false} onClick={() => setOpened((o) => !o)} size="sm" mr="xl" color="gray" />
+          <Box ml="auto">
+            {data && (
+              <Avatar color="indigo" radius="xl" tt="uppercase">
+                {data.user?.name?.[0]}
+              </Avatar>
+            )}
+          </Box>
         </Header>
       }
     >

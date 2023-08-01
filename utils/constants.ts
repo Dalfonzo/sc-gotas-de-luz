@@ -30,3 +30,7 @@ export const SWR_KEYS = {
 export const LINKS = {
   VOLUNTEER_FORM: `https://docs.google.com/forms/d/${process.env.NEXT_PUBLIC_GOOGLE_FORM_VOLUNTEERS_ID}/viewform?ts=60be461e&edit_requested=true`,
 }
+
+export const UNPROTECTED_RESOURCES: Record<string, string> = {
+  DASHBOARD: 'DASHBOARD',
+}

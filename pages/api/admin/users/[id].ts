@@ -23,7 +23,7 @@ export default apiRouteAccessGuard(async (req, res) => {
       where: { id: userId },
       include: { roles: { include: { permissions: { include: { resources: true } } } } },
     })
-    const { password, ...userWithoutPassword } = user
+    const { password: _, ...userWithoutPassword } = user
     return userWithoutPassword
   }
 
@@ -52,7 +52,7 @@ export default apiRouteAccessGuard(async (req, res) => {
         ...(body.fkRole && { fkRole: body.fkRole }),
       },
     })
-    const { password, ...userWithoutPassword } = updatedUser
+    const { password: _, ...userWithoutPassword } = updatedUser
 
     return userWithoutPassword
   }
