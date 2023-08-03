@@ -15,6 +15,7 @@ model FileDb {
   path  String
   name  String
   url   String
+  isCloud Boolean @default(true)
   news  News?
   event Event?
 }

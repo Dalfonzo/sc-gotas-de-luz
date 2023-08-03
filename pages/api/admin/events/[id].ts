@@ -21,7 +21,7 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const get = async () => await eventItem
   const put = async () => {
     const files = await fileUploadHandler(req, { throwOnEmpty: false })
-    const eventFile = files[FILE_UPLOAD_FIELDS.EVENTS]
+    const eventFile = files
     if (eventFile) {
       await beforeFileUpdate((await eventItem).imgId)
     }

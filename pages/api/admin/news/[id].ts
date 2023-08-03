@@ -23,7 +23,7 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const get = async () => await newsItem
   const put = async () => {
     const files = await fileUploadHandler(req, { throwOnEmpty: false })
-    const newsFile = files[FILE_UPLOAD_FIELDS.NEWS]
+    const newsFile = files
     if (newsFile) {
       await beforeFileUpdate((await newsItem).imgId)
     }

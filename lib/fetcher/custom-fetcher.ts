@@ -1,5 +1,11 @@
 import { ApiError } from '../api/errors/api-error'
-export interface FetcherConfig extends Pick<RequestInit, 'headers' | 'credentials'> {}
+export interface FetcherConfig extends Pick<RequestInit, 'headers' | 'credentials'> {
+  baseURL?: string
+}
+
+export function joinAbsoluteUrlPath(...args: string[]) {
+  return args.map((pathPart) => pathPart.replace(/(^\/|\/$)/g, '')).join('/')
+}
 
 export class CustomFetcher {
   private config?: FetcherConfig
@@ -9,9 +15,18 @@ export class CustomFetcher {
   }
 
   private async customFetch<R>(url: string, init: RequestInit) {
-    const res = await fetch(url, { ...this.config, ...init, headers: { ...this.config?.headers, ...init.headers } })
+    const res = await fetch(this.config?.baseURL ? joinAbsoluteUrlPath(this.config.baseURL, url) : url, {
+      ...this.config,
+      ...init,
+      headers: { ...this.config?.headers, ...init.headers },
+    })
+
     if (!res.ok) {
-      throw new ApiError(`Request failed`, res.status)
+      throw new ApiError(`Request failed `, res.status)
+    }
+    const contentType = res.headers.get('Content-Type')
+    if (!contentType?.includes('json')) {
+      return
     }
     const data: R = await res.json()
     return data
