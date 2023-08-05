@@ -19,6 +19,13 @@
       "~/*": ["./*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".d.ts", "pages/api/auth/[...nextauth]", "test.js"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".d.ts",
+    "pages/api/auth/[...nextauth]",
+    "test.js",
+    "pages/api/admin/cloud-storage/...[path].ts"
+  ],
   "exclude": ["node_modules"]
 }
