@@ -50,7 +50,7 @@ export default apiRouteAccessGuard(async (req, res) => {
     const payload = { email: user.email, id: user.id }
     const secret = process.env.SECRET_KEY + user.password
     const token = await signJwtAccessToken(payload, secret, '7d')
-    const link = `http://localhost:3000/reset-password/${user.id}/${token}`
+    const link = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password/${user.id}/${token}`
 
     // FIXME: send this to email
     console.log(link)

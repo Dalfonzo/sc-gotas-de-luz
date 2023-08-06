@@ -19,7 +19,7 @@ export const useUserStore = create<State>((set) => ({
     if (!session) return
     set((state) => ({ ...state, isLoadingUserData: true }))
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/users/${session?.user?.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/admin/users/${session?.user?.id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session?.user?.accessToken}`,
