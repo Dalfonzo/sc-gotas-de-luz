@@ -1,4 +1,5 @@
 export { default } from 'next-auth/middleware'
+import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyJwt } from './lib/jtw'
 
@@ -15,8 +16,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/api/auth/unauthorized', req.url))
     }
   } else if (isClientRoute(pathname)) {
-    const { cookies } = req
-    const token = cookies.get('next-auth.session-token') || cookies.get('next-auth.session-token.0')
+    const token = await getToken({ req })
     if (!token) return NextResponse.redirect(new URL('/sign-in', req.url))
   }
   return NextResponse.next()
