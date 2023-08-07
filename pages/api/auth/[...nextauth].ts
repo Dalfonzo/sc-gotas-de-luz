@@ -12,20 +12,28 @@ export default NextAuth({
       type: 'credentials',
       credentials: {},
       async authorize(credentials: any, req) {
-        const res = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: credentials?.email as string,
-            password: credentials?.password,
-          }),
-        })
+        try {
+          const res = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: credentials?.email as string,
+              password: credentials?.password,
+            }),
+          })
 
-        const user = await res.json()
-        if (user) return user
-        return null
+          const payload = await res.json()
+
+          if (res.status === 200 && payload) {
+            return payload
+          }
+
+          return null
+        } catch (error) {
+          console.log({ error })
+        }
       },
     }),
   ],

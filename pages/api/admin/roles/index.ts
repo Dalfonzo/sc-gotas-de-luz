@@ -5,9 +5,11 @@ import prisma from '~/lib/db/prisma'
 import { Roles } from '~/ts/Roles'
 import { RESOURCES } from '~/utils/constants'
 import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
+import { ConflictError } from '../../../../lib/api/errors/api-error'
 
 interface bodyPostDto {
   name: string
+  description?: string
   permissions: [
     {
       create: boolean
@@ -24,15 +26,23 @@ export default apiRouteAccessGuard(async (req, res) => {
   const get = async () =>
     await paginationHandler<Roles[], Prisma.RolesFindManyArgs>(req, res, prisma.roles, {
       orderBy: { name: 'desc' },
-      include: { permissions: true },
+      include: { permissions: { include: { resources: true } } },
     })
 
   const post = async () => {
     const body: bodyPostDto = req.body
 
     return await prisma.$transaction(async (tx) => {
+      const roleAlreadyExists = await tx.roles.findUnique({
+        where: { name: body.name },
+      })
+
+      if (roleAlreadyExists) {
+        throw new ConflictError(`Role name already exists`)
+      }
+
       const role = await tx.roles.create({
-        data: { name: body.name },
+        data: { name: body.name, ...(body.description && { description: body.description }) },
       })
 
       if (!role.id) {

@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
+import { signJwtAccessToken } from '~/lib/jtw'
 import { RESOURCES } from '~/utils/constants'
 import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 
@@ -21,6 +22,7 @@ export default apiRouteAccessGuard(async (req, res) => {
         email: true,
         fkRole: true,
         id: true,
+        roles: true,
       },
     })
 
@@ -43,6 +45,16 @@ export default apiRouteAccessGuard(async (req, res) => {
     })
 
     const { password, ...userWithoutPassword } = user as UserDto
+    //TODO: Tengo que arreglar bug del update al cambiar el role!!
+    //FIXME: duplicated
+    const payload = { email: user.email, id: user.id }
+    const secret = process.env.SECRET_KEY + user.password
+    const token = await signJwtAccessToken(payload, secret, '7d')
+    const link = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password/${user.id}/${token}`
+
+    // FIXME: send this to email
+    console.log(link)
+
     return userWithoutPassword
   }
   await methodRouter(req, res, { get, post })

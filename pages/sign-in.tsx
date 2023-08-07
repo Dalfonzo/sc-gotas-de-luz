@@ -1,122 +1,110 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, useColorModeValue } from '@chakra-ui/react'
-import Auth from 'layouts/Auth'
-import { signIn, useSession } from 'next-auth/react'
-import { FormEventHandler, useState } from 'react'
+import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Alert, Button, Container, Paper, Text, Title } from '@mantine/core'
+import { useFormik } from 'formik'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import * as Yup from 'yup'
+
+type LoginForm = {
+  email: string
+  password: string
+}
 
 function SignIn() {
-  const titleColor = useColorModeValue('teal.300', 'teal.200')
-  const textColor = useColorModeValue('gray.400', 'white')
-  const [userInfo, setUserInfo] = useState({ email: '', password: '' })
-  const session = useSession()
-  console.log({ session })
-  const handleSubmit: FormEventHandler<HTMLDivElement> = async (e) => {
-    // validate your userinfo
-    e.preventDefault()
-    console.log(userInfo)
-    const res = await signIn('credentials', {
-      email: userInfo.email,
-      password: userInfo.password,
-      redirect: true,
-      callbackUrl: '/admin/dashboard',
-    })
-
-    console.log(res)
-  }
+  const [error, setError] = useState<null | string>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const formik = useFormik<LoginForm>({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .trim()
+        .required('Este campo es requerido')
+        .min(3, 'El campo ingresado es muy corto')
+        .email('Inserte un correo válido'),
+      password: Yup.string().trim().required('Este campo es requerido').min(3, 'El campo ingresado es muy corto'),
+    }),
+    onSubmit: async (values: LoginForm) => {
+      setError(null)
+      setIsLoading(true)
+      signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      })
+        .then((res) => {
+          if (res?.ok) {
+            router.push('/admin/dashboard')
+          } else {
+            setError('Usuario o contraseña incorrectos. Por favor, intente de nuevo.')
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          setIsLoading(false)
+        })
+    },
+    validateOnChange: false,
+  })
 
   return (
-    <Auth>
-      <Flex position="relative" mb="40px">
-        <Flex
-          h={{ sm: 'initial', md: '75vh', lg: '85vh' }}
-          w="100%"
-          maxW="1044px"
-          mx="auto"
-          justifyContent="space-between"
-          mb="30px"
-          pt={{ sm: '50px', md: '0px' }}
+    <Container w="100%" h="100vh" fluid bg="cyan.4">
+      <Container size={420} py={40}>
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+          color="white"
         >
-          <Flex
-            alignItems="center"
-            justifyContent="start"
-            style={{ userSelect: 'none' }}
-            w={{ base: '100%', md: '50%', lg: '42%' }}
-          >
-            <Flex direction="column" w="100%" background="transparent" p="48px" mt={{ md: '150px', lg: '80px' }}>
-              <Heading color={titleColor} fontSize="32px" mb="10px">
-                Bienvenido
-              </Heading>
-              <Text mb="36px" ms="4px" color={textColor} fontWeight="bold" fontSize="14px">
-                Introduce tu correo y contraseña para continuar
-              </Text>
-              <FormControl onSubmit={handleSubmit} as="form">
-                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                  Email
-                </FormLabel>
-                <Input
-                  borderRadius="15px"
-                  mb="24px"
-                  fontSize="sm"
-                  type="text"
-                  placeholder="Tu dirección de correo"
-                  size="lg"
-                  value={userInfo.email}
-                  onChange={({ target }) => setUserInfo({ ...userInfo, email: target.value })}
-                />
-                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                  Contraseña
-                </FormLabel>
-                <Input
-                  borderRadius="15px"
-                  mb="36px"
-                  fontSize="sm"
-                  type="password"
-                  placeholder="Tu contraseña"
-                  size="lg"
-                  value={userInfo.password}
-                  onChange={({ target }) => setUserInfo({ ...userInfo, password: target.value })}
-                />
-                <Button
-                  fontSize="1rem"
-                  type="submit"
-                  bg="teal.300"
-                  w="100%"
-                  h="45"
-                  mb="20px"
-                  color="white"
-                  mt="20px"
-                  _hover={{
-                    bg: 'teal.200',
-                  }}
-                  _active={{
-                    bg: 'teal.400',
-                  }}
-                >
-                  Ingresar
-                </Button>
-              </FormControl>
-            </Flex>
-          </Flex>
-          <Box
-            display={{ base: 'none', md: 'block' }}
-            overflowX="hidden"
-            h="100%"
-            w="40vw"
-            position="absolute"
-            right="0px"
-          >
-            <Box
-              bgImage="url('/assets/img/signInImage.png')"
-              w="100%"
-              h="100%"
-              bgSize="cover"
-              bgPosition="50%"
-              position="absolute"
-              borderBottomLeftRadius="20px"
-            ></Box>
-          </Box>
-        </Flex>
-      </Flex>
-    </Auth>
+          Bienvenido
+        </Title>
+        <Paper p={30} mt={30} radius="md" withBorder shadow="md">
+          <Text color="dimmed" align="center">
+            Por favor, introduzca sus credenciales
+          </Text>
+          <form onSubmit={formik.handleSubmit}>
+            <FormControl variant="floating" isInvalid={Boolean(formik.errors.email)} my="1rem">
+              <Input
+                placeholder=" "
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                type="email"
+              />
+              <FormLabel htmlFor="email">Correo</FormLabel>
+              <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+            </FormControl>
+            <FormControl variant="floating" isInvalid={Boolean(formik.errors.password)} my="1rem">
+              <Input
+                placeholder=" "
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                type="password"
+              />
+              <FormLabel htmlFor="password">Contraseña</FormLabel>
+              <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+            </FormControl>
+            {error && (
+              <Alert color="red" my="lg">
+                <Text color="red">{error}</Text>
+              </Alert>
+            )}
+
+            <Button fullWidth mt="xl" size="md" type="submit" loading={isLoading} color="cyan.4">
+              Iniciar sesión
+            </Button>
+          </form>
+          <Text component={Link} href="/forgot-password" color="blue" align="right" display="block" mt="lg">
+            ¿Olvidó su contraseña?
+          </Text>
+        </Paper>
+      </Container>
+    </Container>
   )
 }
 

@@ -3,6 +3,7 @@ import CustomLoader from '~/components/admin/common/loader/Loader'
 import { Unauthorized } from '~/components/admin/common/unauthorized/Unauthorized'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import { AdminLayout } from '~/layouts/Admin'
+import { useUserStore } from '~/store/users/useUserStore'
 import { OperationsOptions } from '~/ts/OperationsOptions'
 
 export const withProtectedRoute = <TProps extends object>(
@@ -12,12 +13,12 @@ export const withProtectedRoute = <TProps extends object>(
   return function WrappedComponent(props: TProps) {
     const { data } = useSession()
     const { isOpAllowed } = useAccessGuard({ operation, resource })
-
-    const permissions = data?.user.permissions
+    const { isLoadingUserData } = useUserStore(({ isLoadingUserData }) => ({ isLoadingUserData }))
     const opIsAllowed = isOpAllowed()
+
     return (
       <AdminLayout title={title}>
-        {!data || !permissions ? <CustomLoader /> : !opIsAllowed ? <Unauthorized /> : <Component {...props} />}
+        {!data || isLoadingUserData ? <CustomLoader /> : !opIsAllowed ? <Unauthorized /> : <Component {...props} />}
       </AdminLayout>
     )
   }

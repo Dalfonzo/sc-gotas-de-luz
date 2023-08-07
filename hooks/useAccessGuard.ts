@@ -1,6 +1,6 @@
-import { useSession } from 'next-auth/react'
+import { useUserStore } from '~/store/users/useUserStore'
 import { OperationsOptions } from '~/ts/OperationsOptions'
-import { OPERATION_METHODS } from '~/utils/constants'
+import { OPERATION_METHODS, UNPROTECTED_RESOURCES } from '~/utils/constants'
 
 const useAccessGuard = ({
   resource,
@@ -9,11 +9,10 @@ const useAccessGuard = ({
   resource: string
   operation?: OperationsOptions
 }) => {
-  const { data } = useSession()
+  const { permissions } = useUserStore(({ permissions }) => ({ permissions }))
 
   const isAllowed = ({ resource, operation }: { resource: string; operation: OperationsOptions }) => {
-    const permissions = data?.user.permissions
-    return permissions?.[resource]?.[operation]
+    return !!UNPROTECTED_RESOURCES?.[resource] || permissions?.[resource]?.[operation]
   }
 
   const canRead = isAllowed({ resource, operation: OPERATION_METHODS.READ })
