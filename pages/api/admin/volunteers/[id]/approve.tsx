@@ -34,4 +34,4 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   }
 
   await methodRouter(req, res, { put })
-}, RESOURCES.EVENTS)
+}, RESOURCES.VOLUNTEERS)
