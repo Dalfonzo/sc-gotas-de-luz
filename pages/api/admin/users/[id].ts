@@ -18,17 +18,13 @@ export default apiRouteAccessGuard(async (req, res) => {
     if (!userId) {
       throw new Error(`UserId is required`)
     }
-
-    return await prisma.users.findUnique({
-      select: {
-        name: true,
-        lastName: true,
-        email: true,
-        fkRole: true,
-        id: true,
-      },
+    // TODO: Fix this type later
+    const user = (await prisma.users.findUnique({
       where: { id: userId },
-    })
+      include: { roles: { include: { permissions: { include: { resources: true } } } } },
+    })) as any
+    const { password: _, ...userWithoutPassword } = user
+    return userWithoutPassword
   }
 
   const put = async () => {
@@ -56,7 +52,7 @@ export default apiRouteAccessGuard(async (req, res) => {
         ...(body.fkRole && { fkRole: body.fkRole }),
       },
     })
-    const { password, ...userWithoutPassword } = updatedUser
+    const { password: _, ...userWithoutPassword } = updatedUser
 
     return userWithoutPassword
   }

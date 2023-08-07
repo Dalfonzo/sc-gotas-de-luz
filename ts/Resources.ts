@@ -1,5 +1,5 @@
 export interface Resources {
   id: string
   name: string
-  description?: string
+  description: string | null
 }
