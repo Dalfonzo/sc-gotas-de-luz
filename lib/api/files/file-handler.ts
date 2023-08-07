@@ -18,9 +18,11 @@ interface UpdateConfig {
   throwOnEmpty: false
 }
 export type FileHandlerResult = Prisma.FileDbCreateArgs['data']
-
+// eslint-disable-next-line no-redeclare
 export function fileUploadHandler(req: NextApiRequest, config: CreateConfig): Promise<FileHandlerResult>
+// eslint-disable-next-line no-redeclare
 export function fileUploadHandler(req: NextApiRequest, config: UpdateConfig): Promise<FileHandlerResult | null>
+// eslint-disable-next-line no-redeclare
 export async function fileUploadHandler(
   req: NextApiRequest,
   config: Config = { throwOnEmpty: true }
