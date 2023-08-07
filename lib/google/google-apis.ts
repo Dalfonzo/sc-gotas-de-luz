@@ -1,8 +1,15 @@
 import { readFileSync } from 'fs'
 import { google } from 'googleapis'
+
 export const getGoogleInstance = () => {
+  const jsonCredentials = process.env.GOOGLE_AUTH_CRENDENTIALS
   const auth = new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_AUTH_TOKEN_PATH,
+    ...(jsonCredentials
+      ? { credentials: JSON.parse(jsonCredentials) }
+      : {
+          keyFile: process.env.GOOGLE_AUTH_TOKEN_PATH,
+        }),
+
     scopes: [
       'https://www.googleapis.com/auth/cloud-platform',
       'https://www.googleapis.com/auth/drive',

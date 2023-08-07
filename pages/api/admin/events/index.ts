@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { FILE_UPLOAD_FIELDS } from '~/lib/api/constants'
 import { BadRequestError } from '~/lib/api/errors/api-error'
 import { fileUploadHandler } from '~/lib/api/files/file-handler'
 import { paginationHandler } from '~/lib/api/handler'
@@ -25,12 +24,12 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
       include: { img: true },
     })
   const post = async () => {
-    const files = await fileUploadHandler(req)
+    const files = await fileUploadHandler(req, { throwOnEmpty: true })
     const event: Prisma.EventCreateInput = req.body
     if (event.start > event.end) {
       throw new BadRequestError('Start date should preceed end date')
     }
-    return await model.create({ data: { ...event, img: { create: { ...files[FILE_UPLOAD_FIELDS.EVENTS] } } } })
+    return await model.create({ data: { ...event, img: { create: { ...files } } } })
   }
   await methodRouter(req, res, { get, post })
 }, RESOURCES.EVENTS)

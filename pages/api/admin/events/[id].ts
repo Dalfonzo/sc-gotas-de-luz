@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { FILE_UPLOAD_FIELDS } from '~/lib/api/constants'
 import { beforeFileUpdate } from '~/lib/api/files/before-file-update'
 import { fileUploadHandler } from '~/lib/api/files/file-handler'
 import { methodRouter } from '~/lib/api/method-router'
@@ -17,13 +16,13 @@ export const config = {
 export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const model = prisma.event
   const id = Number(req.query.id)
-  const eventItem = model.findFirstOrThrow({ where: { id: id }, include: { img: true } })
-  const get = async () => await eventItem
+  const eventItem = await model.findFirstOrThrow({ where: { id: id }, include: { img: true } })
+  const get = async () => eventItem
   const put = async () => {
     const files = await fileUploadHandler(req, { throwOnEmpty: false })
-    const eventFile = files[FILE_UPLOAD_FIELDS.EVENTS]
+    const eventFile = files
     if (eventFile) {
-      await beforeFileUpdate((await eventItem).imgId)
+      await beforeFileUpdate(eventItem.imgId)
     }
     return await model.update({
       data: { ...req.body, ...(eventFile && { img: { update: eventFile } }) },
@@ -31,8 +30,9 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
     })
   }
   const remove = async () => {
+    await beforeFileUpdate(eventItem?.imgId)
     const data = await model.delete({ where: { id }, include: { img: true } })
-    await beforeFileUpdate(data?.imgId)
+
     await prisma.fileDb.delete({ where: { id: data?.img.id } })
     return data
   }

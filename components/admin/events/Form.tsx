@@ -19,6 +19,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
 import FileUpload from '~/components/common/file-upload/FileUpload'
+import { useCloudUpload } from '~/hooks/useCloudUpload'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { formatDateTimeLocal } from '~/lib/mappers/map-dates'
@@ -32,6 +33,7 @@ interface EventFormProps {
 
 export default function EventsForm({ initialState, onSuccess }: EventFormProps) {
   const customFetcher = useFetcherInstance()
+  const { onFileUpload, fileUploadState } = useCloudUpload({ fileKey: 'events', updatePath: initialState?.img?.path })
   const parseValues = (values: CreateEvent) => {
     const formData = new FormData()
     Object.entries({
@@ -81,6 +83,7 @@ export default function EventsForm({ initialState, onSuccess }: EventFormProps) 
     }),
     onSubmit: async (values) => {
       const parsed = parseValues(values)
+      await onFileUpload(parsed)
       if (initialState) {
         await customFetcher.put(`/api/admin/events/${initialState.id}`, parsed)
       } else {

@@ -21,6 +21,7 @@ import BasicModal from '~/components/common/Modal'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
 import FileUpload from '~/components/common/file-upload/FileUpload'
 import TextEditor from '~/components/common/text-editor/TextEditor'
+import { useCloudUpload } from '~/hooks/useCloudUpload'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { CreateNews } from '~/prisma/types'
@@ -32,6 +33,8 @@ interface NewsFormProps {
 export default function NewsForm({ initialState }: NewsFormProps) {
   const customFetcher = useFetcherInstance()
   const router = useRouter()
+  const { onFileUpload } = useCloudUpload({ fileKey: 'news', updatePath: initialState?.img?.path })
+
   const parseValues = (values: CreateNews) => {
     const formData = new FormData()
     Object.entries({ title: values.title, news: values.news, content: values.content }).forEach(
@@ -58,6 +61,7 @@ export default function NewsForm({ initialState }: NewsFormProps) {
     }),
     onSubmit: async (values) => {
       const parsed = parseValues(values)
+      await onFileUpload(parsed)
       if (initialState) {
         await customFetcher.put(`/api/admin/news/${initialState.id}`, parsed)
       } else {

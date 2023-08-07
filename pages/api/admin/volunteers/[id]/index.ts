@@ -80,4 +80,4 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
     return data
   }
   await methodRouter(req, res, { get, put, delete: remove })
-}, RESOURCES.EVENTS)
+}, RESOURCES.VOLUNTEERS)
