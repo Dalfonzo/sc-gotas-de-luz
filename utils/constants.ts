@@ -15,6 +15,8 @@ export const RESOURCES = {
   EVENTS: 'EVENTS',
   VOLUNTEERS: 'VOLUNTEERS',
 }
+// to be used on api routes that don't relate to a specific resource 
+export const FREE_RESOURCE:'NONE' = 'NONE'
 
 export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
   READ: 'READ',

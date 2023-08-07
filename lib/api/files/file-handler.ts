@@ -3,6 +3,7 @@ import { File } from 'formidable'
 import fs, { existsSync, mkdirSync } from 'fs'
 import { NextApiRequest } from 'next'
 import path from 'path'
+import { CLOUD_FILE_FORM_FIELD } from '../cloud-storage/constants'
 import { BadRequestError } from '../errors/api-error'
 import { checkCloudUpload } from '../use-cloud-upload'
 import { parseFormAsync } from './parse-form'
@@ -28,8 +29,8 @@ export async function fileUploadHandler(
   req.body = { ...fields }
   // just check file is uploaded for cloud storage
   if (!isLocalStorage()) {
-    const fileRef: string = req.body.cloudFile
-    delete req.body.cloudFile
+    const fileRef: string = req.body[CLOUD_FILE_FORM_FIELD]
+    delete req.body[CLOUD_FILE_FORM_FIELD]
     const checkFile = await checkCloudUpload(fileRef)
     if (!checkFile.verified && !config.throwOnEmpty) {
       return null

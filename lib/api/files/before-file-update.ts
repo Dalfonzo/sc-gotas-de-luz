@@ -13,6 +13,11 @@ export const beforeFileUpdate = async (fileID?: number) => {
     return
   }
   if (file.isCloud) {
+    // do not delete file if it's being reference by another entry
+    const exists = await prisma.fileDb.findFirst({ where: { id: { not: file.id }, path: file.path } })
+    if (exists) {
+      return
+    }
     const cloud = new CloudStorage()
     await cloud.deleteFiles(file.name)
     return

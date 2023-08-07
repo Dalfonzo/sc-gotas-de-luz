@@ -52,7 +52,23 @@ export class CloudStorage {
     console.log('Initiating supabase connection:', { key, url, storage, storageAPI })
   }
 
-  async getUploadLink(config?: { originalUrl?: string; extension?: string }) {
+  async getUploadLink(config?: {
+    originalUrl?: string
+    extension?: string
+    useAuth?: boolean
+  }): Promise<{ url: string; token: string }> {
+    if (config?.useAuth) {
+      return {
+        url: joinAbsoluteUrlPath(
+          this.meta.baseUrl,
+          this.meta.storagePrefix,
+          SUPABASE_CONSTANTS.STORAGE.UPDATE_FILE(
+            `${this.meta.storageName}/${randomUUID()}.${config?.extension || 'png'}`
+          )
+        ),
+        token: this.meta.apiKey,
+      }
+    }
     const data = await CloudStorage.storage.createSignedUploadUrl(
       config?.originalUrl
         ? config.originalUrl.split(this.meta.storageName).slice(1).join('')
@@ -61,7 +77,7 @@ export class CloudStorage {
     if (data.error) {
       throw new Error(`Couldn't get upload url [${data.error.message}]`)
     }
-    return data.data
+    return { url: data.data.signedUrl, token: data.data.token }
   }
 
   getUpdateLink() {
@@ -78,7 +94,7 @@ export class CloudStorage {
         verified: true,
         name: url.split('/').pop() || '',
         path: url,
-        url: joinAbsoluteUrlPath(this.meta.baseUrl, this.meta.storagePrefix, url),
+        url: joinAbsoluteUrlPath(this.meta.baseUrl, this.meta.storagePrefix, SUPABASE_CONSTANTS.STORAGE.READ_FILE(url)),
         isCloud: true,
       }
     } catch (error) {
@@ -89,7 +105,6 @@ export class CloudStorage {
 
   async deleteFiles(...url: string[]) {
     const data = await CloudStorage.storage.remove(url)
-    console.log({ deleteResult: data })
     if (data.error) {
       throw new Error(`Couldn't remove file [${data.error.message}]`)
     }

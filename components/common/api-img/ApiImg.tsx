@@ -2,11 +2,18 @@ import { Flex, Image, ImageProps, Text } from '@chakra-ui/react'
 import { BiImage } from 'react-icons/bi'
 
 interface Props extends ImageProps {
-  url?: string | { url: string }
+  url?: string | { url: string; isCloud?: boolean }
   emptySize?: string
 }
 export const ApiImg = ({ url, src, emptySize = '4rem', ...rest }: Props) => {
-  const getSrc = () => (src ? src : !url ? undefined : `/api/storage/${typeof url === 'string' ? url : url.url}`)
+  const getSrc = () =>
+    src
+      ? src
+      : !url
+      ? undefined
+      : typeof url !== 'string' && url.isCloud
+      ? url.url
+      : `/api/storage/${typeof url === 'string' ? url : url.url}`
 
   if (!getSrc()) {
     return (

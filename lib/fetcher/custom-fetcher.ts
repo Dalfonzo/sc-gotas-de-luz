@@ -1,6 +1,7 @@
 import { ApiError } from '../api/errors/api-error'
 export interface FetcherConfig extends Pick<RequestInit, 'headers' | 'credentials'> {
   baseURL?: string
+  formKey?: string
 }
 
 export function joinAbsoluteUrlPath(...args: string[]) {
@@ -35,7 +36,7 @@ export class CustomFetcher {
     const content =
       body instanceof FormData
         ? {
-            body,
+            body: config?.formKey ? body.get(config.formKey) : body,
           }
         : {
             body: JSON.stringify(body),
