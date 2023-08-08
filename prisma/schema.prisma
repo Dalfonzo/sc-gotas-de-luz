@@ -87,3 +87,29 @@ model Volunteer{
   isActive        Boolean   @default(false)
   date            DateTime  @default(now())
 }
+
+model Category{
+  id    Int   @id @default(autoincrement())
+  name  String @unique
+  inventories Inventory[]
+}
+
+model Inventory{
+  id              String    @id @default(uuid())
+  name            String    @unique
+  currentQuantity Float     @default(0)
+  measure         String 
+  updatedAt       DateTime  @default(now())
+  category        Category  @relation(fields: [categoryId], references: [id])  
+  categoryId      Int
+  records         InventoryRecord[]
+}
+
+model InventoryRecord{
+  id          String    @id @default(uuid())
+  quantity    Float
+  date        DateTime    @default(now())
+  concept     String?
+  inventory   Inventory   @relation(fields: [inventoryId], references: [id])
+  inventoryId String 
+}

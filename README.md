@@ -15,7 +15,10 @@ yarn install
     ```bash
     npx prisma migrate dev --name init
     ```
-
+    3. Run seeds
+    ```bash
+    npx prisma db seed
+    ```
     On changes to `schema.prisma`
     ```bash
     npx prisma generate

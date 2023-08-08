@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { OperationsOptions } from '~/ts/OperationsOptions'
 
 export const HTTP_METHODS = {
@@ -7,16 +8,16 @@ export const HTTP_METHODS = {
   POST: 'POST',
   PATCH: 'PATCH',
 }
-// TODO: quizás cambiar los nombres de recursos a español para mostrarlos en el admin
 export const RESOURCES = {
-  NEWS: 'NEWS',
-  USERS: 'USERS',
+  NEWS: 'NOTICIAS',
+  USERS: 'USUARIOS',
   ROLES: 'ROLES',
-  EVENTS: 'EVENTS',
-  VOLUNTEERS: 'VOLUNTEERS',
+  EVENTS: 'EVENTOS (CALENDARIO)',
+  VOLUNTEERS: 'VOLUNTARIOS',
+  INVENTORY: 'INVENTORIO',
 }
-// to be used on api routes that don't relate to a specific resource 
-export const FREE_RESOURCE:'NONE' = 'NONE'
+// to be used on api routes that don't relate to a specific resource
+export const FREE_RESOURCE: 'NONE' = 'NONE'
 
 export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
   READ: 'READ',
@@ -36,3 +37,10 @@ export const LINKS = {
 export const UNPROTECTED_RESOURCES: Record<string, string> = {
   DASHBOARD: 'DASHBOARD',
 }
+
+export const BASE_CATEGORIES: Prisma.CategoryCreateInput[] = [
+  { name: 'Alimentos' },
+  { name: 'Medicamentos' },
+  { name: 'Juguetes' },
+  { name: 'Otros' },
+]
