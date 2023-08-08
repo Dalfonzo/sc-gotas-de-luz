@@ -42,5 +42,6 @@ export const BASE_CATEGORIES: Prisma.CategoryCreateInput[] = [
   { name: 'Alimentos' },
   { name: 'Medicamentos' },
   { name: 'Juguetes' },
+  { name: 'Ropa' },
   { name: 'Otros' },
 ]
