@@ -25,7 +25,8 @@
     ".d.ts",
     "pages/api/auth/[...nextauth]",
     "test.js",
-    "pages/api/admin/cloud-storage/...[path].ts"
+    "pages/api/admin/cloud-storage/...[path].ts",
+    "pages/api/admin/inventory/[id]"
   ],
   "exclude": ["node_modules"]
 }

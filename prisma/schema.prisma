@@ -112,4 +112,5 @@ model InventoryRecord{
   concept     String?
   inventory   Inventory   @relation(fields: [inventoryId], references: [id])
   inventoryId String 
+  expirationDate DateTime?
 }
