@@ -17,6 +17,7 @@ import {
   rem,
 } from '@mantine/core'
 import {
+  IconBuildingWarehouse,
   IconCalendar,
   IconHome,
   IconLock,
@@ -92,6 +93,8 @@ const linksRows = [
   { link: '/admin/roles', label: 'roles', icon: IconLock },
   { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
   { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart, swr: SWR_KEYS.PENDING_VOLUNTEERS },
+  { link: '/admin/inventory', label: 'inventario', icon: IconBuildingWarehouse, swr: SWR_KEYS.EXPIRING_INVENTORY },
+
   { link: '/admin/events', label: 'calendario', icon: IconCalendar },
   { link: '/admin/news', label: 'noticias', icon: IconNews },
 ]
@@ -101,8 +104,11 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
   const router = useRouter()
   const { fetcher } = useFetcher<{ pending: number }>()
   const { data: volunteerData } = useSWR<{ pending: number }>(SWR_KEYS.PENDING_VOLUNTEERS, fetcher)
+  const { data: inventoryData } = useSWR<{ pending: number }>(SWR_KEYS.EXPIRING_INVENTORY, fetcher)
+
   const swrIndicators = {
     [SWR_KEYS.PENDING_VOLUNTEERS]: volunteerData,
+    [SWR_KEYS.EXPIRING_INVENTORY]: inventoryData,
   }
   const links = linksRows.map((item) => (
     <Link
