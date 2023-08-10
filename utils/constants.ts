@@ -45,3 +45,5 @@ export const BASE_CATEGORIES: Prisma.CategoryCreateInput[] = [
   { name: 'Ropa' },
   { name: 'Otros' },
 ]
+
+export const INVENTORY_RECORD_TYPES = { INPUT: 'input', OUTPUT: 'output' }

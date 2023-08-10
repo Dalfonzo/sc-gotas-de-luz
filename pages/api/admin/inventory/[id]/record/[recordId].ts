@@ -5,27 +5,25 @@ import { RESOURCES } from '~/utils/constants'
 import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 
 export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
-  const model = prisma.inventory
-  const id = String(req.query.id)
-  const inventoryItem = await model.findFirstOrThrow({ where: { id: id } })
+  const model = prisma.inventoryRecord
+  const inventoryId = String(req.query.id)
+  const id = String(req.query.recordId)
+  const inventoryItem = await model.findFirstOrThrow({ where: { id: id, inventoryId: inventoryId } })
+
   const get = async () => inventoryItem
 
   const put = async () => {
     const body = req.body || {}
     const parsed = {
-      ...(body.name && { name: body.name }),
-      ...(body.measure && { measure: body.measure }),
-      ...(body.categoryId && { categoryId: body.categoryId }),
-      updatedAt: new Date().toISOString(),
+      ...(body.concept && { concept: body.concept }),
+      ...(body.expirationDate && { measure: body.expirationDate }),
+      ...(body.date && { measure: body.date }),
     }
     return await model.update({
       data: parsed,
       where: { id },
     })
   }
-  const remove = async () => {
-    const data = await model.delete({ where: { id, name: req.body.confirm } })
-    return data
-  }
-  await methodRouter(req, res, { get, put, delete: remove })
+
+  await methodRouter(req, res, { get, put })
 }, RESOURCES.VOLUNTEERS)

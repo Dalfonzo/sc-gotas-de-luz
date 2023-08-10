@@ -110,7 +110,10 @@ model InventoryRecord{
   quantity    Float
   date        DateTime    @default(now())
   concept     String?
+  type        String      @default("input")
   inventory   Inventory   @relation(fields: [inventoryId], references: [id])
   inventoryId String 
   expirationDate DateTime?
+  currentQuantity Float     @default(0)
+
 }
