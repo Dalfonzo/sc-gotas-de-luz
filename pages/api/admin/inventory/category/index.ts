@@ -11,7 +11,9 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const get = async () =>
     await paginationHandler<Category[], Prisma.CategoryFindManyArgs>(req, res, model, {
       orderBy: { name: 'asc' },
+      include: { inventories: { select: { id: true } } },
     })
+
   const post = async () => {
     return await model.create({ data: { ...req.body } })
   }

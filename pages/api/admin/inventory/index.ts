@@ -9,10 +9,16 @@ import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 
 export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiResponse) => {
   const model = prisma.inventory
-  const get = async () =>
-    await paginationHandler<Inventory[], Prisma.InventoryFindManyArgs>(req, res, model, {
+  const get = async () => {
+    const { category } = req.query
+    return await paginationHandler<Inventory[], Prisma.InventoryFindManyArgs>(req, res, model, {
       orderBy: { name: 'asc' },
+      include: { category: true },
+      where: {
+        ...(category && { categoryId: Number(category) }),
+      },
     })
+  }
   const post = async () => {
     return await model.create({ data: { ...req.body } })
   }
