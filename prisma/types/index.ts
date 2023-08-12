@@ -1,4 +1,4 @@
-import { Category, Event, News, Volunteer } from '@prisma/client'
+import { Category, Event, Inventory, News, Volunteer } from '@prisma/client'
 import { FileI } from '~/components/common/file-upload/FileUpload'
 import { DateToString } from '~/lib/mappers/map-dates'
 
@@ -15,3 +15,8 @@ export interface CreateVolunteer extends Omit<Volunteer, 'id' | 'date' | 'isActi
 }
 
 export interface CreateCategory extends Omit<Category, 'id' | 'inventories'> {}
+
+export interface CreateInventory
+  extends Omit<Inventory, 'id' | 'category' | 'currentQuantity' | 'updatedAt' | 'categoryId'> {
+  categoryId: string
+}

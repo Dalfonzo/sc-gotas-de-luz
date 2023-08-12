@@ -2,7 +2,7 @@ import { ActionIcon, Button, Flex, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { Category } from '@prisma/client'
-import { IconEdit, IconEye, IconPlus, IconTrash } from '@tabler/icons-react'
+import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -23,7 +23,7 @@ export default function CategoriesMain() {
   const router = useRouter()
   const { fetcher } = useFetcher<FetchResult>()
   const {
-    data: Inventorys,
+    data: categories,
     error,
     mutate,
     isLoading,
@@ -98,8 +98,8 @@ export default function CategoriesMain() {
         fetching={isLoading}
         idAccessor="id"
         recordsPerPage={PER_PAGE}
-        records={Inventorys?.records}
-        totalRecords={Inventorys?.total}
+        records={categories?.records}
+        totalRecords={categories?.total}
         columns={[
           {
             accessor: 'name',
@@ -111,7 +111,7 @@ export default function CategoriesMain() {
           },
           {
             accessor: 'inventories',
-            title: 'Inventarios',
+            title: 'Inventarios Creados',
             width: 100,
             ellipsis: true,
             sortable: false,
@@ -121,13 +121,9 @@ export default function CategoriesMain() {
           {
             accessor: 'actions',
             title: 'Acciones',
-            width: 100,
+            width: 75,
             render: (item) => (
               <Flex gap="xs" align="center" pos="absolute" top="50%" sx={{ transform: 'translateY(-50%)' }}>
-                <Button variant="light">Ver inventario</Button>
-                <ActionIcon variant="light" color="blue">
-                  <IconEye size="1rem" />
-                </ActionIcon>
                 {canUpdate && (
                   <ActionIcon
                     onClick={() => {

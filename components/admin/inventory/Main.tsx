@@ -3,6 +3,7 @@ import { IconAlertTriangle, IconBuildingWarehouse, IconCategory } from '@tabler/
 import useSWR from 'swr'
 import { useFetcher } from '~/hooks/fetcher'
 import { SWR_KEYS } from '~/utils/constants'
+import InventoryManager from './Manager'
 import CategoriesMain from './categories/Main'
 const VALUES = {
   INVENTORY: 'inventory',
@@ -31,7 +32,7 @@ export default function InventoryMain() {
       </Tabs.List>
 
       <Tabs.Panel value={VALUES.INVENTORY} pt="xl">
-        <div>Hi</div>
+        <InventoryManager />
       </Tabs.Panel>
 
       <Tabs.Panel value={VALUES.CATEGORY} pt="xl">
