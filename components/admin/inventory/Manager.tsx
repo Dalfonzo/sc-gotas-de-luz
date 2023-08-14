@@ -4,6 +4,7 @@ import { Category, Inventory } from '@prisma/client'
 import { IconEdit, IconEye, IconPlus, IconTrash } from '@tabler/icons-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -180,9 +181,11 @@ export default function InventoryManager() {
             width: 100,
             render: (item) => (
               <Flex gap="xs" align="center" pos="absolute" top="50%" sx={{ transform: 'translateY(-50%)' }}>
-                <ActionIcon variant="light" color="blue">
-                  <IconEye size="1rem" />
-                </ActionIcon>
+                <Link href={`${router.asPath}/${item.id}`}>
+                  <ActionIcon variant="light" color="blue">
+                    <IconEye size="1rem" />
+                  </ActionIcon>
+                </Link>
                 {canUpdate && (
                   <ActionIcon
                     onClick={() => {

@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client'
+import { DynamicPrismaClient } from './prisma'
 
 export {}
 
 declare global {
   namespace NodeJS {
     interface Global {
-      prisma?: PrismaClient
+      prisma?: DynamicPrismaClient
     }
   }
 }

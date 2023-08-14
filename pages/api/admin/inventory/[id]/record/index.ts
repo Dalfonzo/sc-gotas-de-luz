@@ -21,7 +21,7 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
     const filters: Prisma.InventoryRecordFindManyArgs = {
       where: {
         ...((filter && {
-          type: { [filter.includes('output') ? INVENTORY_RECORD_TYPES.OUTPUT : INVENTORY_RECORD_TYPES.OUTPUT]: 0 },
+          type: filter.includes('output') ? INVENTORY_RECORD_TYPES.OUTPUT : INVENTORY_RECORD_TYPES.INPUT,
         }) ||
           (expiring && {
             currentQuantity: { gt: 0 },

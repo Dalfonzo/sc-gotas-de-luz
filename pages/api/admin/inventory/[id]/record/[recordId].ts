@@ -16,8 +16,8 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
     const body = req.body || {}
     const parsed = {
       ...(body.concept && { concept: body.concept }),
-      ...(body.expirationDate && { measure: body.expirationDate }),
-      ...(body.date && { measure: body.date }),
+      ...((body.expirationDate || body.expirationDate === null) && { expirationDate: body.expirationDate }),
+      ...(body.date && { date: body.date }),
     }
     return await model.update({
       data: parsed,

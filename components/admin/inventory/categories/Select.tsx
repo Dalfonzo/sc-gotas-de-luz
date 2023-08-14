@@ -1,8 +1,8 @@
-import { ActionIcon, Select, SelectProps } from '@mantine/core'
+import { SelectProps } from '@mantine/core'
 import { Category } from '@prisma/client'
-import { IconX } from '@tabler/icons-react'
 import { Dispatch, SetStateAction } from 'react'
 import useSWR from 'swr'
+import { CustomSelect } from '~/components/common/custom-select/CustomSelect'
 import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
 
 interface Props extends Omit<SelectProps, 'value' | 'data'> {
@@ -25,18 +25,11 @@ export const CategoriesSelect = ({ selectedCategory, setSelectedCategory, ...res
     ([url, dto]: useFetcherParams<Category[]>) => fetcher(url, dto)
   )
   return (
-    <Select
+    <CustomSelect
       {...rest}
-      value={selectedCategory}
-      onChange={(value) => setSelectedCategory(value)}
+      selected={selectedCategory}
+      setSelected={setSelectedCategory}
       error={catError && 'Error al cargar categorías'}
-      rightSection={
-        selectedCategory ? (
-          <ActionIcon onClick={() => setSelectedCategory(null)}>
-            <IconX size="1rem" />
-          </ActionIcon>
-        ) : undefined
-      }
       data={categories?.map((cat) => ({ label: cat.name, value: String(cat.id) })) || []}
     />
   )
