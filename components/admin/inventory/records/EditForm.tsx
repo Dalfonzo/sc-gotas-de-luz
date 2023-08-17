@@ -7,7 +7,9 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import { parseDate } from '~/lib/mappers/map-dates'
 import { CreateInventory } from '~/prisma/types'
+import { INVENTORY_RECORD_TYPES } from '~/utils/constants'
 
 interface InventoryFormProps {
   inventory: Inventory
@@ -36,8 +38,8 @@ export default function InventoryEditForm({ inventory, onSuccess, initialState }
       quantity: initialState.quantity,
     },
     validationSchema: Yup.object<CreateInventory>({
-      date: Yup.string().required('La fecha de ingreso es requerida'),
-      concept: Yup.string().trim().required('El concepto de la entrada es requerido'),
+      date: Yup.string().required('La fecha es requerida'),
+      concept: Yup.string().trim().required('El concepto es requerido'),
       expirationDate: Yup.string().test('exp test', function (value) {
         if (formik.values.canExpire && !value) {
           return this.createError({
@@ -50,11 +52,11 @@ export default function InventoryEditForm({ inventory, onSuccess, initialState }
     }),
     onSubmit: async (values) => {
       const parsed = {
-        date: formatISO(new Date(values.date)),
+        date: formatISO(parseDate(values.date)),
         concept: values.concept,
         expirationDate: null,
         ...(values.canExpire &&
-          values.expirationDate && { expirationDate: formatISO(new Date(values.expirationDate)) }),
+          values.expirationDate && { expirationDate: formatISO(parseDate(values.expirationDate)) }),
       }
       await customFetcher.put(`/api/admin/inventory/${inventory.id}/record/${initialState.id}`, parsed)
 
@@ -82,7 +84,7 @@ export default function InventoryEditForm({ inventory, onSuccess, initialState }
           <InputGroup justifyContent="space-between" alignItems="start">
             <FormControl isRequired isInvalid={Boolean(formik.errors.date && formik.touched.date)}>
               {' '}
-              <Input.Wrapper label="Fecha de ingreso">
+              <Input.Wrapper label="Fecha de registro">
                 <Input
                   mr="lg"
                   size="md"
@@ -96,7 +98,7 @@ export default function InventoryEditForm({ inventory, onSuccess, initialState }
             </FormControl>
             <FormControl>
               {' '}
-              <Input.Wrapper label={`Cantidad a ingresar`}>
+              <Input.Wrapper label={`Cantidad`}>
                 <NumberInput
                   readOnly={true}
                   size="md"
@@ -113,35 +115,37 @@ export default function InventoryEditForm({ inventory, onSuccess, initialState }
               </Input.Wrapper>
             </FormControl>
           </InputGroup>
-          <InputGroup alignItems="center">
-            <FormControl>
-              <Switch
-                size="md"
-                name="canExpire"
-                checked={formik.values.canExpire}
-                onChange={formik.handleChange}
-                label="Registrar fecha de vencimiento"
-              ></Switch>
-            </FormControl>
-            {formik.values.canExpire && (
-              <FormControl
-                isRequired
-                isInvalid={Boolean(formik.errors.expirationDate && formik.touched.expirationDate)}
-              >
-                {' '}
-                <Input.Wrapper label="Fecha de vencimiento">
-                  <Input
-                    size="md"
-                    type="date"
-                    name="expirationDate"
-                    onChange={formik.handleChange}
-                    value={formik.values.expirationDate}
-                  />
-                </Input.Wrapper>
-                <FormErrorMessage>{formik.errors.expirationDate}</FormErrorMessage>
+          {initialState.type === INVENTORY_RECORD_TYPES.INPUT && (
+            <InputGroup alignItems="center">
+              <FormControl>
+                <Switch
+                  size="md"
+                  name="canExpire"
+                  checked={formik.values.canExpire}
+                  onChange={formik.handleChange}
+                  label="Registrar fecha de vencimiento"
+                ></Switch>
               </FormControl>
-            )}
-          </InputGroup>
+              {formik.values.canExpire && (
+                <FormControl
+                  isRequired
+                  isInvalid={Boolean(formik.errors.expirationDate && formik.touched.expirationDate)}
+                >
+                  {' '}
+                  <Input.Wrapper label="Fecha de vencimiento">
+                    <Input
+                      size="md"
+                      type="date"
+                      name="expirationDate"
+                      onChange={formik.handleChange}
+                      value={formik.values.expirationDate}
+                    />
+                  </Input.Wrapper>
+                  <FormErrorMessage>{formik.errors.expirationDate}</FormErrorMessage>
+                </FormControl>
+              )}
+            </InputGroup>
+          )}
           <FormControl isRequired isInvalid={Boolean(formik.errors.concept && formik.touched.concept)}>
             <Input.Wrapper label="Concepto">
               <Textarea

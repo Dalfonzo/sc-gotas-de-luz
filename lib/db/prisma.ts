@@ -16,9 +16,9 @@ const getNewInstance = () => {
     result: {
       inventoryRecord: {
         expiresInDays: {
-          needs: { expirationDate: true, type: true },
+          needs: { expirationDate: true, type: true, currentQuantity: true },
           compute(record) {
-            if (!record.expirationDate || record.type === INVENTORY_RECORD_TYPES.OUTPUT) {
+            if (!record.expirationDate || record.type === INVENTORY_RECORD_TYPES.OUTPUT || !record.currentQuantity) {
               return null
             }
             const today = new Date()

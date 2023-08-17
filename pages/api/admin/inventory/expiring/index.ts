@@ -19,7 +19,6 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
         expirationDate: { lte: toExpireDate },
       },
     }
-
     return await paginationHandler<InventoryRecord[], Prisma.InventoryRecordFindManyArgs>(req, res, model, {
       orderBy: { expirationDate: 'asc' },
       where: {

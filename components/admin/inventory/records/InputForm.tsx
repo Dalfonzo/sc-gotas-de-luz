@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import { parseDate } from '~/lib/mappers/map-dates'
 import { CreateInventory } from '~/prisma/types'
 import { INVENTORY_RECORD_TYPES } from '~/utils/constants'
 
@@ -55,10 +56,10 @@ export default function InventoryInputForm({ inventory, onSuccess }: InventoryFo
     onSubmit: async (values) => {
       const parsed = {
         quantity: values.quantity,
-        date: formatISO(new Date(values.date)),
+        date: formatISO(parseDate(values.date)),
         concept: values.concept,
         ...(values.canExpire &&
-          values.expirationDate && { expirationDate: formatISO(new Date(values.expirationDate)) }),
+          values.expirationDate && { expirationDate: formatISO(parseDate(values.expirationDate)) }),
         type: INVENTORY_RECORD_TYPES.INPUT,
       }
       await customFetcher.post(`/api/admin/inventory/${inventory.id}/record`, parsed)

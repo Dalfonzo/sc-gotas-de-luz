@@ -1,33 +1,26 @@
-import { ActionIcon, Button, Flex, Group, Menu, Text, ThemeIcon, Title, Tooltip } from '@mantine/core'
+import { ActionIcon, Flex, Group, Text, ThemeIcon, Tooltip } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Inventory, InventoryRecord } from '@prisma/client'
-import { IconAlertTriangle, IconEdit, IconPlus, IconTransferIn, IconTransferOut } from '@tabler/icons-react'
+import { IconAlertTriangle, IconEdit, IconTransferOut } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
-import { BackButton } from '~/components/client/common/back-button/BackButton'
 import BasicModal from '~/components/common/Modal'
-import { CustomSelect } from '~/components/common/custom-select/CustomSelect'
 import { useFetcher, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import { formatDate } from '~/lib/mappers/map-dates'
+import { Unpack } from '~/lib/models/common'
 import { INVENTORY_RECORD_TYPES, RESOURCES, SWR_KEYS } from '~/utils/constants'
 import Table from '../../common/table/Table'
 import InventoryEditForm from './EditForm'
-import InventoryInputForm from './InputForm'
 import InventoryOutputForm from './OutputForm'
-type FetchResult = (InventoryRecord & { expiresInDays: number | null })[]
+type FetchResult = (InventoryRecord & { expiresInDays: number | null; inventory: Inventory })[]
 type FetcherResponse = usePaginationFetcherResponse<FetchResult>
 const PER_PAGE = 10
 
-interface Props {
-  inventory: Inventory
-}
-
-export default function InventoryRecordMain({ inventory }: Props) {
+export default function InventoryExpiringMain() {
   const router = useRouter()
   const { fetcher } = useFetcher<FetchResult>()
-  const [selectedType, setSelectedType] = useState<null | string>(null)
   const { mutate: mutateGlobal } = useSWRConfig()
   const {
     data: inventories,
@@ -36,9 +29,8 @@ export default function InventoryRecordMain({ inventory }: Props) {
     isLoading,
   } = useSWR<FetcherResponse>(
     () => {
-      if (!inventory) return null
       return [
-        `/api/admin/inventory/${inventory.id}/record`,
+        `/api/admin/inventory/expiring`,
         {
           usePagination: true,
           dates: ['date', 'expirationDate'],
@@ -47,7 +39,9 @@ export default function InventoryRecordMain({ inventory }: Props) {
             size: PER_PAGE,
             sortBy: router.query.sortBy,
             dir: router.query.dir,
-            ...(selectedType && { filter: selectedType }),
+            filter: INVENTORY_RECORD_TYPES.INPUT,
+            remaining: 1,
+            expiring: 1,
           },
         },
       ]
@@ -59,57 +53,19 @@ export default function InventoryRecordMain({ inventory }: Props) {
     mutate()
   }
   const { canUpdate } = useAccessGuard({ resource: RESOURCES.INVENTORY })
-  const [selected, setSelected] = useState<InventoryRecord | undefined>(undefined)
+  const [selected, setSelected] = useState<Unpack<FetchResult> | undefined>(undefined)
   const [createInputModal, { toggle: toggleCreateInputModal }] = useDisclosure(false)
   const [createOutputModal, { toggle: toggleCreateOutputModal }] = useDisclosure(false)
 
   const [editModal, { toggle: toggleEditModal }] = useDisclosure(false)
-
   return (
     <>
-      <BackButton mb="1rem" />
-      <Title size="h2">Histórico de {inventory.name}</Title>
-      <Text mt="md">
-        Este es el récord de entradas y salidas para este inventario. No se pueden eliminar registros, pero puedes
-        anular entradas erróneas creando salidas nuevas, y viceversa.
-      </Text>
-      <Group align="end" position="right" mt="lg" mb="xl">
-        <Text size="lg" mr="auto">
-          Inventario actual: {inventory.currentQuantity} {inventory.measure}
+      <Group spacing="xs" position="center" mb="md">
+        <Text size="sm" component="div" color="dimmed">
+          Selecciona este ícono para despachar registros de un inventario
         </Text>
-        <CustomSelect
-          label="Filtrar por tipo"
-          data={[
-            { label: 'Entradas', value: INVENTORY_RECORD_TYPES.INPUT },
-            { label: 'Salidas', value: INVENTORY_RECORD_TYPES.OUTPUT },
-          ]}
-          selected={selectedType}
-          setSelected={setSelectedType}
-        />
-        <Menu width={150}>
-          <Menu.Target>
-            <Button
-              w={150}
-              leftIcon={<IconPlus />}
-              onClick={() => {
-                setSelected(undefined)
-              }}
-              color="green"
-            >
-              Registrar
-            </Button>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item onClick={toggleCreateInputModal} icon={<IconTransferIn size={14} />}>
-              Entrada
-            </Menu.Item>
-            <Menu.Item onClick={toggleCreateOutputModal} icon={<IconTransferOut size={14} />}>
-              Salida
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
+        <IconTransferOut display="inline" size="1.2rem" />
       </Group>
-
       <Table
         fetching={isLoading}
         idAccessor="id"
@@ -117,6 +73,14 @@ export default function InventoryRecordMain({ inventory }: Props) {
         records={inventories?.records}
         totalRecords={inventories?.total}
         columns={[
+          {
+            accessor: 'inventoryId',
+            title: 'Inventario',
+            width: 175,
+            ellipsis: true,
+            sortable: true,
+            render: ({ inventory }) => <p>{inventory.name}</p>,
+          },
           {
             accessor: 'date',
             title: 'Fecha',
@@ -191,6 +155,18 @@ export default function InventoryRecordMain({ inventory }: Props) {
                   <ActionIcon
                     onClick={() => {
                       setSelected(item)
+                      toggleCreateOutputModal()
+                    }}
+                    variant="light"
+                    color="blue"
+                  >
+                    <IconTransferOut size="1rem" />
+                  </ActionIcon>
+                )}
+                {canUpdate && (
+                  <ActionIcon
+                    onClick={() => {
+                      setSelected(item)
                       toggleEditModal()
                     }}
                     variant="light"
@@ -204,57 +180,47 @@ export default function InventoryRecordMain({ inventory }: Props) {
           },
         ]}
       />
-      <BasicModal
-        title={'Registrar entrada del inventario'}
-        visible={createInputModal}
-        onClose={toggleCreateInputModal}
-        size="2xl"
-        body={
-          <InventoryInputForm
-            inventory={inventory}
-            onSuccess={() => {
-              onMutate()
-              toggleCreateInputModal()
-            }}
-          />
-        }
-      />
-      <BasicModal
-        title={'Registrar salida del inventario'}
-        visible={createOutputModal}
-        onClose={toggleCreateOutputModal}
-        size="2xl"
-        body={
-          <InventoryOutputForm
-            inventory={inventory}
-            onSuccess={() => {
-              onMutate()
-              toggleCreateOutputModal()
-              mutateGlobal(SWR_KEYS.EXPIRING_INVENTORY)
-            }}
-          />
-        }
-      />
-      <BasicModal
-        title={'Editar registro'}
-        visible={editModal}
-        onClose={toggleEditModal}
-        size="2xl"
-        body={
-          selected ? (
-            <InventoryEditForm
-              inventory={inventory}
-              initialState={selected}
+      {selected && (
+        <BasicModal
+          title={'Registrar salida del inventario'}
+          visible={createOutputModal}
+          onClose={toggleCreateOutputModal}
+          size="2xl"
+          body={
+            <InventoryOutputForm
+              inventory={selected.inventory}
               onSuccess={() => {
-                mutate()
-                toggleEditModal()
+                onMutate()
+                toggleCreateOutputModal()
+                mutateGlobal(SWR_KEYS.EXPIRING_INVENTORY)
               }}
+              initialOutputId={selected.id}
             />
-          ) : (
-            <div></div>
-          )
-        }
-      />
+          }
+        />
+      )}
+      {selected && (
+        <BasicModal
+          title={'Editar registro'}
+          visible={editModal}
+          onClose={toggleEditModal}
+          size="2xl"
+          body={
+            selected ? (
+              <InventoryEditForm
+                inventory={selected.inventory}
+                initialState={selected}
+                onSuccess={() => {
+                  mutate()
+                  toggleEditModal()
+                }}
+              />
+            ) : (
+              <div></div>
+            )
+          }
+        />
+      )}
     </>
   )
 }

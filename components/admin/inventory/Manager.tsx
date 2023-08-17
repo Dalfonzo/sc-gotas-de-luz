@@ -181,7 +181,7 @@ export default function InventoryManager() {
             width: 100,
             render: (item) => (
               <Flex gap="xs" align="center" pos="absolute" top="50%" sx={{ transform: 'translateY(-50%)' }}>
-                <Link href={`${router.asPath}/${item.id}`}>
+                <Link href={`${router.pathname}/${item.id}`}>
                   <ActionIcon variant="light" color="blue">
                     <IconEye size="1rem" />
                   </ActionIcon>

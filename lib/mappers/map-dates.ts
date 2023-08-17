@@ -1,6 +1,6 @@
 /* convert string properties to dates */
 
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export type DateToString<T> = {
@@ -32,4 +32,8 @@ export function formatDateTimeLocal(date: Date | string) {
     date = new Date(date)
   }
   return format(date, `yyyy-MM-dd'T'HH:mm`, {})
+}
+
+export function parseDate(date: string, format = 'yyyy-MM-dd') {
+  return parse(date, format, new Date())
 }

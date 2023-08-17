@@ -2,9 +2,11 @@ import { Indicator, Tabs } from '@mantine/core'
 import { IconAlertTriangle, IconBuildingWarehouse, IconCategory } from '@tabler/icons-react'
 import useSWR from 'swr'
 import { useFetcher } from '~/hooks/fetcher'
+import { useTabs } from '~/hooks/useTabs'
 import { SWR_KEYS } from '~/utils/constants'
 import InventoryManager from './Manager'
 import CategoriesMain from './categories/Main'
+import InventoryExpiringMain from './records/Expiring'
 const VALUES = {
   INVENTORY: 'inventory',
   CATEGORY: 'category',
@@ -14,9 +16,9 @@ export default function InventoryMain() {
   const { fetcher } = useFetcher<{ pending: number }>()
 
   const { data: inventoryData } = useSWR<{ pending: number }>(SWR_KEYS.EXPIRING_INVENTORY, fetcher)
-
+  const { currentTab, onTabChange } = useTabs(VALUES.INVENTORY)
   return (
-    <Tabs defaultValue={VALUES.INVENTORY}>
+    <Tabs keepMounted={false} value={currentTab} onTabChange={onTabChange}>
       <Tabs.List>
         <Tabs.Tab value={VALUES.INVENTORY} icon={<IconBuildingWarehouse size="0.8rem" />}>
           Gestionar inventario
@@ -39,7 +41,7 @@ export default function InventoryMain() {
         <CategoriesMain />
       </Tabs.Panel>
       <Tabs.Panel value={VALUES.EXPIRING} pt="xl">
-        <>Exp</>
+        <InventoryExpiringMain />
       </Tabs.Panel>
     </Tabs>
   )

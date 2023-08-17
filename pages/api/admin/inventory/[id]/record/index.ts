@@ -16,7 +16,7 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const model = prisma.inventoryRecord
   const inventoryID = String(req.query.id)
   const get = async () => {
-    const { filter, expiring } = req.query
+    const { filter, expiring, remaining } = req.query
     const toExpireDate = add(new Date(), { months: Number(expiring) || 1 })
     const filters: Prisma.InventoryRecordFindManyArgs = {
       where: {
@@ -29,6 +29,12 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
             expirationDate: { lte: toExpireDate },
           }) ||
           {}),
+        ...(remaining && {
+          type: INVENTORY_RECORD_TYPES.INPUT,
+          currentQuantity: {
+            gte: Number(remaining),
+          },
+        }),
       },
     }
 
@@ -64,7 +70,6 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
     }
 
     delete body.outputs
-
     const [created] = await prisma.$transaction([
       model.create({
         data: {
