@@ -65,7 +65,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@prisma/client": "5",
+    "@prisma/client": "^5.1.1",
     "@types/bcrypt": "^5.0.0",
     "@types/email-templates": "^10.0.1",
     "@types/formidable": "^2.0.6",
