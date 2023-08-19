@@ -10,7 +10,7 @@ export const apiRouteAccessGuard =
   async (req: NextApiRequest, res: NextApiResponse) => {
     const { method } = req
     const token = req.headers.authorization || ''
-    const decodedToken = (await verifyJwt(token)) as User & JWTPayload
+    const decodedToken = (await verifyJwt(token)).payload as User & JWTPayload
     // For auth routes that don't relate to a specific resource
     if (resourceName === FREE_RESOURCE) {
       return handler(req, res)

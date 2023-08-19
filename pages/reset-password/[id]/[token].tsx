@@ -1,5 +1,5 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
-import { Button, Container, Paper, Text, Title } from '@mantine/core'
+import { Alert, Button, Container, Paper, Text, Title } from '@mantine/core'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -17,23 +17,20 @@ function ResetPassword() {
   const router = useRouter()
   const customFetcher = useFetcherInstance()
   const { id, token } = router.query
-  // /api/reset-password/:id/:token
-  const { fetcher } = useFetcher<{ message: string }>()
-  const { data, isLoading, mutate, isValidating } = useSWR<{ message: string }>(
+  const { fetcher } = useFetcher<{ message: string; status: string }>()
+  const { data, isLoading } = useSWR<{ message: string; status: string }>(
     () => {
       if (!id || !token) return null
-      return `/api/reset-password/${id}/${token}`
+      return [`/api/reset-password/${id}/${token}`]
     },
     ([url, dto]: useFetcherParams<{ message: string }>) => fetcher(url, dto),
     {
       revalidateOnFocus: false,
     }
   )
+  const isFreshAccount = !!router.query.firstTime
+  const isInvalid = data?.status === 'error'
 
-  // FIXME: if isvalid show, if not show message of error
-  const isValid = data?.message === 'ok'
-
-  console.log(data)
   const formik = useFormik<ResetPasswordProps>({
     initialValues: {
       password: '',
@@ -44,7 +41,8 @@ function ResetPassword() {
       passwordConfirmation: Yup.string()
         .trim()
         .required('Este campo es requerido')
-        .min(3, 'El campo ingresado es muy corto'),
+        .min(3, 'El campo ingresado es muy corto')
+        .oneOf([Yup.ref('password')], 'Las contraseñas deben coincidir'),
     }),
     onSubmit: async (values: ResetPasswordProps) => {
       await customFetcher.post(`/api/reset-password/${id}/${token}`, { password: values.password })
@@ -70,11 +68,18 @@ function ResetPassword() {
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
           color="white"
         >
-          Cambiar Contraseña
+          {isFreshAccount ? '¡Bienvenido a bordo!' : 'Cambiar Contraseña'}
         </Title>
+        {isInvalid && (
+          <Alert color="red" title="Error" my="md" variant="filled">
+            {data?.message}
+          </Alert>
+        )}
         <Paper p={30} mt={30} radius="md" withBorder shadow="md">
           <Text color="dimmed" align="center">
-            Por favor, introduzca su nueva contraseña.
+            {isFreshAccount
+              ? 'Por favor, indique la contraseña con la que desea ingresar a su cuenta'
+              : 'Por favor, introduzca su nueva contraseña'}
           </Text>
           <form
             onSubmit={(e) => {
@@ -89,6 +94,7 @@ function ResetPassword() {
                 onChange={formik.handleChange}
                 value={formik.values.password}
                 type="password"
+                disabled={isInvalid}
               />
               <FormLabel htmlFor="password">Contraseña</FormLabel>
               <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
@@ -100,11 +106,11 @@ function ResetPassword() {
                 onChange={formik.handleChange}
                 value={formik.values.passwordConfirmation}
                 type="password"
+                disabled={isInvalid}
               />
               <FormLabel htmlFor="passwordConfirmation">Confirmación de contraseña</FormLabel>
               <FormErrorMessage>{formik.errors.passwordConfirmation}</FormErrorMessage>
             </FormControl>
-
             <Button
               fullWidth
               mt="xl"
@@ -112,8 +118,9 @@ function ResetPassword() {
               type="submit"
               loading={formik.isSubmitting || loadingSubmit}
               color="cyan.4"
+              disabled={isInvalid}
             >
-              Cambiar contraseña
+              {isFreshAccount ? 'Registrar contraseña' : 'Cambiar contraseña'}
             </Button>
           </form>
         </Paper>

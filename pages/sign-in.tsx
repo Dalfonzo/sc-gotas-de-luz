@@ -60,7 +60,7 @@ function SignIn() {
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
           color="white"
         >
-          Bienvenido
+          Iniciar sesión
         </Title>
         <Paper p={30} mt={30} radius="md" withBorder shadow="md">
           <Text color="dimmed" align="center">

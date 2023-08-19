@@ -4,6 +4,17 @@ import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { verifyJwt } from '~/lib/jtw'
 
+const tokenVerificationHandler = async (token: string, secret: string) => {
+  const resp = await verifyJwt(token, secret)
+  if (resp.status === 'error' && resp.code === 'JWS_VERIFICATION_FAILED') {
+    return { status: 'error', message: 'Token inválido o vencido.' }
+  } else if (resp.status === 'error' && resp.code === 'UNKNOWN') {
+    return { status: 'error', message: 'Ocurrió un error inesperado: ' + resp.payload }
+  } else {
+    return { status: 'success', message: 'ok' }
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const get = async () => {
     const { id, token } = req.query
@@ -22,20 +33,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const secret = process.env.SECRET_KEY + user.password
-    // crear secret con el JWT y el password
-    // crear payload con email y userid
 
-    await verifyJwt(token as string, secret)
-    // FIXME: Improve this
-    return { message: 'ok' }
-    // Si todo sale bien, muestro la pantalla para escribir el password y su confirmacion
+    return await tokenVerificationHandler(token as string, secret)
   }
 
   const post = async () => {
     const { password } = req.body
     const { id, token } = req.query
-
-    //  Revisar si usuario email existe en db
 
     const user = await prisma.users.findUnique({
       where: { id: id as string },
@@ -46,12 +50,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error('invalid user')
     }
 
-    // Validamos token
     const secret = process.env.SECRET_KEY + user.password
-    await verifyJwt(token as string, secret)
+    const response = await tokenVerificationHandler(token as string, secret)
 
-    // update user con new password
-    // FIXME: Remove this duplicated code
+    if (response.status === 'error') {
+      return response
+    }
+
     const updatedUser = await prisma.users.update({
       where: { id: id as string },
       data: {

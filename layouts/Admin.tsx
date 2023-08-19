@@ -225,7 +225,7 @@ export const AdminLayout = ({ children, title }: { children: React.ReactNode; ti
       <Container size="lg" px="lg" py="md">
         <PageHeading title={title} />
       </Container>
-      <Container size="lg" bg="white" px="lg" py="md" mih="350px">
+      <Container size="lg" bg="white" px="lg" py="md" mih="350px" pos="relative">
         {children}
       </Container>
     </AppShell>

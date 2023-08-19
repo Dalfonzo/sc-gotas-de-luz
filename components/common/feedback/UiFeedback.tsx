@@ -1,8 +1,8 @@
-import { Box, Center } from '@chakra-ui/react'
+import { Box, BoxProps, Center } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { CustomAlert } from './CustomAlert'
 import { Loader } from './Loader'
-interface Props {
+interface Props extends BoxProps {
   isLoading?: boolean
   isError?: boolean
   errorMsg?: [string, string]
@@ -21,9 +21,10 @@ export default function UiFeedback({
   loadingType = 'circle',
   emptyMsg = ['Aún no hay datos', 'Vuelve más tarde'],
   errorMsg = ['Lo sentimos', 'Ha ocurrido un error inesperado, intenta recargar la página'],
+  ...props
 }: Props) {
   const Centered = ({ children }: { children: ReactNode }) => (
-    <Box height="100%" my="auto">
+    <Box height="100%" my="auto" {...props}>
       <Center width="100%" my="10" height="100%">
         <Box width="25rem" maxWidth="100%" display="flex" justifyContent="center" alignItems="center">
           {children}

@@ -1,8 +1,7 @@
 import * as jose from 'jose'
 
 const SECRET_KEY = process.env.SECRET_KEY || ''
-// TODO: ADD this to .env
-const TOKEN_EXPIRATION_TIME = '30d'
+const TOKEN_EXPIRATION_TIME = process.env.AUTH_TOKEN_EXPIRATION_TIME || '30d'
 
 export async function signJwtAccessToken(
   payload: jose.JWTPayload,
@@ -22,9 +21,12 @@ export async function verifyJwt(token: string, secret = SECRET_KEY) {
     const sanitizedToken = token?.replace('Bearer', '').trim()
     // TODO: ADD verification for token expired.
     const decoded = await jose.jwtVerify(sanitizedToken, new TextEncoder().encode(secret))
-    return decoded.payload
-  } catch (error) {
-    console.log(error)
-    return null
+    console.log({ decoded })
+    return { status: 'success', payload: decoded.payload }
+  } catch (error: any) {
+    if (error.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
+      return { status: 'error', code: 'JWS_VERIFICATION_FAILED', payload: error.message }
+    }
+    return { status: 'error', code: 'UNKNOWN', payload: error.message }
   }
 }

@@ -10,7 +10,7 @@ async function main() {
   })
 
   const resources = Object.values(RESOURCES)
-  // TODO:  Probar estos seeds luego
+
   await Promise.all(
     resources.map(async (resource) => {
       return await prisma.permissions.create({
