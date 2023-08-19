@@ -19,13 +19,14 @@ export async function signJwtAccessToken(
 export async function verifyJwt(token: string, secret = SECRET_KEY) {
   try {
     const sanitizedToken = token?.replace('Bearer', '').trim()
-    // TODO: ADD verification for token expired.
+
     const decoded = await jose.jwtVerify(sanitizedToken, new TextEncoder().encode(secret))
-    console.log({ decoded })
     return { status: 'success', payload: decoded.payload }
   } catch (error: any) {
     if (error.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
       return { status: 'error', code: 'JWS_VERIFICATION_FAILED', payload: error.message }
+    } else if (error.code === 'ERR_JWT_EXPIRED') {
+      return { status: 'error', code: 'TOKEN_EXPIRED', payload: error.message }
     }
     return { status: 'error', code: 'UNKNOWN', payload: error.message }
   }
