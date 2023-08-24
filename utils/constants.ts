@@ -15,6 +15,7 @@ export const RESOURCES = {
   EVENTS: 'EVENTOS (CALENDARIO)',
   VOLUNTEERS: 'VOLUNTARIOS',
   INVENTORY: 'INVENTORIO',
+  DONATIONS: 'DONACIONES',
 }
 // to be used on api routes that don't relate to a specific resource
 export const FREE_RESOURCE: 'NONE' = 'NONE'
