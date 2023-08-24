@@ -20,3 +20,7 @@ export interface CreateInventory
   extends Omit<Inventory, 'id' | 'category' | 'currentQuantity' | 'updatedAt' | 'categoryId'> {
   categoryId: string
 }
+
+export interface PendingResult {
+  pending: number
+}

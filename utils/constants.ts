@@ -30,6 +30,7 @@ export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
 export const SWR_KEYS = {
   PENDING_VOLUNTEERS: '/api/admin/volunteers/pending',
   EXPIRING_INVENTORY: '/api/admin/inventory/expiring/count',
+  PENDING_DONATIONS: '/api/admin/donation/pending',
 }
 
 export const LINKS = {
