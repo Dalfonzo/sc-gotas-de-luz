@@ -3,16 +3,26 @@ import { CLOUD_FILE_FORM_FIELD } from '~/lib/api/cloud-storage/constants'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 type FileUploadStates = 'idle' | 'error' | 'completed' | 'loading'
 type UploadResult = { Key: string } | undefined
+
+const parseValues = (values: Record<string, any>) => {
+  const formData = new FormData()
+  Object.entries(values).forEach(([key, value]) => value && formData.append(key, value))
+  return formData
+}
+
 export const useCloudUpload = (config: { fileKey: string; updatePath?: string }) => {
   const shouldCloudUpload = process.env.NEXT_PUBLIC_USE_LOCAL_STORAGE !== 'true'
   const [fileUploadState, setFileUploadState] = useState<FileUploadStates>('idle')
   const [fileReference, setFileReference] = useState<string | null>(null)
   const fetcher = useFetcherInstance()
 
-  const onFileUpload = async (form: FormData) => {
+  const onFileUpload = async (form: FormData | Record<string, any>) => {
+    if (!(form instanceof FormData)) {
+      form = parseValues(form)
+    }
     if (fileUploadState === 'completed') {
       fileReference && form.append(CLOUD_FILE_FORM_FIELD, fileReference)
-      return
+      return form
     }
     setFileUploadState('loading')
     try {
@@ -44,6 +54,7 @@ export const useCloudUpload = (config: { fileKey: string; updatePath?: string })
       setFileReference(ref)
       form.append(CLOUD_FILE_FORM_FIELD, ref)
       setFileUploadState('completed')
+      return form 
     } catch (error) {
       setFileUploadState('error')
       throw error

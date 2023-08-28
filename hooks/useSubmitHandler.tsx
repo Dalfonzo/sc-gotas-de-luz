@@ -33,6 +33,8 @@ export default function useSubmitHandler<T>({
           status: 'success',
         })
       }
+      setLoadingSubmit(false)
+      return result
     } catch (error) {
       // TODO: see error parsing const parsedError = parseError(error)
       setSubmitError('Ha ocurrido un error inesperado')

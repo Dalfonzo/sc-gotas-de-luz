@@ -1,7 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
-import DonationBanner from '~/components/client/common/donation-banner'
-import DonationForm from '~/components/client/donate/donation-form'
+import { DonationSteps } from '~/components/client/donate/donation-form/Steps'
 import Heading from '~/components/client/donate/heading'
 import LatestDonators from '~/components/client/donate/latest-donators'
 import ClientLayout from '~/layouts/Client'
@@ -17,8 +16,9 @@ const Donate = () => {
       <Box maxW="7xl" margin="auto">
         <Heading />
         <LatestDonators />
-        <DonationForm />
-        <DonationBanner />
+        <DonationSteps />
+        {/*         <DonationBanner />
+         */}{' '}
       </Box>
     </ClientLayout>
   )

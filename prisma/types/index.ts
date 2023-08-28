@@ -1,4 +1,4 @@
-import { Category, Event, Inventory, News, Volunteer } from '@prisma/client'
+import { Category, Donation, Event, Inventory, News, Volunteer } from '@prisma/client'
 import { FileI } from '~/components/common/file-upload/FileUpload'
 import { DateToString } from '~/lib/mappers/map-dates'
 
@@ -23,4 +23,9 @@ export interface CreateInventory
 
 export interface PendingResult {
   pending: number
+}
+
+export interface CreateDonation extends Omit<Donation, 'id' | 'img' | 'imgId' | 'isVerified' | 'date' | 'createdAt'> {
+  date: string
+  donation?: FileI
 }

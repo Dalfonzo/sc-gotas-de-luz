@@ -141,4 +141,5 @@ model Donation {
   imgId       Int       @unique
   method      DonationMethod  @relation(fields: [methodId], references: [id])
   methodId    Int
+  createdAt   DateTime @default(now())
 }
