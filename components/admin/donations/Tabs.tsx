@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import { useFetcher } from '~/hooks/fetcher'
 import { useTabs } from '~/hooks/useTabs'
 import { SWR_KEYS } from '~/utils/constants'
+import DonationMain from './Main'
 import DonationMethodTable from './methods/Table'
 
 const VALUES = {
@@ -30,7 +31,7 @@ export function DonationTabs() {
       </Tabs.List>
 
       <Tabs.Panel value={VALUES.DONATION} pt="xl">
-        <div>DONACIONES</div>
+        <DonationMain pending={donationData?.pending} />
       </Tabs.Panel>
 
       <Tabs.Panel value={VALUES.METHOD} pt="xl">
