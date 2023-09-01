@@ -14,7 +14,6 @@ export const CategoriesSelect = ({ selectedCategory, setSelectedCategory, ...res
   const {
     data: categories,
     error: catError,
-    isLoading: loadingCats,
   } = useSWR<Category[]>(
     [
       `/api/admin/inventory/category`,
@@ -27,6 +26,7 @@ export const CategoriesSelect = ({ selectedCategory, setSelectedCategory, ...res
   return (
     <CustomSelect
       {...rest}
+  
       selected={selectedCategory}
       setSelected={setSelectedCategory}
       error={catError && 'Error al cargar categorías'}

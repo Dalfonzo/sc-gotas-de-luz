@@ -54,7 +54,6 @@ export default function InventoryExpiringMain() {
   }
   const { canUpdate } = useAccessGuard({ resource: RESOURCES.INVENTORY })
   const [selected, setSelected] = useState<Unpack<FetchResult> | undefined>(undefined)
-  const [createInputModal, { toggle: toggleCreateInputModal }] = useDisclosure(false)
   const [createOutputModal, { toggle: toggleCreateOutputModal }] = useDisclosure(false)
 
   const [editModal, { toggle: toggleEditModal }] = useDisclosure(false)

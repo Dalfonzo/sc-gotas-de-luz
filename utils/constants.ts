@@ -15,6 +15,7 @@ export const RESOURCES = {
   EVENTS: 'EVENTOS (CALENDARIO)',
   VOLUNTEERS: 'VOLUNTARIOS',
   INVENTORY: 'INVENTORIO',
+  DONATIONS: 'DONACIONES',
 }
 // to be used on api routes that don't relate to a specific resource
 export const FREE_RESOURCE: 'NONE' = 'NONE'
@@ -29,6 +30,7 @@ export const OPERATION_METHODS: Record<OperationsOptions, OperationsOptions> = {
 export const SWR_KEYS = {
   PENDING_VOLUNTEERS: '/api/admin/volunteers/pending',
   EXPIRING_INVENTORY: '/api/admin/inventory/expiring/count',
+  PENDING_DONATIONS: '/api/admin/donation/pending',
 }
 
 export const LINKS = {

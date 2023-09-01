@@ -18,6 +18,7 @@ model FileDb {
   isCloud Boolean @default(true)
   news  News?
   event Event?
+  donation Donation?
 }
 
 model News {
@@ -116,4 +117,29 @@ model InventoryRecord{
   expirationDate DateTime?
   currentQuantity Float     @default(0)
 
+}
+
+model DonationMethod{
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  reference String  
+  donations Donation[]   
+}
+
+model Donation {
+  id          String      @id @default(uuid())
+  name        String?
+  message     String?
+  reference   String
+  amount      Float
+  // TODO: TBD if email is necessary 
+  //email       String 
+  isAnon      Boolean     @default(false)
+  isVerified  Boolean     @default(false)
+  date    DateTime @default(now())
+  img         FileDb    @relation(fields: [imgId], references: [id])
+  imgId       Int       @unique
+  method      DonationMethod  @relation(fields: [methodId], references: [id])
+  methodId    Int
+  createdAt   DateTime @default(now())
 }

@@ -2,7 +2,11 @@ import { Box, Image, Text } from '@chakra-ui/react'
 import LinkButton from '~/components/client/common/link-button'
 import { responsiveProperty } from '~/theme/utils'
 
-const DonationBanner = () => {
+interface Props {
+  link?: string
+}
+
+const DonationBanner = ({ link = '/donate' }: Props) => {
   return (
     <Box
       maxW="7xl"
@@ -21,7 +25,7 @@ const DonationBanner = () => {
             personas. Haz tu aporte y nosotros nos encargaremos de hacerlo llegar a quienes más lo necesitan.
           </Text>
           <LinkButton
-            href="/donate"
+            href={link}
             variant="lnk-btn-white"
             content="Donar"
             display={{ base: 'block', lg: 'inline-block' }}

@@ -1,4 +1,5 @@
 import { Box, Center } from '@chakra-ui/react'
+import { Skeleton, Stack } from '@mantine/core'
 import { ReactNode } from 'react'
 import { CustomAlert } from './CustomAlert'
 import { Loader } from './Loader'
@@ -10,8 +11,28 @@ interface Props {
   isValidating?: boolean
   emptyMsg?: [string, string]
   loadingType?: 'circle' | 'skeleton'
+  loadingItems?: number
   children: ReactNode
 }
+const SingleSkeleton = () => (
+  <Stack maw="100%" w="20rem">
+    {' '}
+    <Skeleton height={50} circle mb="xl" />
+    <Skeleton height={8} radius="xl" />
+    <Skeleton height={8} mt={6} radius="xl" />
+    <Skeleton height={8} mt={6} width="70%" radius="xl" />
+  </Stack>
+)
+const Skeletons = ({ rows = 1 }: { rows?: number }) => {
+  return (
+    <Stack spacing="lg">
+      {Array.from({ length: rows }, (_, i) => (
+        <SingleSkeleton key={i} />
+      ))}
+    </Stack>
+  )
+}
+
 export default function UiFeedback({
   children,
   isLoading,
@@ -19,6 +40,7 @@ export default function UiFeedback({
   isEmpty,
   isValidating,
   loadingType = 'circle',
+  loadingItems = 1,
   emptyMsg = ['Aún no hay datos', 'Vuelve más tarde'],
   errorMsg = ['Lo sentimos', 'Ha ocurrido un error inesperado, intenta recargar la página'],
 }: Props) {
@@ -31,12 +53,9 @@ export default function UiFeedback({
       </Center>
     </Box>
   )
+
   if (isLoading || (!isLoading && isError && isValidating)) {
-    return (
-      <Centered>
-        <Loader />
-      </Centered>
-    )
+    return <Centered>{loadingType === 'circle' ? <Loader /> : <Skeletons rows={loadingItems} />}</Centered>
   }
   if (isError) {
     return (

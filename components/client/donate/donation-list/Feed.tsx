@@ -1,25 +1,25 @@
 import { Box } from '@chakra-ui/react'
+import { Donation } from '@prisma/client'
+import { useState } from 'react'
 import { useFetcher, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import { useInfiniteList } from '~/hooks/useInfiniteList'
-import { NewsI } from '~/lib/models/news'
-import UiFeedback from '../../common/feedback/UiFeedback'
-import NewsList from './card/List'
-import Heading from './heading/Heading'
+import UiFeedback from '../../../common/feedback/UiFeedback'
+import { DonationList } from './List'
 
-export const NewsFeed = () => {
-  const { fetcher } = useFetcher<NewsI[]>()
+export const DonationFeed = () => {
+  const { fetcher } = useFetcher<Donation[]>()
   const {
-    rows: news,
+    rows: donations,
     error: isError,
     isEmpty,
     isValidating,
     isLoadingInitialData,
     InfiniteListFetcherTrigger,
   } = useInfiniteList(
-    (pageIndex, previousPageData?: usePaginationFetcherResponse<NewsI[]>) => {
+    (pageIndex, previousPageData?: usePaginationFetcherResponse<Donation[]>) => {
       if (previousPageData?.lastPage && previousPageData?.lastPage < pageIndex) return null
       return [
-        `/api/news`,
+        `/api/donation`,
         {
           dates: ['date'],
           query: {
@@ -31,24 +31,22 @@ export const NewsFeed = () => {
         },
       ]
     },
-    ([url, dto]: usePaginationFetcherParams<NewsI[]>) => fetcher(url, dto),
+    ([url, dto]: usePaginationFetcherParams<Donation[]>) => fetcher(url, dto),
     {}
   )
   return (
     <Box>
-      <Heading />
-
       <UiFeedback
         isLoading={isLoadingInitialData}
         isEmpty={isEmpty}
         isError={!!isError}
         isValidating={isValidating}
-        emptyMsg={[
-          'Aún no hay noticias',
-          'Pronto encontrarás todos los emocionantes sucesos que tenemos que compartir',
-        ]}
+        loadingType="skeleton"
+        loadingItems={4}
+        emptyMsg={['Aún no hay donaciones', '¡Iremos mostrando las donaciones a penas las veriquemos!']}
+        errorMsg={['Lo sentimos, ha ocurrido un error al cargar los donativos', 'Intenta cargar la página nuevamente']}
       >
-        <NewsList news={news || []} />
+        <DonationList donations={donations || []} />
         <InfiniteListFetcherTrigger />
       </UiFeedback>
     </Box>
