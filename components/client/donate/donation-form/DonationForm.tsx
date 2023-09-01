@@ -14,11 +14,14 @@ import { Text } from '@mantine/core'
 import { useFormik } from 'formik'
 import FileUpload from '~/components/common/file-upload/FileUpload'
 import { CreateDonation } from '~/prisma/types'
+import { useDonate } from '../donate-context.provider'
+
 interface Props {
   formik: ReturnType<typeof useFormik<CreateDonation>>
 }
-// TODO: update form
 const DonationForm = ({ formik }: Props) => {
+  const { state } = useDonate()
+
   return (
     <form>
       <Flex gap={6} flexDirection="column" width="95%" margin="auto">
@@ -113,19 +116,24 @@ const DonationForm = ({ formik }: Props) => {
             </FormControl>
           </Box>
         </div>
-
-        <FormControl isRequired isInvalid={Boolean(formik.errors.reference && formik.touched.reference)}>
-          <FormLabel htmlFor="reference">Referencia</FormLabel>
-          <Input
-            placeholder="Código de referencia para verificar la donación"
-            name="reference"
-            onChange={formik.handleChange}
-            value={formik.values.reference}
-          />
-          {formik.errors.reference && formik.touched.reference && (
-            <FormErrorMessage>{formik.errors.reference}</FormErrorMessage>
-          )}
-        </FormControl>
+        <Box alignItems="flex-start" display="flex" flexDir={{ base: 'column', md: 'row' }} gap={{ base: 6, md: 3 }}>
+          <FormControl isRequired isInvalid={Boolean(formik.errors.reference && formik.touched.reference)}>
+            <FormLabel htmlFor="reference">Referencia</FormLabel>
+            <Input
+              placeholder="Código de referencia para verificar la donación"
+              name="reference"
+              onChange={formik.handleChange}
+              value={formik.values.reference}
+            />
+            {formik.errors.reference && formik.touched.reference && (
+              <FormErrorMessage>{formik.errors.reference}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl>
+            <FormLabel>Método seleccionado</FormLabel>
+            <Input value={state.method?.name} readOnly />
+          </FormControl>
+        </Box>
         <FormControl isRequired isInvalid={Boolean(formik.errors.donation && formik.touched.donation)}>
           <FileUpload
             name="news"

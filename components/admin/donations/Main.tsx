@@ -108,7 +108,7 @@ export default function DonationMain({ pending }: Props) {
               isVerified ? <Text color="green">Verificada</Text> : <Text color="orange">Pendiente</Text>,
           },
           {
-            accessor: 'createAt',
+            accessor: 'createdAt',
             title: 'Recibida el',
             width: 100,
             ellipsis: true,

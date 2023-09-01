@@ -3,6 +3,7 @@ import { DonationMethod } from '@prisma/client'
 import useSWR from 'swr'
 import UiFeedback from '~/components/common/feedback/UiFeedback'
 import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
+import { useDonate } from '../donate-context.provider'
 import { MethodCard } from './MethodCard'
 type FetchResult = DonationMethod[]
 
@@ -13,6 +14,8 @@ interface Props {
 
 export const MethodSelect = ({ onSelect, selected }: Props) => {
   const { fetcher } = useFetcher<FetchResult>()
+  const { updateMethod } = useDonate()
+
   const {
     data: methods,
     error,
@@ -49,6 +52,7 @@ export const MethodSelect = ({ onSelect, selected }: Props) => {
             key={met.id}
             onClick={() => {
               onSelect(met.id)
+              updateMethod(met)
             }}
             name={met.name}
             reference={met.reference}

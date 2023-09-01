@@ -1,6 +1,6 @@
 import { responsiveProperty } from '~/theme/utils'
 
-const Text = {
+export const TextStyling = {
   variants: {
     title: {
       fontWeight: 'black',
@@ -41,6 +41,6 @@ const Text = {
 }
 export const TextComponent = {
   components: {
-    Text,
+    Text: TextStyling,
   },
 }

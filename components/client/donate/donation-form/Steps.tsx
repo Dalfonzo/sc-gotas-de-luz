@@ -1,7 +1,6 @@
-import { Box, Button as ChakraButton, Text } from '@chakra-ui/react'
-import { Button, Card, Container, Group, Stepper, ThemeIcon, Title, Transition } from '@mantine/core'
-import { useToggle } from '@mantine/hooks'
-import { IconArrowLeft, IconArrowRight, IconHeartHandshake, IconInfoCircle } from '@tabler/icons-react'
+import { Box, Text } from '@chakra-ui/react'
+import { Button, Group, Stepper, ThemeIcon, Title, Transition } from '@mantine/core'
+import { IconArrowLeft, IconArrowRight, IconInfoCircle } from '@tabler/icons-react'
 import { format, formatISO, isDate, parse } from 'date-fns'
 import { useFormik } from 'formik'
 import Image from 'next/image'
@@ -12,7 +11,6 @@ import { useCloudUpload } from '~/hooks/useCloudUpload'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { CreateDonation } from '~/prisma/types'
-import { responsiveProperty } from '~/theme/utils'
 import { MethodSelect } from '../donate-method/MethodSelect'
 import DonationForm from './DonationForm'
 
@@ -23,9 +21,11 @@ const StepTitle = ({ children }: { children: string }) => (
 )
 const MAX_STEPS = 2
 const FORM_STEP = 1
-export const DonationSteps = () => {
+interface Props {
+  afterComplete?: () => any
+}
+export const DonationSteps = ({ afterComplete }: Props) => {
   const [activeStep, setActiveStep] = useState(0)
-  const [showCard, toggleCard] = useToggle()
   const canProceed: (() => boolean)[] = [() => Number.isSafeInteger(formik.values.methodId), () => true, () => false]
   const nextStep = async () => {
     if (activeStep == FORM_STEP) {
@@ -39,7 +39,6 @@ export const DonationSteps = () => {
   }
   const { onFileUpload } = useCloudUpload({ fileKey: 'donation' })
   const customFetcher = useFetcherInstance()
-
   const formik = useFormik<CreateDonation>({
     initialValues: {
       name: '',
@@ -81,7 +80,6 @@ export const DonationSteps = () => {
       amount: Yup.number().min(1, 'El monto ingresado es inválido').required('Este campo es requerido'),
     }),
     onSubmit: async (values) => {
-      // TODO: Add route to endpoint
       const prepared = { ...values, date: formatISO(new Date(values.date)) }
       const parsed = await onFileUpload(prepared)
       if (!parsed) {
@@ -101,7 +99,7 @@ export const DonationSteps = () => {
   })
 
   const onReset = () => {
-    toggleCard()
+    afterComplete && afterComplete()
     formik.resetForm()
     setActiveStep(0)
   }
@@ -130,95 +128,57 @@ export const DonationSteps = () => {
     </Transition>
   )
   return (
-    <Container>
-      <Box as="section" flex="flex" flexDir="column" px="1rem">
-        <Text
-          variant="subtitle"
-          as="h2"
-          mx="0"
-          marginTop={responsiveProperty({ mobileSize: 2, desktopSize: 6, unit: 'rem' })}
-          marginBottom="2rem"
-        >
-          ¡Aparece aquí!
-        </Text>
-        <Text variant="normal" my="2rem">
-          Si quieres que tu donativo sea mostrado aquí, haz click en el botón inferior y sigue las instrucciones para
-          registrar tu donativo. ¡Gracias por apoyarnos!
-        </Text>
-        <ChakraButton
-          leftIcon={<IconHeartHandshake />}
-          size="lg"
-          px="2em"
-          display="flex"
-          variant={showCard ? 'ghost' : 'btn-primary'}
-          marginX="auto"
-          my="2em"
-          width="10rem"
-          onClick={() => toggleCard()}
-        >
-          Donar
-        </ChakraButton>
-      </Box>
-      <Transition duration={500} exitDuration={500} mounted={showCard} transition="scale-y" timingFunction="ease">
-        {(styles) => (
-          <Card style={styles} shadow="lg">
-            <Stepper active={activeStep}>
-              <Stepper.Step>
-                <StepTitle>Selecciona un medio para donar:</StepTitle>
-
-                <MethodSelect
-                  onSelect={(id) => formik.setFieldValue('methodId', id)}
-                  selected={formik.values.methodId}
-                />
-                <Group position="right" mt="md" spacing={3}>
-                  <ThemeIcon variant="light" color="gray">
-                    <IconInfoCircle />
-                  </ThemeIcon>{' '}
-                  Realiza tu donación antes de continuar:
-                  <Text fontWeight="medium" align="right"></Text>
-                </Group>
-              </Stepper.Step>
-              <Stepper.Step>
-                <StepTitle>Registra tu donación:</StepTitle>
-
-                <UiFeedback loadingItems={4} loadingType="skeleton" isLoading={loadingSubmit}>
-                  <DonationForm formik={formik} />
-                </UiFeedback>
-              </Stepper.Step>
-              <Stepper.Step>{ThankYou}</Stepper.Step>
-            </Stepper>
-            {activeStep < MAX_STEPS && (
-              <Group my="md" position="right">
-                <Button
-                  leftIcon={<IconArrowLeft />}
-                  variant="outline"
-                  w={'9rem'}
-                  display="flex"
-                  color="cyan.4"
-                  onClick={prevStep}
-                  size="lg"
-                  maw="40%"
-                >
-                  Atrás
-                </Button>
-                <Button
-                  onClick={nextStep}
-                  disabled={!canProceed[activeStep]()}
-                  size="lg"
-                  rightIcon={<IconArrowRight />}
-                  display="flex"
-                  variant="filled"
-                  color="cyan.4"
-                  maw="50%"
-                  loading={loadingSubmit}
-                >
-                  Siguiente
-                </Button>
-              </Group>
-            )}
-          </Card>
-        )}
-      </Transition>
-    </Container>
+    <Box>
+      <Stepper active={activeStep}>
+        <Stepper.Step>
+          <StepTitle>Selecciona un medio para donar:</StepTitle>
+          <MethodSelect onSelect={(id) => formik.setFieldValue('methodId', id)} selected={formik.values.methodId} />
+          <Group position="right" mt="md" spacing={3}>
+            <ThemeIcon variant="light" color="gray">
+              <IconInfoCircle />
+            </ThemeIcon>{' '}
+            Realiza tu donación antes de continuar:
+            <Text fontWeight="medium" align="right"></Text>
+          </Group>
+        </Stepper.Step>
+        <Stepper.Step>
+          <StepTitle>Registra tu donación:</StepTitle>
+          <UiFeedback loadingItems={4} loadingType="skeleton" isLoading={loadingSubmit}>
+            <DonationForm formik={formik} />
+          </UiFeedback>
+        </Stepper.Step>
+        <Stepper.Step>{ThankYou}</Stepper.Step>
+      </Stepper>
+      {activeStep < MAX_STEPS && (
+        <Group my="md" position="right">
+          <Button
+            leftIcon={<IconArrowLeft />}
+            variant="outline"
+            w={'9rem'}
+            display="flex"
+            color="cyan.4"
+            onClick={prevStep}
+            size="lg"
+            maw="40%"
+            disabled={loadingSubmit}
+          >
+            Atrás
+          </Button>
+          <Button
+            onClick={nextStep}
+            disabled={!canProceed[activeStep]()}
+            size="lg"
+            rightIcon={<IconArrowRight />}
+            display="flex"
+            variant="filled"
+            color="cyan.4"
+            maw="50%"
+            loading={loadingSubmit}
+          >
+            Siguiente
+          </Button>
+        </Group>
+      )}
+    </Box>
   )
 }
