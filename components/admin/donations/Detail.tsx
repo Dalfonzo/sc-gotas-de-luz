@@ -1,14 +1,11 @@
-import { ActionIcon, Box, Button, Card, Group, SimpleGrid, Stack, Text } from '@mantine/core'
+import { ActionIcon, Box, Card, Group, SimpleGrid, Stack, Text } from '@mantine/core'
 import {
-  IconCheck,
   IconCheckbox,
   IconClock,
   IconExternalLink,
   IconHeartHandshake,
   IconMessage,
-  IconTrash,
   IconUser,
-  IconX,
 } from '@tabler/icons-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -93,31 +90,7 @@ export const DonationDetails = ({ donation }: Props) => {
       </Card>
     </Box>
   )
-  const Actions = (
-    <Box mb="lg">
-      <Text fz="lg" fw="bold" mb="md">
-        Acciones
-      </Text>
-      <Text mb="lg">Puedes aprobar el donativo recibido o eliminar el registro:</Text>
-      <Group mt="lg" position="left">
-        {!donation.isVerified && canUpdate && (
-          <Button onClick={() => onApprove(donation)} color="green" leftIcon={<IconCheck />}>
-            Aprobar
-          </Button>
-        )}
-        {donation.isVerified && canUpdate && (
-          <Button onClick={() => onApprove(donation)} color="orange" leftIcon={<IconX />}>
-            Anular
-          </Button>
-        )}
-        {!donation.isVerified && canDelete && (
-          <Button color="red" onClick={() => onDelete(donation)} leftIcon={<IconTrash />}>
-            Eliminar
-          </Button>
-        )}
-      </Group>
-    </Box>
-  )
+
   const Reference = (
     <Box mb="lg">
       <Text fz="lg" fw="bold" mb="md">

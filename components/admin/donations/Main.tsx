@@ -75,6 +75,7 @@ export default function DonationMain({ pending }: Props) {
         records={methods?.records}
         totalRecords={methods?.total}
         recordsPerPage={PER_PAGE}
+  
         columns={[
           {
             accessor: 'name',

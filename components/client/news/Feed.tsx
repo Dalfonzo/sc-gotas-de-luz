@@ -12,7 +12,6 @@ export const NewsFeed = () => {
     rows: news,
     error: isError,
     isEmpty,
-    isLoading,
     isValidating,
     isLoadingInitialData,
     InfiniteListFetcherTrigger,

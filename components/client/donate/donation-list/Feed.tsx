@@ -8,12 +8,10 @@ import { DonationList } from './List'
 
 export const DonationFeed = () => {
   const { fetcher } = useFetcher<Donation[]>()
-  const [order, setOrder] = useState<string | undefined>(undefined)
   const {
     rows: donations,
     error: isError,
     isEmpty,
-    isLoading,
     isValidating,
     isLoadingInitialData,
     InfiniteListFetcherTrigger,

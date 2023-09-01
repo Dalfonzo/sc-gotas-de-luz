@@ -22,8 +22,8 @@ const Heading = () => {
         px="1rem"
       >
         <List.Item>
-          Donar a "Gotas de Luz" es una oportunidad maravillosa para marcar la diferencia en la vida de aquellos que más
-          lo necesitan. Tu contribución puede ayudar a proporcionar alimentos, atención médica, educación y
+          Donar a {'"Gotas de Luz"'} es una oportunidad maravillosa para marcar la diferencia en la vida de aquellos que
+          más lo necesitan. Tu contribución puede ayudar a proporcionar alimentos, atención médica, educación y
           oportunidades de desarrollo a personas que de otra manera no tendrían acceso a ellos.
         </List.Item>
         <List.Item>

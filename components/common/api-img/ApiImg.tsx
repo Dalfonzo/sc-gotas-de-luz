@@ -25,5 +25,5 @@ export const ApiImg = ({ url, src, emptySize = '4rem', ...rest }: Props) => {
       </Flex>
     )
   }
-  return <Image src={getSrc()} {...rest} />
+  return <Image src={getSrc()} {...rest} alt={rest.alt || 'img'} />
 }

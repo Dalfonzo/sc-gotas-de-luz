@@ -83,7 +83,7 @@ const OutputSelect = ({
             : 'Sin fecha',
         })) || []
     return processed
-  }, [outputs, records])
+  }, [outputs, records, value])
   return (
     <Select
       label="Entrada a despachar"

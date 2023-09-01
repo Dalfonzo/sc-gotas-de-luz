@@ -1,4 +1,3 @@
-// TODO: add api ROUTE
 import { Inventory, Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { paginationHandler } from '~/lib/api/handler'
