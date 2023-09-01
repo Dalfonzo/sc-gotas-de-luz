@@ -63,6 +63,7 @@ const LatestDonators = () => {
           ]}
           loadingType="skeleton"
           loadingItems={3}
+          isEmpty={!donations?.total}
         >
           <Box
             width="fit-content"

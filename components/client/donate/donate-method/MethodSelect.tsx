@@ -44,6 +44,7 @@ export const MethodSelect = ({ onSelect, selected }: Props) => {
       ]}
       loadingType="skeleton"
       loadingItems={3}
+      isEmpty={!methods?.length}
     >
       <Stack>
         {methods?.map((met) => (
