@@ -116,7 +116,12 @@ const RolesMain = () => {
                   </ActionIcon>
                 )}
                 {canDelete && (
-                  <ActionIcon variant="light" color="red" onClick={() => openDeleteModal(item)}>
+                  <ActionIcon
+                    variant="light"
+                    color="red"
+                    onClick={() => openDeleteModal(item)}
+                    disabled={!item.canBeDeleted}
+                  >
                     <IconTrash size="1rem" />
                   </ActionIcon>
                 )}
@@ -132,6 +137,7 @@ const RolesMain = () => {
         size="2xl"
         body={
           <RolesForm
+            readOnly={!selected?.canBeDeleted}
             initialState={selected}
             resources={resources as Resources[]}
             onSuccess={() => {

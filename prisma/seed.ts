@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 async function main() {
   /* Roles */
   const adminRole = await prisma.roles.create({
-    data: { name: 'admin' },
+    data: { name: 'administrador', description: 'Provee acceso a todo el sistema', canBeDeleted: false },
   })
 
   const resources = Object.values(RESOURCES)
@@ -32,6 +32,7 @@ async function main() {
       password: await bcrypt.hash('123456', 10),
       lastName: 'admin',
       email: 'admin@gmail.com',
+      canBeDeleted: false,
       roles: { connect: { id: adminRole.id } },
     },
   })

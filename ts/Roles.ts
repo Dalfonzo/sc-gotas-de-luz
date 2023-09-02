@@ -5,4 +5,5 @@ export interface Roles {
   name: string
   description?: string
   permissions: Permissions[]
+  canBeDeleted: boolean
 }

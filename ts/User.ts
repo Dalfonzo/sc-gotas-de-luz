@@ -10,4 +10,5 @@ export interface User {
   roles: Roles
   permissions: Record<string, ParsedPermission>
   accessToken: string
+  canBeDeleted: boolean
 }

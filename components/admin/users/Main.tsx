@@ -134,7 +134,12 @@ const UserMain = () => {
                   </ActionIcon>
                 )}
                 {canDelete && (
-                  <ActionIcon variant="light" color="red" onClick={() => openDeleteModal(item)}>
+                  <ActionIcon
+                    variant="light"
+                    color="red"
+                    onClick={() => openDeleteModal(item)}
+                    disabled={!item.canBeDeleted}
+                  >
                     <IconTrash size="1rem" />
                   </ActionIcon>
                 )}
@@ -144,7 +149,7 @@ const UserMain = () => {
         ]}
       />
       <BasicModal
-        title={'Añadir usuario'}
+        title={selected ? 'Editar usuario' : 'Añadir usuario'}
         visible={createModal}
         onClose={toggleCreateModal}
         size="2xl"

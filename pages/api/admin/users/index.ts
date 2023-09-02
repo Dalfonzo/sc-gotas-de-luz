@@ -25,6 +25,7 @@ export default apiRouteAccessGuard(async (req, res) => {
         fkRole: true,
         id: true,
         roles: true,
+        canBeDeleted: true,
       },
     })
 

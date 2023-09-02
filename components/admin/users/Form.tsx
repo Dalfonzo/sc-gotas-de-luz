@@ -1,4 +1,14 @@
-import { Box, FormControl, FormErrorMessage, FormLabel, Input, Select, Text } from '@chakra-ui/react'
+import {
+  AbsoluteCenter,
+  Box,
+  Divider,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Select,
+  Text,
+} from '@chakra-ui/react'
 import { Button } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 import { useFormik } from 'formik'
@@ -20,27 +30,23 @@ type InitialValues = {
   email: string
   password?: string
   fkRole: string
+  canBeDeleted: boolean
 }
 
 export default function Form({ onSuccess, roles, initialState }: Props) {
   const customFetcher = useFetcherInstance()
-  console.log({ initialState })
   const formik = useFormik<InitialValues>({
     initialValues: {
       name: initialState?.name || '',
       lastName: initialState?.lastName || '',
       email: initialState?.email || '',
-      // TODO: FIX
-      ...(!initialState && { password: '' }),
       fkRole: initialState?.fkRole || '',
+      canBeDeleted: initialState?.canBeDeleted ?? true,
     },
     validationSchema: Yup.object({
       name: Yup.string().trim().required('El nombre es requerido').max(20, 'Máximo 20 caracteres'),
       lastName: Yup.string().trim().required('El apellido es requerido').max(20, 'Máximo 20 caracteres'),
       email: Yup.string().trim().required('El correo es requerido').max(20, 'Máximo 20 caracteres'),
-      ...(!initialState && {
-        password: Yup.string().trim().required('La contraseña es requerida').max(20, 'Máximo 20 caracteres'),
-      }),
       fkRole: Yup.string().trim().required('El nombre del rol es requerido'),
     }),
     onSubmit: async (values) => {
@@ -52,7 +58,6 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
       onSuccess()
       return true
     },
-    // TODO: FIX THISSSS
     validateOnChange: false,
   })
 
@@ -70,6 +75,12 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
         Llena los campos para {initialState ? ' actualizar ' : ' agregar '} este Usuario.
       </Text>
       <form>
+        <Box position="relative" padding="2" mb={3}>
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Datos
+          </AbsoluteCenter>
+        </Box>
         <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.name)}>
           <Input placeholder=" " name="name" onChange={formik.handleChange} value={formik.values.name} />
           <FormLabel htmlFor="name">Nombre</FormLabel>
@@ -85,26 +96,20 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
           <FormLabel htmlFor="email">Correo</FormLabel>
           <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
         </FormControl>
-        {!initialState && (
-          <FormControl variant="floating" isInvalid={Boolean(formik.errors.password)} my="1rem">
-            <Input
-              placeholder=" "
-              name="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              type="password"
-            />
-            <FormLabel htmlFor="password">Contraseña</FormLabel>
-            <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-          </FormControl>
-        )}
-        <FormControl isInvalid={Boolean(formik.errors.fkRole)} my="1rem">
+        <FormControl isInvalid={Boolean(formik.errors.fkRole)} mt="1">
+          <Box position="relative" padding="2" mb={3}>
+            <Divider />
+            <AbsoluteCenter bg="white" px="4">
+              Rol/Permisos
+            </AbsoluteCenter>
+          </Box>
           <Select
             placeholder="Seleccionar Rol"
             size="lg"
             onChange={formik.handleChange}
             value={formik.values.fkRole}
             name="fkRole"
+            disabled={!formik.values.canBeDeleted}
           >
             {roles?.map((role) => {
               return (
@@ -124,6 +129,7 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
           disabled={!formik.isValid || !formik.dirty}
           loading={loadingSubmit}
           color="cyan"
+          mt="lg"
           mb="lg"
           size="lg"
           mr="auto"
