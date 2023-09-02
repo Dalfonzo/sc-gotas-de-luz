@@ -65,7 +65,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@prisma/client": "^4.14.0",
+    "@prisma/client": "^5.1.1",
     "@types/bcrypt": "^5.0.0",
     "@types/email-templates": "^10.0.1",
     "@types/formidable": "^2.0.6",
@@ -79,7 +79,7 @@
     "eslint-config-next": "13.4.1",
     "husky": "^8.0.3",
     "prettier": "^2.8.8",
-    "prisma": "^4.14.0",
+    "prisma": "5",
     "ts-node": "^10.9.1",
     "typescript": "5.0.4"
   }

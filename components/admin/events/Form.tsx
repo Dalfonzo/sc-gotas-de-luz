@@ -33,7 +33,7 @@ interface EventFormProps {
 
 export default function EventsForm({ initialState, onSuccess }: EventFormProps) {
   const customFetcher = useFetcherInstance()
-  const { onFileUpload, fileUploadState } = useCloudUpload({ fileKey: 'events', updatePath: initialState?.img?.path })
+  const { onFileUpload } = useCloudUpload({ fileKey: 'events', updatePath: initialState?.img?.path })
   const parseValues = (values: CreateEvent) => {
     const formData = new FormData()
     Object.entries({

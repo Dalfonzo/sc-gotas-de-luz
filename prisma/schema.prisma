@@ -18,6 +18,7 @@ model FileDb {
   isCloud Boolean @default(true)
   news  News?
   event Event?
+  donation Donation?
 }
 
 model News {
@@ -86,4 +87,59 @@ model Volunteer{
   formReference   String?   @unique 
   isActive        Boolean   @default(false)
   date            DateTime  @default(now())
+}
+
+model Category{
+  id    Int   @id @default(autoincrement())
+  name  String @unique
+  inventories Inventory[]
+}
+
+model Inventory{
+  id              String    @id @default(uuid())
+  name            String    @unique
+  currentQuantity Float     @default(0)
+  measure         String 
+  updatedAt       DateTime  @default(now())
+  category        Category  @relation(fields: [categoryId], references: [id])  
+  categoryId      Int
+  records         InventoryRecord[]
+}
+
+model InventoryRecord{
+  id          String    @id @default(uuid())
+  quantity    Float
+  date        DateTime    @default(now())
+  concept     String?
+  type        String      @default("input")
+  inventory   Inventory   @relation(fields: [inventoryId], references: [id])
+  inventoryId String 
+  expirationDate DateTime?
+  currentQuantity Float     @default(0)
+
+}
+
+model DonationMethod{
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  reference String  
+  donations Donation[]   
+}
+
+model Donation {
+  id          String      @id @default(uuid())
+  name        String?
+  message     String?
+  reference   String
+  amount      Float
+  // TODO: TBD if email is necessary 
+  //email       String 
+  isAnon      Boolean     @default(false)
+  isVerified  Boolean     @default(false)
+  date    DateTime @default(now())
+  img         FileDb    @relation(fields: [imgId], references: [id])
+  imgId       Int       @unique
+  method      DonationMethod  @relation(fields: [methodId], references: [id])
+  methodId    Int
+  createdAt   DateTime @default(now())
 }

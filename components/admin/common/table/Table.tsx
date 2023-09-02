@@ -25,7 +25,6 @@ function Table<T>({
     setCurrentPage(1)
     setSortStatus(status)
     router.replace({
-      ...router,
       query: {
         ...router.query,
         sortBy: status.columnAccessor,

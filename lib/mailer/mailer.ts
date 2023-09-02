@@ -60,8 +60,7 @@ class NodemailerAdapter {
     const websiteURL = process.env.NEXT_PUBLIC_SITE_URL
 
     const meta = {
-      //TODO: add contact phone
-      phone: '',
+      phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || '',
       email: process.env.EMAIL_MAIL,
       websiteURL,
     }

@@ -12,7 +12,7 @@ function parseDates(item: any, dates: string[]) {
     if (typeof item == 'object') {
       Object.entries(item).forEach(([key, value]) => {
         if (dates.includes(key)) {
-          item[key] = new Date(value as string)
+          if (value != null && value != undefined) item[key] = new Date(value as string)
         }
       })
     }

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
-import { RESOURCES } from '../utils/constants'
+import { BASE_CATEGORIES, RESOURCES } from '../utils/constants'
 const prisma = new PrismaClient()
 
 async function main() {
@@ -35,6 +35,8 @@ async function main() {
       roles: { connect: { id: adminRole.id } },
     },
   })
+
+  await prisma.category.createMany({ data: BASE_CATEGORIES })
 }
 main()
   .then(async () => {

@@ -1,4 +1,4 @@
-import { Event, News, Volunteer } from '@prisma/client'
+import { Category, Donation, DonationMethod, Event, FileDb, Inventory, News, Volunteer } from '@prisma/client'
 import { FileI } from '~/components/common/file-upload/FileUpload'
 import { DateToString } from '~/lib/mappers/map-dates'
 
@@ -12,4 +12,25 @@ export interface CreateNews extends Omit<News, 'id' | 'date' | 'img' | 'imgId'> 
 
 export interface CreateVolunteer extends Omit<Volunteer, 'id' | 'date' | 'isActive' | 'formReference'> {
   formReference?: string
+}
+
+export interface CreateCategory extends Omit<Category, 'id' | 'inventories'> {}
+
+export interface CreateInventory
+  extends Omit<Inventory, 'id' | 'category' | 'currentQuantity' | 'updatedAt' | 'categoryId'> {
+  categoryId: string
+}
+
+export interface PendingResult {
+  pending: number
+}
+
+export interface CreateDonation extends Omit<Donation, 'id' | 'img' | 'imgId' | 'isVerified' | 'date' | 'createdAt'> {
+  date: string
+  donation?: FileI
+}
+
+export interface IncludeDonation extends Donation {
+  method: DonationMethod
+  img: FileDb
 }

@@ -10,7 +10,6 @@ interface Props<Values extends FormValues> {
   formKey: Extract<keyof Values, string>
 }
 export function ImgInput<Values extends FormValues>({ label, formik, formKey }: Props<Values>) {
-  const debounce = (e: ChangeEvent) => setTimeout(() => formik.handleChange(e), 250)
   return (
     <Flex gap="1rem" flexDirection={'column'} alignItems="center">
       <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors[formKey] && formik.touched[formKey])}>
