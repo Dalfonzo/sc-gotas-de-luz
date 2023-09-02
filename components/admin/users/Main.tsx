@@ -22,7 +22,7 @@ const UserMain = () => {
   const [selected, setSelected] = useState<User | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
   const { user } = useUserStore(({ user }) => ({ user }))
-  console.log({ user })
+
   const {
     data: users,
     isLoading,
