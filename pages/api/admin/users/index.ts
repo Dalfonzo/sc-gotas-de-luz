@@ -48,7 +48,7 @@ export default apiRouteAccessGuard(async (req, res) => {
     })
 
     const { password, ...userWithoutPassword } = user as UserDto
-    //TODO: Tengo que arreglar bug del update al cambiar el role!!
+
     const payload = { email: user.email, id: user.id }
     const secret = process.env.SECRET_KEY + user.password
     const token = await signJwtAccessToken(payload, secret, process.env.EMAIL_TOKEN_EXPIRATION_TIME)
