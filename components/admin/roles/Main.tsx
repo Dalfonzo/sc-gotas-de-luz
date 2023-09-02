@@ -137,7 +137,7 @@ const RolesMain = () => {
         size="2xl"
         body={
           <RolesForm
-            readOnly={!selected?.canBeDeleted}
+            readOnly={!selected ? false : !selected.canBeDeleted}
             initialState={selected}
             resources={resources as Resources[]}
             onSuccess={() => {

@@ -18,7 +18,7 @@ export default apiRouteAccessGuard(async (req, res) => {
     if (!userId) {
       throw new Error(`UserId is required`)
     }
-    // TODO: Fix this type later
+
     const user = (await prisma.users.findUnique({
       where: { id: userId },
       include: { roles: { include: { permissions: { include: { resources: true } } } } },
