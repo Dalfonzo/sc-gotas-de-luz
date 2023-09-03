@@ -46,7 +46,7 @@ const LatestDonators = () => {
         gap={{ base: '2rem', md: '3rem', lg: '4rem' }}
       >
         <Box width={{ base: '100%', lg: '40%' }} alignSelf={{ base: 'flex-start', lg: 'unset' }}>
-          <Text variant="subtitle" as="h2">
+          <Text variant="subtitle-no-decoration" as="h2">
             Nuestros últimos benefactores
           </Text>
           <Text variant="normal" marginTop={responsiveProperty({ mobileSize: 0.5, desktopSize: 2, unit: 'rem' })}>

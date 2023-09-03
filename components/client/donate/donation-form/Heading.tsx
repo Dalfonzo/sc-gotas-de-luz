@@ -11,7 +11,7 @@ export const DonationFormHeading = () => {
     <Container>
       <Box as="section" id="button" flex="flex" flexDir="column" px="1rem">
         <Text
-          variant="subtitle"
+          variant="subtitle-no-decoration"
           as="h2"
           mx="0"
           marginTop={responsiveProperty({ mobileSize: 2, desktopSize: 6, unit: 'rem' })}

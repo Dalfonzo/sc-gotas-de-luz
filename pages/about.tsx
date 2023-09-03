@@ -2,7 +2,6 @@ import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
 import Content from '~/components/client/about/content'
 import Heading from '~/components/client/about/heading'
-import DonationBanner from '~/components/client/common/donation-banner'
 import ClientLayout from '~/layouts/Client'
 
 const Home = () => {
@@ -16,7 +15,6 @@ const Home = () => {
       <Box maxW="5xl" margin="auto">
         <Heading />
         <Content />
-        <DonationBanner />
       </Box>
     </ClientLayout>
   )

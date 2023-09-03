@@ -1,4 +1,5 @@
 import { As, Card, CardBody, CardHeader, Divider, Flex, Heading, Icon, Text } from '@chakra-ui/react'
+import { ThemeIcon } from '@mantine/core'
 import { ReactNode } from 'react'
 
 export interface InfoCardProps {
@@ -8,10 +9,12 @@ export interface InfoCardProps {
 }
 export const InfoCard = ({ title, content, icon }: InfoCardProps) => {
   return (
-    <Card size="md" variant="outline" borderRadius="lg" maxW="sm" align="center">
+    <Card size="md" variant="filled" borderRadius="lg" maxW="sm" align="center" background="#fbfbfb" padding={4}>
       <CardHeader>
         <Flex direction="column" align="center" gap={3}>
-          <Icon as={icon} color="aqua" boxSize="8" />
+          <ThemeIcon color="cyan.4" radius="xl" size={50} variant="light">
+            <Icon as={icon} boxSize={6} />
+          </ThemeIcon>
           <Heading size="md">{title}</Heading>
         </Flex>
       </CardHeader>

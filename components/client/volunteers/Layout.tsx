@@ -65,7 +65,7 @@ export const VolunteersLayout = () => {
         ))}
       </Flex>
       <Flex direction="column" mt="5em">
-        <Text variant="subtitle" mb="5" as="h2" ref={targetRef}>
+        <Text variant="subtitle-no-decoration" mb="5" as="h2" ref={targetRef}>
           ¿Listo para el primer paso?
         </Text>
         <Text>Ingresa en el siguiente link para registrar tus datos y formar parte de nuestro gran equipo:</Text>

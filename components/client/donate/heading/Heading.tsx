@@ -1,22 +1,21 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { List, ThemeIcon } from '@mantine/core'
 import { IconHeartHandshake } from '@tabler/icons-react'
 import { TextStyling } from '~/theme/components/text'
 import { responsiveProperty } from '~/theme/utils'
+import HeadingWithDecoration from '../../common/heading-with-decoration/HeadingWithDecoration'
 
 const Heading = () => {
   return (
     <Box my={responsiveProperty({ desktopSize: 7, mobileSize: 2, unit: 'rem' })} as="section">
-      <Text as="h1" variant="title" marginBottom="4rem" textAlign="center">
-        Ayúdanos a ayudar
-      </Text>
+      <HeadingWithDecoration title="Ayúdanos a ayudar" />
       <List
         spacing="sm"
         size="lg"
         styles={{ item: { ...TextStyling.variants.normal, fontWeight: 400, color: '#616161' } }}
         icon={
-          <ThemeIcon color="cyan.4" radius="xl" size={24}>
-            <IconHeartHandshake size="1rem" />
+          <ThemeIcon color="cyan.4" radius="xl" size={40} variant="light" mt="xs" mr="1rem">
+            <IconHeartHandshake size="1.5rem" />
           </ThemeIcon>
         }
         px="1rem"
