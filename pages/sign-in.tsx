@@ -1,4 +1,4 @@
-import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage, FormLabel, Image, Input } from '@chakra-ui/react'
 import { Alert, Button, Container, Paper, Text, Title } from '@mantine/core'
 import { useFormik } from 'formik'
 import { signIn } from 'next-auth/react'
@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import * as Yup from 'yup'
-
 type LoginForm = {
   email: string
   password: string
@@ -55,6 +54,7 @@ function SignIn() {
   return (
     <Container w="100%" h="100vh" fluid bg="cyan.4">
       <Container size={420} py={40}>
+        <Image src="/assets/svg/logo-footer.svg" alt="asd" width={75} height={75} mx="auto" mt="4" mb="5" />
         <Title
           align="center"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}

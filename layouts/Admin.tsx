@@ -7,6 +7,7 @@ import {
   Flex,
   Group,
   Header,
+  Image,
   Indicator,
   MediaQuery,
   Navbar,
@@ -90,7 +91,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const linksRows = [
-  { link: '/admin/dashboard', label: 'tablero', icon: IconHome },
+  { link: '/admin/dashboard', label: 'inicio', icon: IconHome },
   { link: '/admin/roles', label: 'roles', icon: IconLock },
   { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
   { link: '/admin/donations', label: 'donaciones', icon: IconHeartHandshake, swr: SWR_KEYS.PENDING_DONATIONS },
@@ -147,8 +148,15 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
     <Navbar height={'100vh'} top="0" p="md" className={classes.navbar} {...props}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          {/* TODO: Add logo */}
-          <Text className={classes.version}>Gotas de luz</Text>
+          <Image
+            src="/assets/svg/logo-footer.svg"
+            alt="asd"
+            width={isOpen ? 60 : 40}
+            height={isOpen ? 60 : 40}
+            mx="auto"
+            mt="4"
+            mb="5"
+          />
         </Group>
         {links}
       </Navbar.Section>
