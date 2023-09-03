@@ -57,7 +57,7 @@ export const VolunteersLayout = () => {
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLParagraphElement>({ offset: 80 })
   const formLink = LINKS.VOLUNTEER_FORM
   return (
-    <Flex direction="column" align="center" maxW="7xl" margin="auto" px="5">
+    <Flex direction="column" align="center" maxW="5xl" margin="auto" px="5">
       <VHeading onScroll={scrollIntoView} />
       <Flex justify="center" wrap="wrap" width="100%" gap="5" /*columns={{ xs: 3, sm: 2, md: 3 }}*/>
         {cards.map((card, idx) => (

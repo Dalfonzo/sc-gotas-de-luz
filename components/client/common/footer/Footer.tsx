@@ -5,10 +5,10 @@ import { SocialMedia } from '../social-media/SocialMedia'
 
 const Footer = () => {
   return (
-    <Box as="footer" color="dark" marginTop="8rem">
+    <Box as="footer" color="dark" marginTop="8rem" background="#f2f2f2">
       <Box padding="5rem 2rem">
         <Box
-          maxW="7xl"
+          maxW="5xl"
           margin="2rem auto 4rem"
           display="flex"
           alignItems="center"
@@ -18,7 +18,7 @@ const Footer = () => {
         >
           <Image src="/assets/svg/logo-footer-black.svg" alt="gotas de luz" width={100} />
           <Text variant="subtitle-no-decoration" mt="2rem" textAlign={'center'} mb="1rem">
-            Cambiemos al mundo, juntos.
+            Cambiemos al mundo, juntos
           </Text>
           <div>
             <Text textAlign={'center'}>Existen muchas formas en que puedes</Text>
@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
         </Box>
         <Flex
-          maxW="7xl"
+          maxW="5xl"
           gap={responsiveProperty({ mobileSize: 2, desktopSize: 5, unit: 'rem' })}
           margin="auto"
           justifyContent={'space-evenly'}

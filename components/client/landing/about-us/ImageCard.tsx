@@ -7,18 +7,8 @@ interface ImageCardI extends BoxProps {
 
 const ImageCard = ({ imgSrc, imgAlt, ...rest }: ImageCardI) => {
   return (
-    <Box
-      _even={{ marginLeft: { base: '2rem', sm: '4rem' } }}
-      _odd={{ marginRight: { base: '2rem', sm: '4rem' } }}
-      {...rest}
-      position="relative"
-    >
-      <AspectRatio
-        width={{ base: '90%', sm: '80%', md: '70%' }}
-        mx={'auto'}
-        ratio={{ base: 2, sm: 2.5, md: 3 }}
-        marginBottom={{ base: '2rem', sm: '4rem', md: '6rem' }}
-      >
+    <Box {...rest} position="relative">
+      <AspectRatio ratio={{ base: 2, sm: 2.5, md: 1.8 }}>
         <Image src={imgSrc} alt={imgAlt} borderRadius="20px" />
       </AspectRatio>
     </Box>

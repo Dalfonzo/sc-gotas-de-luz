@@ -6,6 +6,8 @@ import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-quill/dist/quill.snow.css'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
 import theme from 'theme/theme'
 import { ContextButton } from '~/components/admin/common/context-button/ContextButton'
 import { RouterTransition } from '~/components/common/router-transition/RouterTransition'
@@ -13,7 +15,6 @@ import '../styles/styles.css'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // FIXME: CHeck if this any can be improved
   const ChildComponent = Component as any
   return (
     <main className={inter.className}>

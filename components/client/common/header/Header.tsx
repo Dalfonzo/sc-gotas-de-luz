@@ -33,7 +33,7 @@ const Header = () => {
   return (
     <Box as="header">
       <Box
-        maxW="7xl"
+        maxW="5xl"
         margin="auto"
         display="flex"
         justifyContent={{ base: 'flex-start', md: 'space-between' }}
@@ -41,7 +41,7 @@ const Header = () => {
         padding="16px"
       >
         <Link href="/">
-          <Image cursor="pointer" src="/assets/svg/logo-header.svg" alt="Logo de gotas de luz" />
+          <Image cursor="pointer" src="/assets/svg/logo-footer-black.svg" alt="Logo de gotas de luz" width="60px" />
         </Link>
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
         <LinkButton

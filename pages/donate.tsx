@@ -16,7 +16,7 @@ const Donate = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DonateProvider>
-        <Box maxW="7xl" margin="auto">
+        <Box maxW="5xl" margin="auto">
           <Heading />
           <DonationFormHeading />
           <Box marginY="5rem" />
