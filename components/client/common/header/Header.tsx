@@ -46,7 +46,7 @@ const Header = () => {
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
         <LinkButton
           href="/donate"
-          variant="lnk-btn-black"
+          variant="lnk-btn-light-blue"
           content="Donar"
           position="relative"
           display="block"
