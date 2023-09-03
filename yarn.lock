@@ -3501,10 +3501,10 @@ formik@^2.2.9:
     tiny-warning "^1.0.2"
     tslib "^1.10.0"
 
-framer-motion@^10.12.9:
-  version "10.12.9"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.12.9.tgz#113bfdf34d32e06fc8e8093033829bc5ee1ea03e"
-  integrity sha512-diLij2xjOn8RS1xz66wNDTa6nezR3bRRBB9J0r1a5xeJjcSdJpOkk2U7pTzhg1v54bzZ7HBLJ4gKo8aAQM0U3w==
+framer-motion@^10.16.2:
+  version "10.16.2"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.16.2.tgz#b737f628f69a883824024124dab452273f73cbba"
+  integrity sha512-aY6L9YMvqMWtfOQptaUvvr8dp97jskXY5UYLQM0vOPxKeERrG/Z034EIQZ/52u7MeCT0HlCQy3/l0HdUZCB9Tw==
   dependencies:
     tslib "^2.4.0"
   optionalDependencies:

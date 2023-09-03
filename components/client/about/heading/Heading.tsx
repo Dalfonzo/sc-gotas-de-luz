@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 import { responsiveProperty } from '~/theme/utils'
 import HeadingWithDecoration from '../../common/heading-with-decoration/HeadingWithDecoration'
 
@@ -15,4 +16,4 @@ const Heading = () => {
   )
 }
 
-export default Heading
+export default withAnimation(Heading)

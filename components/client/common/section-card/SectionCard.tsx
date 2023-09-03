@@ -1,4 +1,5 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 import { responsiveProperty } from '~/theme/utils'
 import LinkButton from '../link-button/LinkButton'
 
@@ -39,4 +40,4 @@ const SectionCard = ({ title, linkText, href, bodyContent, ...rest }: SectionCar
   )
 }
 
-export default SectionCard
+export default withAnimation(SectionCard)

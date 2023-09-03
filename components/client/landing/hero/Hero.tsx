@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 
 const Hero = () => {
   return (
@@ -34,4 +35,4 @@ const Hero = () => {
   )
 }
 
-export default Hero
+export default withAnimation(Hero)

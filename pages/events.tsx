@@ -2,7 +2,9 @@ import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
 import Calendar from '~/components/client/events/calendar/index'
 import Heading from '~/components/client/events/heading/Heading'
+import withAnimation from '~/hoc/withAnimation'
 import ClientLayout from '~/layouts/Client'
+
 const Events = () => {
   return (
     <ClientLayout>
@@ -18,4 +20,4 @@ const Events = () => {
     </ClientLayout>
   )
 }
-export default Events
+export default withAnimation(Events)

@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { VolunteersLayout } from '~/components/client/volunteers/Layout'
+import withAnimation from '~/hoc/withAnimation'
 import ClientLayout from '~/layouts/Client'
 
 const Volunteers = () => {
@@ -15,4 +16,4 @@ const Volunteers = () => {
   )
 }
 
-export default Volunteers
+export default withAnimation(Volunteers)

@@ -5,7 +5,9 @@ import Link from 'next/link'
 import { responsiveProperty } from '~/theme/utils'
 import { DonateReducerActionKind, useDonate } from '../donate-context.provider'
 import { DonationSteps } from './Steps'
-export const DonationFormHeading = () => {
+import withAnimation from '~/hoc/withAnimation'
+
+const DonationFormHeading = () => {
   const { state, updateFormToggle } = useDonate()
   return (
     <Container>
@@ -67,3 +69,5 @@ export const DonationFormHeading = () => {
     </Container>
   )
 }
+
+export default withAnimation(DonationFormHeading)

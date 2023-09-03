@@ -11,6 +11,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useWindowScroll } from '@mantine/hooks'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { BiMenuAltRight } from 'react-icons/bi'
@@ -19,7 +20,7 @@ import NavLinks from './NavLinks'
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const [scroll, scrollTo] = useWindowScroll()
   useEffect(() => {
     const updateSize = () => {
       if (window.innerWidth > 990 && isOpen) {
@@ -31,18 +32,35 @@ const Header = () => {
     return () => window.removeEventListener('resize', updateSize)
   }, [isOpen, onClose])
 
+  const isScrolledDown = scroll.y > 0
+
   return (
-    <Box as="header">
+    <Box
+      as="header"
+      boxShadow={isScrolledDown ? 'md' : 'none'}
+      position="sticky"
+      top="0"
+      left="0"
+      background="white"
+      zIndex={10}
+    >
       <Box
         maxW="5xl"
         margin="auto"
         display="flex"
         justifyContent={{ base: 'flex-start', md: 'space-between' }}
         alignItems="center"
-        padding="16px"
+        transition="padding ease 0.5s"
+        padding={isScrolledDown ? '12px' : '16px'}
       >
         <Link href="/">
-          <Image cursor="pointer" src="/assets/svg/logo-footer-black.svg" alt="Logo de gotas de luz" width="60px" />
+          <Image
+            cursor="pointer"
+            src="/assets/svg/logo-footer-black.svg"
+            alt="Logo de gotas de luz"
+            width={isScrolledDown ? '40px' : '60px'}
+            transition="width ease 0.5s"
+          />
         </Link>
         <NavLinks display={{ base: 'none', lg: 'unset' }} />
         <LinkButton

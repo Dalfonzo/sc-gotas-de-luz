@@ -1,4 +1,5 @@
 import { Grid, GridItem, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 
 const Content = () => {
   return (
@@ -44,4 +45,4 @@ const Content = () => {
   )
 }
 
-export default Content
+export default withAnimation(Content)

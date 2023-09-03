@@ -4,6 +4,7 @@ import { IconHeartHandshake } from '@tabler/icons-react'
 import { TextStyling } from '~/theme/components/text'
 import { responsiveProperty } from '~/theme/utils'
 import HeadingWithDecoration from '../../common/heading-with-decoration/HeadingWithDecoration'
+import withAnimation from '~/hoc/withAnimation'
 
 const Heading = () => {
   return (
@@ -40,4 +41,4 @@ const Heading = () => {
   )
 }
 
-export default Heading
+export default withAnimation(Heading)

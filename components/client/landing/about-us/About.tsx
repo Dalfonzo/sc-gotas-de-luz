@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 import { responsiveProperty } from '~/theme/utils'
 import Carousel, { ImageList } from './Carousel'
 
@@ -47,4 +48,4 @@ const AboutUs = () => {
   )
 }
 
-export default AboutUs
+export default withAnimation(AboutUs)
