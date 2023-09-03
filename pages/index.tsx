@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
 import SectionCard from '~/components/client/common/section-card'
 import AboutUs from '~/components/client/landing/about-us'
@@ -15,33 +16,35 @@ const Home = () => {
         </Head>
         <Hero />
         <AboutUs />
-        <SectionCard
-          bodyContent="Siempre estamos haciendo actividades en diversas partes del país. Puedes ver nuestro calendario y mantenerte al tanto de nuestras fechas y demás detalles."
-          href="/"
-          title={
-            <>
-              Próximos
-              <br />
-              Eventos
-            </>
-          }
-          linkText="Ver más"
-          background="#DDFEFF"
-        />
-        <SectionCard
-          bodyContent="Si quieres poner manos a la obra, puedes registrate como voluntario y acompañarnos en nuestra hermosa labor. Si prefieres no involucrarte de manera directa, puedes hacer donaciones de alimentos, dinero, ropa y cualquier otra cosa que desees."
-          href="/"
-          title={<>Apóyanos</>}
-          linkText="Donar"
-          background="#F9FFE9"
-        />
-        <SectionCard
-          bodyContent="No es necesario contar con mucho para ayudar a alguien más. Puedes postularte como voluntario en cualquier momento y contribuir con nuestra causa.  ¡Cualquier ayuda es importante!"
-          href="/"
-          title={<>Voluntariado</>}
-          linkText="Ver más"
-          background="#E9FFEC"
-        />
+        <Box px="1rem">
+          <SectionCard
+            bodyContent="Siempre estamos haciendo actividades en diversas partes del país. Puedes ver nuestro calendario y mantenerte al tanto de nuestras fechas y demás detalles."
+            href="/events"
+            title={
+              <>
+                Próximos
+                <br />
+                Eventos
+              </>
+            }
+            linkText="Ver más"
+            background="pastel.blue"
+          />
+          <SectionCard
+            bodyContent="Si quieres poner manos a la obra, puedes registrate como voluntario y acompañarnos en nuestra hermosa labor. Si prefieres no involucrarte de manera directa, puedes hacer donaciones de alimentos, dinero, ropa y cualquier otra cosa que desees."
+            href="/donate"
+            title={<>Apóyanos</>}
+            linkText="Donar"
+            background="pastel.yellow"
+          />
+          <SectionCard
+            bodyContent="No es necesario contar con mucho para ayudar a alguien más. Puedes postularte como voluntario en cualquier momento y contribuir con nuestra causa.  ¡Cualquier ayuda es importante!"
+            href="/volunteers"
+            title={<>Voluntariado</>}
+            linkText="Ver más"
+            background="pastel.green"
+          />
+        </Box>
       </div>
     </ClientLayout>
   )

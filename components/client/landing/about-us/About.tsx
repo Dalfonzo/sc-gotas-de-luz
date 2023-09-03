@@ -27,7 +27,6 @@ const AboutUs = () => {
       mx="auto"
       my={responsiveProperty({ mobileSize: 3, desktopSize: 4, unit: 'rem' })}
       alignItems="center"
-      padding="0 1rem"
     >
       <Text variant="title" textAlign="center" margin="auto">
         Lo que hacemos

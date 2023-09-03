@@ -58,9 +58,9 @@ export const linkStyles = {
         },
         'lnk-btn-light-blue': {
           ...commonBtnLinkStyles,
-          background: '#d8f8f9',
+          background: 'pastel.blue',
           ...commonIconBtnLinkStyles,
-          color: '#519193',
+          color: 'aqua.dark',
         },
       },
     },

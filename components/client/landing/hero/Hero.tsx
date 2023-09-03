@@ -1,9 +1,15 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-import { responsiveProperty } from '~/theme/utils'
 
 const Hero = () => {
   return (
-    <Flex as="section" flexDir="column" alignItems="center" justifyContent="center" height="90vh">
+    <Flex
+      as="section"
+      flexDir="column"
+      alignItems="center"
+      justifyContent="center"
+      height={{ base: '350px', sm: '60vh', md: '80vh' }}
+      maxH={720}
+    >
       <Box
         bgImage="url('/assets/svg/brush-stroke-3.svg')"
         bgPosition="center"
@@ -16,8 +22,8 @@ const Hero = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Box marginTop={responsiveProperty({ mobileSize: 3, desktopSize: 5, unit: 'rem' })}>
-          <Text variant="title" textAlign="center" mt="-10rem">
+        <Box>
+          <Text variant="title" textAlign="center">
             Iluminando <br />
             momentos para <br />
             generar vida

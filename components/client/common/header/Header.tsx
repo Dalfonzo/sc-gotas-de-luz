@@ -1,6 +1,7 @@
 import {
   Box,
   Icon,
+  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -55,13 +56,12 @@ const Header = () => {
           marginLeft={{ base: 'auto', lg: 'unset' }}
           marginRight={{ base: '1rem', lg: 'unset' }}
         />
-        <Icon
-          as={BiMenuAltRight}
-          onClick={onOpen}
-          fontSize="2.5em"
-          color="text.dark"
+        <IconButton
+          aria-label="menu"
           display={{ base: 'unset', lg: 'none' }}
-          role="button"
+          icon={<Icon as={BiMenuAltRight} onClick={onOpen} fontSize="2.5em" color="aqua.dark" role="button" />}
+          background="white"
+          borderRadius="50%"
         />
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="full">

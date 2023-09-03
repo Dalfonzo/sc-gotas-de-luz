@@ -16,8 +16,8 @@ const SectionCard = ({ title, linkText, href, bodyContent, ...rest }: SectionCar
       mx="auto"
       my={responsiveProperty({ mobileSize: 1, desktopSize: 4, unit: 'rem' })}
       alignItems="center"
-      padding="100px 140px"
-      borderRadius="40"
+      padding={{ base: '50px 35px', sm: '50px 70px', md: '100px 140px' }}
+      borderRadius={{ base: 20, md: '40' }}
       {...rest}
     >
       <Text variant="title" textAlign="center" margin="auto">
@@ -31,7 +31,7 @@ const SectionCard = ({ title, linkText, href, bodyContent, ...rest }: SectionCar
         href={href}
         content={linkText}
         variant="lnk-btn-black"
-        margin="80px auto 0"
+        margin={{ base: '20px auto 0', sm: '50px auto 0', md: '70px auto 0' }}
         width="fit-content"
         display="block"
       />
