@@ -5,10 +5,10 @@ import { SocialMedia } from '../social-media/SocialMedia'
 
 const Footer = () => {
   return (
-    <Box as="footer" color="white" marginTop="8rem">
-      <Box padding="5rem 2rem" background="aqua.light">
+    <Box as="footer" color="dark" marginTop="8rem" background="#f2f2f2">
+      <Box padding="5rem 2rem">
         <Box
-          maxW="7xl"
+          maxW="5xl"
           margin="2rem auto 4rem"
           display="flex"
           alignItems="center"
@@ -16,9 +16,9 @@ const Footer = () => {
           flexDir={'column'}
           gap={{ base: '1.5rem', sm: 'unset' }}
         >
-          <Image src="/assets/svg/logo-footer.svg" alt="gotas de luz" />
-          <Text variant="subtitle-no-decoration" color="white" mt="2rem" textAlign={'center'}>
-            Cambiemos al mundo, juntos.
+          <Image src="/assets/svg/logo-footer-black.svg" alt="gotas de luz" width={100} />
+          <Text variant="subtitle-no-decoration" mt="2rem" textAlign={'center'} mb="1rem">
+            Cambiemos al mundo, juntos
           </Text>
           <div>
             <Text textAlign={'center'}>Existen muchas formas en que puedes</Text>
@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
         </Box>
         <Flex
-          maxW="7xl"
+          maxW="5xl"
           gap={responsiveProperty({ mobileSize: 2, desktopSize: 5, unit: 'rem' })}
           margin="auto"
           justifyContent={'space-evenly'}
@@ -34,7 +34,7 @@ const Footer = () => {
         >
           <List spacing="0.5rem" textAlign={{ base: 'center', sm: 'unset' }}>
             <ListItem as="li">
-              <Text variant="subtitle-no-decoration" color="white" marginY="0.5em">
+              <Text variant="normal" fontWeight="bold" marginY="0.5em">
                 Sitio
               </Text>
             </ListItem>
@@ -56,7 +56,7 @@ const Footer = () => {
           </List>
           <List spacing="0.5rem" textAlign={{ base: 'center', sm: 'unset' }}>
             <Box as="li">
-              <Text variant="subtitle-no-decoration" color="white" marginY="0.5em">
+              <Text variant="normal" fontWeight="bold" marginY="0.5em">
                 Contacto
               </Text>
             </Box>

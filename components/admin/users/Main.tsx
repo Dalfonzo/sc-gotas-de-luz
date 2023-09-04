@@ -10,6 +10,7 @@ import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
+import { useUserStore } from '~/store/users/useUserStore'
 import { Roles } from '~/ts/Roles'
 import { User } from '~/ts/User'
 import { RESOURCES } from '~/utils/constants'
@@ -20,6 +21,7 @@ const UserMain = () => {
   const { fetcher: rolesFetcher } = useFetcher<Roles[]>()
   const [selected, setSelected] = useState<User | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
+  const { user } = useUserStore(({ user }) => ({ user }))
 
   const {
     data: users,
@@ -134,7 +136,12 @@ const UserMain = () => {
                   </ActionIcon>
                 )}
                 {canDelete && (
-                  <ActionIcon variant="light" color="red" onClick={() => openDeleteModal(item)}>
+                  <ActionIcon
+                    variant="light"
+                    color="red"
+                    onClick={() => openDeleteModal(item)}
+                    disabled={!item.canBeDeleted || user.id === item.id}
+                  >
                     <IconTrash size="1rem" />
                   </ActionIcon>
                 )}
@@ -144,7 +151,7 @@ const UserMain = () => {
         ]}
       />
       <BasicModal
-        title={'Añadir usuario'}
+        title={selected ? 'Editar usuario' : 'Añadir usuario'}
         visible={createModal}
         onClose={toggleCreateModal}
         size="2xl"

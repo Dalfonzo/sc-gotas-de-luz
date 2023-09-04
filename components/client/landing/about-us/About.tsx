@@ -1,17 +1,35 @@
 import { Box, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 import { responsiveProperty } from '~/theme/utils'
-import ImageCard from './ImageCard'
+import Carousel, { ImageList } from './Carousel'
+
+const firstRowList: ImageList[] = [
+  { imgAlt: 'equipo de gotas de luz', imgSrc: '/assets/img/crew-img.png' },
+  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/girl-smiling.png' },
+  { imgAlt: 'Niños posando para una tomarse una fotografía', imgSrc: '/assets/img/event-activities.jpg' },
+]
+
+const secondRowList: ImageList[] = [
+  { imgAlt: 'equipo de gotas de luz', imgSrc: '/assets/img/crew-img.png' },
+  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/girl-smiling.png' },
+  { imgAlt: 'Niños posando para una tomarse una fotografía', imgSrc: '/assets/img/event-activities.jpg' },
+]
+
+const thirdRowList: ImageList[] = [
+  { imgAlt: 'equipo de gotas de luz', imgSrc: '/assets/img/crew-img.png' },
+  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/girl-smiling.png' },
+  { imgAlt: 'Niños posando para una tomarse una fotografía', imgSrc: '/assets/img/event-activities.jpg' },
+]
 
 const AboutUs = () => {
   return (
     <Box
-      maxW="7xl"
+      maxW="5xl"
       mx="auto"
-      my={responsiveProperty({ mobileSize: 3, desktopSize: 10, unit: 'rem' })}
+      my={responsiveProperty({ mobileSize: 3, desktopSize: 4, unit: 'rem' })}
       alignItems="center"
-      padding="0 1rem"
     >
-      <Text variant="title" textAlign="center" margin="auto" color="aqua.light">
+      <Text variant="title" textAlign="center" margin="auto">
         Lo que hacemos
       </Text>
       <Text
@@ -23,13 +41,11 @@ const AboutUs = () => {
         Conservando nuestra esencia, realizamos diferentes actividades con el objetivo de dar a las personas algo más
         que un aporte material. Queremos darle una gota de luz en medio de este mar de oscuridad.
       </Text>
-      <Box marginY="8rem">
-        <ImageCard imgAlt="equipo de gotas de luz" imgSrc="/assets/img/crew-img.png" />
-        <ImageCard imgAlt="Niña sonriendo" imgSrc="/assets/img/girl-smiling.png" />
-        <ImageCard imgAlt="Niños posando para una tomarse una fotografía" imgSrc="/assets/img/event-activities.jpg" />
-      </Box>
+      <Carousel settings={{ speed: 20000 }} imagesList={[...firstRowList, ...firstRowList]} />
+      <Carousel settings={{ rtl: true, speed: 20000 }} imagesList={[...secondRowList, ...secondRowList]} />
+      <Carousel settings={{ speed: 15000 }} imagesList={[...thirdRowList, ...thirdRowList]} />
     </Box>
   )
 }
 
-export default AboutUs
+export default withAnimation(AboutUs)

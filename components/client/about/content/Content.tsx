@@ -1,4 +1,5 @@
 import { Grid, GridItem, Text } from '@chakra-ui/react'
+import withAnimation from '~/hoc/withAnimation'
 
 const Content = () => {
   return (
@@ -9,7 +10,7 @@ const Content = () => {
       as="section"
     >
       <GridItem padding="3rem">
-        <Text as="h2" variant="subtitle">
+        <Text as="h2" variant="subtitle-no-decoration">
           Misión
         </Text>
         <Text variant="normal" marginTop="2.5rem">
@@ -17,8 +18,8 @@ const Content = () => {
           vida de la población, instituciones y centros de cuidados menos favorecidos.
         </Text>
       </GridItem>
-      <GridItem gridRow={{ base: '2', md: 'span 2' }} padding="3rem" backgroundColor="#F9F9F9">
-        <Text as="h2" variant="subtitle">
+      <GridItem gridRow={{ base: '2', md: 'span 2' }} padding="3rem" backgroundColor="pastel.green">
+        <Text as="h2" variant="subtitle-no-decoration">
           Trayectoria
         </Text>
         <Text variant="normal" marginTop="2.5rem">
@@ -32,7 +33,7 @@ const Content = () => {
         </Text>
       </GridItem>
       <GridItem padding="3rem">
-        <Text as="h2" variant="subtitle">
+        <Text as="h2" variant="subtitle-no-decoration">
           Visión
         </Text>
         <Text variant="normal" marginTop="2.5rem">
@@ -44,4 +45,4 @@ const Content = () => {
   )
 }
 
-export default Content
+export default withAnimation(Content)

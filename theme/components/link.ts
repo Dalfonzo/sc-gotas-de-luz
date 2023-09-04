@@ -2,13 +2,13 @@ import { responsiveProperty } from '~/theme/utils'
 
 const commonBtnLinkStyles = {
   fontWeight: 'bold',
-  paddingTop: responsiveProperty({ mobileSize: 1, desktopSize: 1, unit: 'rem' }),
-  paddingBottom: responsiveProperty({ mobileSize: 1, desktopSize: 1, unit: 'rem' }),
-  paddingLeft: responsiveProperty({ mobileSize: 1.5, desktopSize: 2, unit: 'rem' }),
-  paddingRight: responsiveProperty({ mobileSize: 1.5, desktopSize: 2, unit: 'rem' }),
+  paddingTop: responsiveProperty({ mobileSize: 8, desktopSize: 12, unit: 'px' }),
+  paddingBottom: responsiveProperty({ mobileSize: 8, desktopSize: 12, unit: 'px' }),
+  paddingLeft: responsiveProperty({ mobileSize: 1.5, desktopSize: 3, unit: 'rem' }),
+  paddingRight: responsiveProperty({ mobileSize: 1.5, desktopSize: 3, unit: 'rem' }),
   fontSize: responsiveProperty({ mobileSize: 14, desktopSize: 18, unit: 'px' }),
   display: 'inline-block',
-  borderRadius: '5px',
+  borderRadius: '4px',
 }
 
 const commonIconBtnLinkStyles = {
@@ -18,7 +18,7 @@ const commonIconBtnLinkStyles = {
     fill: 'currentColor',
   },
   _hover: {
-    transform: 'scale(1.03)',
+    // _TODO: Check this later
   },
   _active: {
     transform: 'scale(1.00) translateY(0.1em)',
@@ -55,6 +55,12 @@ export const linkStyles = {
           background: 'text.dark',
           ...commonIconBtnLinkStyles,
           color: 'white',
+        },
+        'lnk-btn-light-blue': {
+          ...commonBtnLinkStyles,
+          background: 'pastel.blue',
+          ...commonIconBtnLinkStyles,
+          color: 'aqua.dark',
         },
       },
     },

@@ -12,6 +12,7 @@ interface FormProps {
   onSuccess: () => void
   resources: Resources[]
   initialState: Roles | undefined
+  readOnly: boolean
 }
 
 type InitialValues = {
@@ -26,7 +27,7 @@ const totalOfSelectedItems = (values: Record<string, string[] | string>) => {
   return total
 }
 
-export default function RoleForm({ onSuccess, resources, initialState }: FormProps) {
+export default function RoleForm({ onSuccess, resources, initialState, readOnly }: FormProps) {
   const customFetcher = useFetcherInstance()
 
   const initial = initialState?.permissions.reduce((prev, curr) => {
@@ -122,6 +123,7 @@ export default function RoleForm({ onSuccess, resources, initialState }: FormPro
                   defaultChecked={formik.initialValues[resource.name].includes('CREATE')}
                   label={'Crear'}
                   color="cyan"
+                  disabled={readOnly}
                 />
                 <Checkbox
                   name={resource.name}
@@ -130,6 +132,7 @@ export default function RoleForm({ onSuccess, resources, initialState }: FormPro
                   defaultChecked={formik.initialValues[resource.name].includes('UPDATE')}
                   label={'Modificar'}
                   color="cyan"
+                  disabled={readOnly}
                 />
                 <Checkbox
                   name={resource.name}
@@ -138,6 +141,7 @@ export default function RoleForm({ onSuccess, resources, initialState }: FormPro
                   onChange={formik.handleChange}
                   label={'Leer'}
                   color="cyan"
+                  disabled={readOnly}
                 />
                 <Checkbox
                   name={resource.name}
@@ -146,6 +150,7 @@ export default function RoleForm({ onSuccess, resources, initialState }: FormPro
                   defaultChecked={formik.initialValues[resource.name].includes('DELETE')}
                   label={'Borrar'}
                   color="cyan"
+                  disabled={readOnly}
                 />
               </Flex>
             )

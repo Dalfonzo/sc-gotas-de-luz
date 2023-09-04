@@ -57,7 +57,7 @@ export const VolunteersLayout = () => {
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLParagraphElement>({ offset: 80 })
   const formLink = LINKS.VOLUNTEER_FORM
   return (
-    <Flex direction="column" align="center" maxW="7xl" margin="auto" px="5">
+    <Flex direction="column" align="center" maxW="5xl" margin="auto" px="5">
       <VHeading onScroll={scrollIntoView} />
       <Flex justify="center" wrap="wrap" width="100%" gap="5" /*columns={{ xs: 3, sm: 2, md: 3 }}*/>
         {cards.map((card, idx) => (
@@ -65,7 +65,7 @@ export const VolunteersLayout = () => {
         ))}
       </Flex>
       <Flex direction="column" mt="5em">
-        <Text variant="subtitle" mb="5" as="h2" ref={targetRef}>
+        <Text variant="subtitle-no-decoration" mb="5" as="h2" ref={targetRef}>
           ¿Listo para el primer paso?
         </Text>
         <Text>Ingresa en el siguiente link para registrar tus datos y formar parte de nuestro gran equipo:</Text>

@@ -7,4 +7,12 @@ export const MAIL_TEMPLATES = {
     subject: `Solicitud de voluntariado recibida`,
     templatePath: 'volunteer-received.hbs',
   },
+  FORGOT_PASSWORD: {
+    subject: `Cambio de contraseña`,
+    templatePath: 'forgot-password.hbs',
+  },
+  ACCOUNT_CREATED: {
+    subject: `¡Bienvenido a bordo!`,
+    templatePath: 'account-created.hbs',
+  },
 }

@@ -1,8 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
-import DonationBanner from '~/components/client/common/donation-banner/DonationBanner'
 import { DonateProvider } from '~/components/client/donate/donate-context.provider'
-import { DonationFormHeading } from '~/components/client/donate/donation-form/Heading'
+import DonationFormHeading from '~/components/client/donate/donation-form/Heading'
 import Heading from '~/components/client/donate/heading'
 import LatestDonators from '~/components/client/donate/latest-donators'
 import ClientLayout from '~/layouts/Client'
@@ -16,12 +15,11 @@ const Donate = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DonateProvider>
-        <Box maxW="7xl" margin="auto">
+        <Box maxW="5xl" margin="auto">
           <Heading />
           <DonationFormHeading />
           <Box marginY="5rem" />
           <LatestDonators />
-          <DonationBanner link="/donate#button" />
         </Box>
       </DonateProvider>
     </ClientLayout>

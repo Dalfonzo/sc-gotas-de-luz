@@ -5,6 +5,7 @@ import { apiRouteAccessGuard } from '~/utils/guards/apiRouteAccessGuard'
 
 interface PutDto {
   name: string
+  description?: string
   permissions: [
     {
       create: boolean
@@ -41,7 +42,7 @@ export default apiRouteAccessGuard(async (req, res) => {
 
     return await prisma.$transaction(async (tx) => {
       const role = await tx.roles.update({
-        data: { name: body.name },
+        data: { name: body.name, ...(body.description && { description: body.description }) },
         where: { id: roleId },
       })
 

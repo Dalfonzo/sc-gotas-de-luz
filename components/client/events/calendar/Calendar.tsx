@@ -12,6 +12,7 @@ import { DateRange } from '~/lib/models/common'
 import { EventI } from '~/lib/models/event'
 import UiFeedback from '../../../common/feedback/UiFeedback'
 import EventModal from './EventModal'
+
 const locales = {
   es: es,
 }

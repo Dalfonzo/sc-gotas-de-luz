@@ -10,14 +10,18 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   if (isApiRoute(pathname)) {
     const token = req.headers.get('authorization')
-    const decodedToken = await verifyJwt(token!)
-
-    if (!token || !decodedToken) {
+    const errorOrDecodedToken = await verifyJwt(token!)
+    if (!token || !errorOrDecodedToken || errorOrDecodedToken.code === 'TOKEN_EXPIRED') {
       return NextResponse.redirect(new URL('/api/auth/unauthorized', req.url))
     }
   } else if (isClientRoute(pathname)) {
     const token = await getToken({ req })
-    if (!token) return NextResponse.redirect(new URL('/sign-in', req.url))
+    const errorOrDecodedToken = await verifyJwt(token?.accessToken as string)
+
+    if (!token || errorOrDecodedToken.code === 'TOKEN_EXPIRED') {
+      // close session first
+      return NextResponse.redirect(new URL('/sign-in', req.url))
+    }
   }
   return NextResponse.next()
 }

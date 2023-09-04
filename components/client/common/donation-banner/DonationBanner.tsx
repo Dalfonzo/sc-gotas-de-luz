@@ -9,7 +9,7 @@ interface Props {
 const DonationBanner = ({ link = '/donate' }: Props) => {
   return (
     <Box
-      maxW="7xl"
+      maxW="5xl"
       margin="auto"
       marginTop={responsiveProperty({ mobileSize: 3, desktopSize: 10, unit: 'rem' })}
       padding="0 1rem"
