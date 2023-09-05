@@ -33,6 +33,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import UiFeedback from '~/components/common/feedback/UiFeedback'
 import { useFetcher } from '~/hooks/fetcher'
 import { useUserStore } from '~/store/users/useUserStore'
 import { SWR_KEYS } from '~/utils/constants'
@@ -198,8 +199,9 @@ const PageHeading = ({ title }: { title: string }) => {
 export const AdminLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
   const [opened, setOpened] = useState(true)
   const { data } = useSession()
-  const { loadUser } = useUserStore(({ loadUser }) => ({
+  const { loadUser, isLoadingUserData } = useUserStore(({ loadUser, isLoadingUserData }) => ({
     loadUser,
+    isLoadingUserData,
   }))
 
   useEffect(() => {
@@ -243,7 +245,9 @@ export const AdminLayout = ({ children, title }: { children: React.ReactNode; ti
         <PageHeading title={title} />
       </Container>
       <Container size="lg" bg="white" px="lg" py="md" mih="350px" pos="relative">
-        {children}
+        <UiFeedback isLoading={isLoadingUserData} minH={350} pt={100}>
+          {children}
+        </UiFeedback>
       </Container>
     </AppShell>
   )

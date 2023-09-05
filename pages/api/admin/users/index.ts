@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { signJwtAccessToken } from '~/lib/jtw'
@@ -41,7 +40,6 @@ export default apiRouteAccessGuard(async (req, res) => {
       data: {
         name: body.name,
         lastName: body.lastName,
-        password: await bcrypt.hash(body.password, 10),
         email: body.email,
         roles: { connect: { id: body.fkRole } },
       },

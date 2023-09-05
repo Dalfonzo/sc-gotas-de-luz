@@ -15,9 +15,14 @@ export const useUserStore = create<State>((set) => ({
   permissions: {},
   isLoadingUserData: true,
   loadUser: async () => {
-    const session = await getSession()
-    if (!session) return
     set((state) => ({ ...state, isLoadingUserData: true }))
+    const session = await getSession()
+
+    if (!session) {
+      set((state) => ({ ...state, isLoadingUserData: false }))
+      return
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/admin/users/${session?.user?.id}`, {
         headers: {
@@ -26,8 +31,7 @@ export const useUserStore = create<State>((set) => ({
         },
       })
       const user = await response.json()
-
-      set((state: any) => ({
+      set((state) => ({
         ...state,
         user,
         permissions: parsePermissions(user.roles.permissions as Permissions[]),

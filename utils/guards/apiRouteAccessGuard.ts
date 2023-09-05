@@ -12,7 +12,7 @@ export const apiRouteAccessGuard =
     const token = req.headers.authorization || ''
     const decodedToken = (await verifyJwt(token)).payload as User & JWTPayload
     // For auth routes that don't relate to a specific resource
-    if (resourceName === FREE_RESOURCE) {
+    if (resourceName === FREE_RESOURCE || (req.query.id && decodedToken.id === req.query.id)) {
       return handler(req, res)
     }
     const rows = await prisma.roles.findUnique({
