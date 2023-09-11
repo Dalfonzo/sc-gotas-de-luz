@@ -10,7 +10,7 @@ const parseValues = (values: Record<string, any>) => {
   return formData
 }
 
-export const useCloudUpload = (config: { fileKey: string; updatePath?: string }) => {
+export const useCloudUpload = (config: { fileKey: string; updatePath?: string; optional?:boolean }) => {
   const shouldCloudUpload = process.env.NEXT_PUBLIC_USE_LOCAL_STORAGE !== 'true'
   const [fileUploadState, setFileUploadState] = useState<FileUploadStates>('idle')
   const [fileReference, setFileReference] = useState<string | null>(null)
@@ -27,6 +27,9 @@ export const useCloudUpload = (config: { fileKey: string; updatePath?: string })
     setFileUploadState('loading')
     try {
       const file = form.get(config.fileKey)
+      if(!file && config.optional){
+        return form 
+      }
       if (!file || !shouldCloudUpload) {
         return
       }

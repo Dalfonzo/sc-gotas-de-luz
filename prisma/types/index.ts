@@ -32,5 +32,5 @@ export interface CreateDonation extends Omit<Donation, 'id' | 'img' | 'imgId' | 
 
 export interface IncludeDonation extends Donation {
   method: DonationMethod
-  img: FileDb
+  img?: FileDb
 }

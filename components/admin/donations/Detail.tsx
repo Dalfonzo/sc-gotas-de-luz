@@ -120,14 +120,16 @@ export const DonationDetails = ({ donation }: Props) => {
         </Text>
       </Group>
 
-      <Box h="auto" pos="relative" mt="md" w="100%">
-        <ActionIcon pos="absolute" right="10%" bottom="0">
-          <IconExternalLink width={32} height={32} />
-        </ActionIcon>
-        <Link href={donation.img.url} target="_blank">
-          <ApiImg alt="Comprobante" objectFit="contain" h="15rem" w="100%" url={donation.img} />
-        </Link>
-      </Box>
+      {donation.img && (
+        <Box h="auto" pos="relative" mt="md" w="100%">
+          <ActionIcon pos="absolute" right="10%" bottom="0">
+            <IconExternalLink width={32} height={32} />
+          </ActionIcon>
+          <Link href={donation.img.url} target="_blank">
+            <ApiImg alt="Comprobante" objectFit="contain" h="15rem" w="100%" url={donation.img} />
+          </Link>
+        </Box>
+      )}
     </Box>
   )
   return (

@@ -138,8 +138,8 @@ model Donation {
   isAnon     Boolean        @default(false)
   isVerified Boolean        @default(false)
   date       DateTime       @default(now())
-  img        FileDb         @relation(fields: [imgId], references: [id])
-  imgId      Int            @unique
+  img        FileDb?         @relation(fields: [imgId], references: [id])
+  imgId      Int?            @unique
   method     DonationMethod @relation(fields: [methodId], references: [id])
   methodId   Int
   createdAt  DateTime       @default(now())

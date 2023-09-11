@@ -33,7 +33,7 @@ const DonationForm = ({ formik }: Props) => {
             name="name"
             disabled={formik.values.isAnon}
             onChange={formik.handleChange}
-            value={formik.values.name || undefined}
+            value={formik.values.name as string}
           />
           {formik.errors.name && formik.touched.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
         </FormControl>
@@ -57,7 +57,7 @@ const DonationForm = ({ formik }: Props) => {
             placeholder="Incluye un mensaje para mostrar junto con tu donación"
             name="message"
             onChange={formik.handleChange}
-            value={formik.values.message || undefined}
+            value={formik.values.message as string}
             rows={3}
             height="unset"
             minHeight="100px"
@@ -134,7 +134,7 @@ const DonationForm = ({ formik }: Props) => {
             <Input value={state.method?.name} readOnly />
           </FormControl>
         </Box>
-        <FormControl isRequired isInvalid={Boolean(formik.errors.donation && formik.touched.donation)}>
+        <FormControl isRequired={false} isInvalid={Boolean(formik.errors.donation && formik.touched.donation)}>
           <FileUpload
             name="news"
             label="Comprobante"

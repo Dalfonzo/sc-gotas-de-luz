@@ -37,7 +37,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
   const prevStep = () => {
     setActiveStep((current) => (current > 0 ? current - 1 : current))
   }
-  const { onFileUpload } = useCloudUpload({ fileKey: 'donation' })
+  const { onFileUpload } = useCloudUpload({ fileKey: 'donation', optional: true })
   const customFetcher = useFetcherInstance()
   const formik = useFormik<CreateDonation>({
     initialValues: {
@@ -64,12 +64,6 @@ export const DonationSteps = ({ afterComplete }: Props) => {
         .trim()
         .required('Por favor, ingresa la referencia para comprobar tu donación')
         .min(3, 'El campo ingresado es muy corto'),
-      donation: Yup.string().test('img test', function (value: any) {
-        if (!value) {
-          return this.createError({ path: this.path, message: 'La imagen del comprobante es requerida' })
-        }
-        return true
-      }),
       date: Yup.date()
         .transform((_, originalValue) =>
           isDate(originalValue) ? originalValue : parse(originalValue, 'yyyy-MM-dd', new Date())
@@ -85,6 +79,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
       if (!parsed) {
         return false
       }
+
       await customFetcher.post('/api/donation', parsed)
       return true
     },

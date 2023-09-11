@@ -12,8 +12,9 @@ export default apiRouteAccessGuard(async (req: NextApiRequest, res: NextApiRespo
   const get = async () => methodItem
 
   const put = async () => {
+    const body = req.body
     return await model.update({
-      data: { isVerified: req.body.isVerified },
+      data: { isVerified: req.body.isVerified, ...(body.amount && { amount: body.amount }) },
       where: { id },
     })
   }

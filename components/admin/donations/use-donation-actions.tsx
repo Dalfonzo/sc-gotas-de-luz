@@ -1,5 +1,6 @@
-import { Group, Text } from '@mantine/core'
+import { Group, NumberInput, Text, TextInput, Textarea } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import { RefObject, useRef } from 'react'
 import { useSWRConfig } from 'swr'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -10,32 +11,49 @@ interface Props {
   afterDelete?: () => Promise<any>
   afterUpdate?: () => Promise<any>
 }
+const AMOUNT_INPUT_ID = '_amount'
 
-const DonationDetails = (item: IncludeDonation) => (
-  <Group position="apart" spacing="sm" my="md">
-    <span>
-      Nombre: <b>{item.name || 'Anónimo'}</b>{' '}
-    </span>
-    <span>
-      Monto:<b> {item.amount.toFixed(2)}</b>
-    </span>
-    <span>
-      Referencia:
-      <b>
-        {' '}
-        {item.reference} {`(${item.method.name})`}
-      </b>
-    </span>
-  </Group>
-)
+interface DetailProps {
+  item: IncludeDonation
+  amountRef?: RefObject<HTMLInputElement>
+}
+
+const DonationDetails = ({ item, amountRef }: DetailProps) => {
+  return (
+    <Group position="apart" align="end" spacing="sm" my="md">
+      <TextInput description="No modificable" label="Nombre" value={item.name || 'Anónimo'} readOnly />
+
+      <NumberInput
+        label="Monto"
+        description="En dólares (modificable)"
+        defaultValue={item.amount}
+        min={1}
+        id={AMOUNT_INPUT_ID}
+        ref={amountRef}
+        precision={2}
+        readOnly={item.isVerified || !amountRef}
+      />
+      <Textarea
+        description="No modificable"
+        w="100%"
+        label="Referencia"
+        value={`${item.reference} (${item.method.name})`}
+        readOnly
+      />
+    </Group>
+  )
+}
 
 export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
   const fetcherInstance = useFetcherInstance()
   const { mutate } = useSWRConfig()
-
+  const amountRef = useRef<HTMLInputElement>(null)
   const { onSubmit: onUpdate, loadingSubmit: loadingUpdate } = useSubmitHandler<{ id: string; isVerified: boolean }>({
     callback: async ({ id, isVerified }) => {
-      await fetcherInstance.put(`/api/admin/donation/${id}`, { isVerified })
+      await fetcherInstance.put(`/api/admin/donation/${id}`, {
+        isVerified,
+        ...(isVerified && { amount: Number(amountRef.current?.value) }),
+      })
       await mutate(SWR_KEYS.PENDING_DONATIONS)
       afterUpdate && (await afterUpdate())
       return true
@@ -53,7 +71,7 @@ export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
               <Text size="sm">
                 Si el donativo fue aprobado por equivocación, puedes quitar su verificación y después eliminarlo, si es
                 necesario.
-                <DonationDetails {...item} />
+                <DonationDetails item={item} />
               </Text>
             ),
             labels: { confirm: 'Anular', cancel: 'Cancelar' },
@@ -66,7 +84,7 @@ export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
             children: (
               <Text size="sm">
                 Asegúrate de haber verificado la transacción del donativo para aprobarlo.
-                <DonationDetails {...item} />
+                <DonationDetails item={item} amountRef={amountRef} />
               </Text>
             ),
             labels: { confirm: 'Aprobar', cancel: 'Cancelar' },
@@ -92,7 +110,7 @@ export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
         <Text size="sm">
           Solo elimina en caso de que el donativo haya sido fraudulento, ya que no podrá ser recuperado una vez
           eliminado.
-          <DonationDetails {...item} />
+          <DonationDetails item={item} />
         </Text>
       ),
       labels: { confirm: 'Borrar', cancel: 'Cancelar' },

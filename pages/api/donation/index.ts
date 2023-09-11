@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const get = async () => await getDonations(req, res, true)
 
   const post = async () => {
-    const files = await fileUploadHandler(req, { throwOnEmpty: true })
+    const files = await fileUploadHandler(req, { throwOnEmpty: false })
     const body = req.body
     const isAnon = body.isAnon === 'true' || body.isAnon === true
     const methodId = Number(delete body.methodId)
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         isVerified: false,
         isAnon: isAnon,
         amount: Number(body.amount),
-        img: { create: { ...files } },
+        ...(files && { img: { create: { ...files } } }),
         method: { connect: { id: methodId } },
       },
     })

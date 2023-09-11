@@ -75,7 +75,6 @@ export default function DonationMain({ pending }: Props) {
         records={methods?.records}
         totalRecords={methods?.total}
         recordsPerPage={PER_PAGE}
-  
         columns={[
           {
             accessor: 'name',
@@ -111,7 +110,7 @@ export default function DonationMain({ pending }: Props) {
           {
             accessor: 'createdAt',
             title: 'Recibida el',
-            width: 100,
+            width: 110,
             ellipsis: true,
             sortable: true,
             render: ({ createdAt }) => <Text> {formatDate(createdAt)}</Text>,
