@@ -12,7 +12,7 @@ import { IncludeDonation } from '~/prisma/types'
 import { RESOURCES } from '~/utils/constants'
 import Table from '../common/table/Table'
 import { DonationDetails } from './Detail'
-import { useDonationActions } from './use-donation-actions'
+import { ConfirmModal, useDonationActions } from './use-donation-actions'
 
 type FetcherResponse = IncludeDonation[]
 const PER_PAGE = 10
@@ -50,8 +50,13 @@ export default function DonationMain({ pending }: Props) {
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.DONATIONS })
   const [selected, setSelected] = useState<IncludeDonation | undefined>(undefined)
   const [isOpen, { toggle }] = useDisclosure(false)
+  const [isConfirmOpen, { toggle: toggleConfirm }] = useDisclosure(false)
+  const [isAbortOpen, { toggle: toggleAbort }] = useDisclosure(false)
 
-  const { onApprove, onDelete } = useDonationActions({ afterDelete: () => mutate(), afterUpdate: () => mutate() })
+  const { onUpdate, loadingUpdate, onDelete } = useDonationActions({
+    afterDelete: () => mutate(),
+    afterUpdate: () => mutate(),
+  })
   return (
     <>
       <Chip.Group multiple={false} value={verifiedOnly} onChange={setVerifiedOnly}>
@@ -133,7 +138,7 @@ export default function DonationMain({ pending }: Props) {
                 </ActionIcon>
                 {canUpdate && (
                   <ActionIcon
-                    onClick={() => onApprove(item)}
+                    onClick={() => (item.isVerified ? toggleAbort() : toggleConfirm())}
                     variant="light"
                     color={item.isVerified ? 'orange' : 'green'}
                   >
@@ -154,8 +159,32 @@ export default function DonationMain({ pending }: Props) {
         title={'Detalle del donativo'}
         visible={isOpen}
         onClose={toggle}
-        size="2xl"
+        size="3xl"
         body={<>{selected && <DonationDetails donation={selected} />}</>}
+      />
+      <ConfirmModal
+        item={selected}
+        confirm
+        open={isConfirmOpen}
+        toggle={toggleConfirm}
+        loading={loadingUpdate}
+        onSubmit={async (values) => {
+          if (await onUpdate(values)) {
+            toggleConfirm()
+          }
+        }}
+      />
+      <ConfirmModal
+        item={selected}
+        confirm={false}
+        open={isAbortOpen}
+        toggle={toggleAbort}
+        loading={loadingUpdate}
+        onSubmit={async (values) => {
+          if (await onUpdate(values)) {
+            toggleAbort()
+          }
+        }}
       />
     </>
   )

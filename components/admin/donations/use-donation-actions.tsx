@@ -1,7 +1,8 @@
-import { Group, NumberInput, Text, TextInput, Textarea } from '@mantine/core'
+import { Button, Group, Modal, NumberInput, Text, TextInput, Textarea } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { RefObject, useRef } from 'react'
 import { useSWRConfig } from 'swr'
+import { Skeletons } from '~/components/common/feedback/UiFeedback'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { IncludeDonation } from '~/prisma/types'
@@ -16,9 +17,10 @@ const AMOUNT_INPUT_ID = '_amount'
 interface DetailProps {
   item: IncludeDonation
   amountRef?: RefObject<HTMLInputElement>
+  messageRef?: RefObject<HTMLTextAreaElement>
 }
 
-const DonationDetails = ({ item, amountRef }: DetailProps) => {
+const DonationDetails = ({ item, amountRef, messageRef }: DetailProps) => {
   return (
     <Group position="apart" align="end" spacing="sm" my="md">
       <TextInput description="No modificable" label="Nombre" value={item.name || 'Anónimo'} readOnly />
@@ -40,19 +42,121 @@ const DonationDetails = ({ item, amountRef }: DetailProps) => {
         value={`${item.reference} (${item.method.name})`}
         readOnly
       />
+      {messageRef && item.email && !item.emailSent && (
+        <Textarea
+          required
+          label="Agradecimiento"
+          w="100%"
+          minRows={3}
+          description="Para enviárselo por correo como agradecimiento"
+          placeholder="Puedes explicar en qué se usará el donativo, o simplemente dar un sincero mensaje de gracias"
+          ref={messageRef}
+        />
+      )}
     </Group>
   )
 }
 
+interface ConfirmDto {
+  id: string
+  isVerified: boolean
+  amount?: number
+  thanks?: string
+}
+
+interface ConfirmModalProps {
+  confirm: boolean
+  item?: IncludeDonation
+  open: boolean
+  toggle: () => void
+  loading: boolean
+  onSubmit: (dto: ConfirmDto) => Promise<void>
+}
+
+export const ConfirmModal = ({ confirm, item, open, toggle, loading, onSubmit }: ConfirmModalProps) => {
+  const amountRef = useRef<HTMLInputElement>(null)
+  const messageRef = useRef<HTMLTextAreaElement>(null)
+  if (confirm) {
+    return (
+      <Modal opened={open} onClose={toggle} title="¿Aprobar donativo?" centered>
+        {item ? (
+          <>
+            {' '}
+            <Text size="sm">
+              Asegúrate de haber verificado la transacción del donativo para aprobarlo.
+              <DonationDetails item={item} amountRef={amountRef} messageRef={messageRef} />
+            </Text>
+            <Group position="right" mt="lg">
+              <Button onClick={toggle} variant="default" size="sm">
+                Cancelar{' '}
+              </Button>
+              <Button
+                onClick={() =>
+                  onSubmit({
+                    id: item.id,
+                    isVerified: true,
+                    amount: Number(amountRef.current?.value),
+                    thanks: messageRef.current?.value,
+                  })
+                }
+                color="green"
+                loading={loading}
+              >
+                Aprobar
+              </Button>
+            </Group>{' '}
+          </>
+        ) : (
+          <Skeletons rows={2} />
+        )}
+      </Modal>
+    )
+  }
+  return (
+    <Modal opened={open} onClose={toggle} title="¿Anular verificación de donativo?" centered>
+      {item ? (
+        <>
+          <Text size="sm">
+            Si el donativo fue aprobado por equivocación, puedes quitar su verificación y después eliminarlo, si es
+            necesario.
+            <DonationDetails item={item} />
+          </Text>
+          <Group position="right" mt="lg">
+            <Button onClick={toggle} variant="default" size="sm">
+              Cancelar{' '}
+            </Button>
+            <Button
+              onClick={() =>
+                onSubmit({
+                  id: item.id,
+                  isVerified: false,
+                })
+              }
+              color="orange"
+              loading={loading}
+            >
+              Anular
+            </Button>
+          </Group>
+        </>
+      ) : (
+        <Skeletons rows={3} />
+      )}
+    </Modal>
+  )
+}
+
+export const DonationConfirmProvider = () => {}
+
 export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
   const fetcherInstance = useFetcherInstance()
   const { mutate } = useSWRConfig()
-  const amountRef = useRef<HTMLInputElement>(null)
-  const { onSubmit: onUpdate, loadingSubmit: loadingUpdate } = useSubmitHandler<{ id: string; isVerified: boolean }>({
-    callback: async ({ id, isVerified }) => {
+
+  const { onSubmit: onUpdate, loadingSubmit: loadingUpdate } = useSubmitHandler<ConfirmDto>({
+    callback: async ({ id, isVerified, amount, thanks }) => {
       await fetcherInstance.put(`/api/admin/donation/${id}`, {
         isVerified,
-        ...(isVerified && { amount: Number(amountRef.current?.value) }),
+        ...(isVerified && { amount: Number(amount), thanks: thanks?.trim() }),
       })
       await mutate(SWR_KEYS.PENDING_DONATIONS)
       afterUpdate && (await afterUpdate())
@@ -60,38 +164,6 @@ export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
     },
     success: { message: 'Donativo modificado' },
   })
-
-  const openUpdateModal = (item: IncludeDonation) =>
-    modals.openConfirmModal(
-      item.isVerified
-        ? {
-            title: <b>¿Anular verificación de donativo? </b>,
-            centered: true,
-            children: (
-              <Text size="sm">
-                Si el donativo fue aprobado por equivocación, puedes quitar su verificación y después eliminarlo, si es
-                necesario.
-                <DonationDetails item={item} />
-              </Text>
-            ),
-            labels: { confirm: 'Anular', cancel: 'Cancelar' },
-            confirmProps: { color: 'orange', loading: loadingUpdate },
-            onConfirm: async () => await onUpdate({ id: item.id, isVerified: false }),
-          }
-        : {
-            title: <b>¿Aprobar donativo? </b>,
-            centered: true,
-            children: (
-              <Text size="sm">
-                Asegúrate de haber verificado la transacción del donativo para aprobarlo.
-                <DonationDetails item={item} amountRef={amountRef} />
-              </Text>
-            ),
-            labels: { confirm: 'Aprobar', cancel: 'Cancelar' },
-            confirmProps: { color: 'green', loading: loadingUpdate },
-            onConfirm: async () => await onUpdate({ id: item.id, isVerified: true }),
-          }
-    )
 
   const { onSubmit: onDelete, loadingSubmit: loadingDelete } = useSubmitHandler<string>({
     callback: async (id) => {
@@ -119,6 +191,7 @@ export const useDonationActions = ({ afterDelete, afterUpdate }: Props) => {
     })
   return {
     onDelete: openDeleteModal,
-    onApprove: openUpdateModal,
+    onUpdate,
+    loadingUpdate,
   }
 }

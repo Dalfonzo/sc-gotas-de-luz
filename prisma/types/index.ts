@@ -25,7 +25,7 @@ export interface PendingResult {
   pending: number
 }
 
-export interface CreateDonation extends Omit<Donation, 'id' | 'img' | 'imgId' | 'isVerified' | 'date' | 'createdAt'> {
+export interface CreateDonation extends Omit<Donation, 'id' | 'img' | 'imgId' | 'isVerified' | 'date' | 'createdAt'|'emailSent'> {
   date: string
   donation?: FileI
 }

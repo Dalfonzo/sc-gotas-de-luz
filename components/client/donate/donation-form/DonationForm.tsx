@@ -60,7 +60,6 @@ const DonationForm = ({ formik }: Props) => {
             value={formik.values.message as string}
             rows={3}
             height="unset"
-            minHeight="100px"
             _focus={{
               borderColor: 'aqua.light',
               boxShadow: '0 0 0 1px #60E0E3',

@@ -133,8 +133,8 @@ model Donation {
   message    String?
   reference  String
   amount     Float
-  // TODO: TBD if email is necessary
-  //email       String
+  email      String?
+  emailSent  Boolean? 
   isAnon     Boolean        @default(false)
   isVerified Boolean        @default(false)
   date       DateTime       @default(now())

@@ -1,6 +1,7 @@
 import Email from 'email-templates'
 import { existsSync } from 'fs'
 import NodeMailer from 'nodemailer'
+import { joinAbsoluteUrlPath } from '../fetcher/custom-fetcher'
 const path = require('path')
 
 export interface EmailDataDto<Data = Record<string, any>> {
@@ -9,6 +10,7 @@ export interface EmailDataDto<Data = Record<string, any>> {
   title?: string
   data?: Data
   button?: string
+  appendUrl?: string
 }
 
 export interface EmailSendDto<Data = Record<string, any>> {
@@ -58,7 +60,9 @@ class NodemailerAdapter {
       throw new Error(`Email template [${templatePath}] not found`)
     }
     const websiteURL = process.env.NEXT_PUBLIC_SITE_URL
-
+    if (context.appendUrl) {
+      context.url = joinAbsoluteUrlPath(websiteURL || '', context.appendUrl)
+    }
     const meta = {
       phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || '',
       email: process.env.EMAIL_MAIL,

@@ -15,4 +15,8 @@ export const MAIL_TEMPLATES = {
     subject: `¡Bienvenido a bordo!`,
     templatePath: 'account-created.hbs',
   },
+  DONATION_APPROVED: {
+    subject: '¡Hemos confirmado tu donativo!',
+    templatePath: 'donation-approved.hbs',
+  },
 }
