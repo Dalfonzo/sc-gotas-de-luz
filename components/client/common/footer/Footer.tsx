@@ -16,7 +16,7 @@ const Footer = () => {
           flexDir={'column'}
           gap={{ base: '1.5rem', sm: 'unset' }}
         >
-          <Image src="/assets/svg/logo-footer-black.svg" alt="gotas de luz" width={100} />
+          <Image src="/assets/svg/gotas_de_luz.svg" alt="gotas de luz" width={100} />
           <Text variant="subtitle-no-decoration" mt="2rem" textAlign={'center'} mb="1rem">
             Cambiemos al mundo, juntos
           </Text>

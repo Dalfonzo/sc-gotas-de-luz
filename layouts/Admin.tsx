@@ -150,8 +150,8 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Image
-            src="/assets/svg/logo-footer.svg"
-            alt="asd"
+            src="/assets/svg/gotas_de_luz.svg"
+            alt="logo"
             width={isOpen ? 60 : 40}
             height={isOpen ? 60 : 40}
             mx="auto"

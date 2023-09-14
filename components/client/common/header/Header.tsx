@@ -56,7 +56,7 @@ const Header = () => {
         <Link href="/">
           <Image
             cursor="pointer"
-            src="/assets/svg/logo-footer-black.svg"
+            src="/assets/svg/gotas_de_luz.svg"
             alt="Logo de gotas de luz"
             width={isScrolledDown ? '40px' : '60px'}
             transition="width ease 0.5s"

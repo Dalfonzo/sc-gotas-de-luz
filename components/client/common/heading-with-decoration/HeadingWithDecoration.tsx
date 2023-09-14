@@ -13,7 +13,7 @@ const HeadingWithDecoration = ({ title }: { title: string | JSX.Element }) => {
         )}
       </Box>
       <Box
-        bgImage="url('/assets/svg/test.svg')"
+        bgImage="url('/assets/svg/landing-bg.svg')"
         bgPosition="center"
         bgRepeat="no-repeat"
         bgSize="contain"

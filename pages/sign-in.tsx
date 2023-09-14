@@ -52,13 +52,13 @@ function SignIn() {
   })
 
   return (
-    <Container w="100%" h="100vh" fluid bg="cyan.4">
+    <Container w="100%" h="100vh" fluid bg="gray.1">
       <Container size={420} py={40}>
-        <Image src="/assets/svg/logo-footer.svg" alt="asd" width={75} height={75} mx="auto" mt="4" mb="5" />
+        <Image src="/assets/svg/gotas_de_luz.svg" alt="asd" width={75} height={75} mx="auto" mt="4" mb="5" />
         <Title
           align="center"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-          color="white"
+          color="dark"
         >
           Iniciar sesión
         </Title>
