@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { BadRequestError, ConflictError } from '~/lib/api/errors/api-error'
 import { paginationHandler } from '~/lib/api/handler'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
@@ -35,7 +36,14 @@ export default apiRouteAccessGuard(async (req, res) => {
     const role = await prisma.roles.findUnique({ where: { id: body.fkRole } })
 
     if (!role) {
-      throw new Error(`Invalid RoleId`)
+      throw new BadRequestError(`Invalid roleId`)
+    }
+
+    const userByEmail = await prisma.users.findUnique({ where: { email: body.email } })
+    const emailAlreadyExists = !!userByEmail
+
+    if (emailAlreadyExists) {
+      throw new ConflictError(`Email already registered`)
     }
 
     const user = await prisma.users.create({
