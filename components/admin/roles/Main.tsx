@@ -2,11 +2,12 @@ import { ActionIcon, Button, Flex, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 import Table from '~/components/admin/common/table/Table'
 import BasicModal from '~/components/common/Modal'
-import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
+import { useFetcher, useFetcherParams, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -15,19 +16,38 @@ import { Roles } from '~/ts/Roles'
 import { RESOURCES } from '~/utils/constants'
 import RolesForm from './RolesForm'
 
+const PER_PAGE = 10
+type FetcherResponse = usePaginationFetcherResponse<Roles[]>
+
 const RolesMain = () => {
   const { fetcher } = useFetcher<Roles[]>()
   const [selected, setSelected] = useState<Roles | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
+  const router = useRouter()
 
   const {
     data: roles,
     isLoading,
     mutate,
     isValidating,
-  } = useSWR<Roles[]>([`/api/admin/roles`], ([url, dto]: useFetcherParams<Roles[]>) => fetcher(url, dto), {
-    revalidateOnFocus: false,
-  })
+  } = useSWR<FetcherResponse>(
+    [
+      `/api/admin/roles`,
+      {
+        usePagination: true,
+        query: {
+          page: router.query.page,
+          size: PER_PAGE,
+          sortBy: router.query.sortBy,
+          dir: router.query.dir,
+        },
+      },
+    ],
+    ([url, dto]: usePaginationFetcherParams<Roles[]>) => fetcher(url, dto),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const { data: resources } = useSWR<Roles[]>([`/api/admin/resources`], ([url, dto]: useFetcherParams<Resources[]>) =>
     fetcher(url, dto)
@@ -78,8 +98,9 @@ const RolesMain = () => {
       <Table
         fetching={isLoading || isValidating}
         idAccessor="id"
-        records={roles}
-        totalRecords={roles?.length}
+        recordsPerPage={PER_PAGE}
+        records={roles?.records}
+        totalRecords={roles?.total}
         columns={[
           {
             accessor: 'name',
