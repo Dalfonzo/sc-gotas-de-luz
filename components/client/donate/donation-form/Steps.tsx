@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import * as Yup from 'yup'
+import Captcha, { useCaptcha } from '~/components/common/captcha/Captcha'
 import UiFeedback from '~/components/common/feedback/UiFeedback'
 import { useCloudUpload } from '~/hooks/useCloudUpload'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
@@ -36,16 +37,25 @@ export const DonationSteps = ({ afterComplete }: Props) => {
     () => true,
     () => false,
   ]
+  const { loadingCaptcha, executeCaptcha, ...captchaRest } = useCaptcha()
+
+  const submitCallback = async () => {
+    const success = await onSubmit()
+    if (!success) return
+    setActiveStep((current) => (current < MAX_STEPS ? current + 1 : current))
+  }
+
   const nextStep = async () => {
     if (activeStep == FORM_STEP) {
-      await formik.validateForm() //await onSubmit()
+      await formik.validateForm()
       formik.setTouched({ amount: true, name: true, message: true, reference: true })
       if (!formik.isValid) return
     }
     if (activeStep == SUBMIT_STEP) {
-      // TODO: add Captcha here
-      const success = await onSubmit()
-      if (!success) return
+      executeCaptcha(async () => {
+        submitCallback()
+      })
+      return
     }
     setActiveStep((current) => (current < MAX_STEPS ? current + 1 : current))
   }
@@ -141,6 +151,8 @@ export const DonationSteps = ({ afterComplete }: Props) => {
   )
   return (
     <Box id={BOX_ID}>
+      <Captcha callback={submitCallback} {...captchaRest} />
+
       <Stepper active={activeStep}>
         <Stepper.Step>
           <StepTitle>Selecciona un medio para donar:</StepTitle>
@@ -189,7 +201,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
               display="flex"
               variant="filled"
               color="cyan.4"
-              loading={loadingSubmit}
+              loading={loadingSubmit || loadingCaptcha}
             >
               Siguiente
             </Button>
