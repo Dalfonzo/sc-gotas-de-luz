@@ -40,7 +40,7 @@ export default function NewsMain() {
     ],
     ([url, dto]: usePaginationFetcherParams<News[]>) => fetcher(url, dto)
   )
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.NEWS })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.NEWS })
   const [selected, setSelected] = useState<News | null>(null)
   const fetcherInstance = useFetcherInstance()
   const [isOpen, { toggle }] = useDisclosure(false)
@@ -70,9 +70,11 @@ export default function NewsMain() {
   return (
     <>
       <Link href="/admin/news/add">
-        <Button leftIcon={<IconPlus />} color="green" ml="auto" display="block" my="lg">
-          Agregar
-        </Button>
+        {canCreate && (
+          <Button leftIcon={<IconPlus />} color="green" ml="auto" display="block" my="lg">
+            Agregar
+          </Button>
+        )}
       </Link>
       <Modal size="xl" opened={isOpen} onClose={toggle} title="Vista de artículo">
         {selected && <NewsArticle news={selected} />}

@@ -53,7 +53,7 @@ const RolesMain = () => {
     fetcher(url, dto)
   )
 
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.ROLES })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.ROLES })
 
   const fetcherInstance = useFetcherInstance()
 
@@ -82,19 +82,21 @@ const RolesMain = () => {
 
   return (
     <>
-      <Button
-        leftIcon={<IconPlus />}
-        color="green"
-        ml="auto"
-        display="block"
-        my="lg"
-        onClick={() => {
-          toggleCreateModal()
-          setSelected(undefined)
-        }}
-      >
-        Agregar
-      </Button>
+      {canCreate && (
+        <Button
+          leftIcon={<IconPlus />}
+          color="green"
+          ml="auto"
+          display="block"
+          my="lg"
+          onClick={() => {
+            toggleCreateModal()
+            setSelected(undefined)
+          }}
+        >
+          Agregar
+        </Button>
+      )}
       <Table
         fetching={isLoading || isValidating}
         idAccessor="id"

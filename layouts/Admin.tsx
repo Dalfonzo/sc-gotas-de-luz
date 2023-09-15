@@ -92,18 +92,39 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const linksRows = [
-  { link: '/admin/dashboard', label: 'inicio', icon: IconHome },
-  { link: '/admin/roles', label: 'roles', icon: IconLock },
-  { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
-  { link: '/admin/donations', label: 'donaciones', icon: IconHeartHandshake, swr: SWR_KEYS.PENDING_DONATIONS },
-  { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart, swr: SWR_KEYS.PENDING_VOLUNTEERS },
-  { link: '/admin/inventory', label: 'inventario', icon: IconBuildingWarehouse, swr: SWR_KEYS.EXPIRING_INVENTORY },
-  { link: '/admin/events', label: 'calendario', icon: IconCalendar },
-  { link: '/admin/news', label: 'noticias', icon: IconNews },
+  { link: '/admin/dashboard', label: 'inicio', icon: IconHome, key: 'INICIO' },
+  { link: '/admin/roles', label: 'roles', icon: IconLock, key: 'ROLES' },
+  { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup, key: 'USUARIOS' },
+  {
+    link: '/admin/donations',
+    label: 'donaciones',
+    icon: IconHeartHandshake,
+    swr: SWR_KEYS.PENDING_DONATIONS,
+    key: 'DONACIONES',
+  },
+  {
+    link: '/admin/volunteers',
+    label: 'voluntarios',
+    icon: IconUserHeart,
+    swr: SWR_KEYS.PENDING_VOLUNTEERS,
+    key: 'VOLUNTARIOS',
+  },
+  {
+    link: '/admin/inventory',
+    label: 'inventario',
+    icon: IconBuildingWarehouse,
+    swr: SWR_KEYS.EXPIRING_INVENTORY,
+    key: 'INVENTORIO',
+  },
+  { link: '/admin/events', label: 'calendario', icon: IconCalendar, key: 'EVENTOS (CALENDARIO)' },
+  { link: '/admin/news', label: 'noticias', icon: IconNews, key: 'NOTICIAS' },
 ]
+
+const FREE_ROUTES = ['INICIO']
 
 export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> & { isOpen: boolean }) {
   const { classes, cx } = useStyles()
+  const { permissions } = useUserStore(({ permissions }) => ({ permissions }))
   const router = useRouter()
   const { fetcher } = useFetcher<{ pending: number }>()
   const { data: volunteerData } = useSWR<{ pending: number }>(SWR_KEYS.PENDING_VOLUNTEERS, fetcher)
@@ -115,7 +136,11 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
     [SWR_KEYS.EXPIRING_INVENTORY]: inventoryData,
     [SWR_KEYS.PENDING_DONATIONS]: donationData,
   }
-  const links = linksRows.map((item) => (
+
+  const readPermissions = Object.keys(permissions).filter((element) => permissions[element].READ === true)
+  const allowedLinks = linksRows.filter((link) => readPermissions.includes(link.key) || FREE_ROUTES.includes(link.key))
+
+  const links = allowedLinks.map((item) => (
     <Link
       className={cx(classes.link, { [classes.linkActive]: router.asPath.startsWith(item.link) })}
       href={item.link}
