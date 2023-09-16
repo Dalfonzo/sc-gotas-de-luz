@@ -1,6 +1,6 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
 
-const HeadingWithDecoration = ({ title, ...rest }: { title: string | JSX.Element } & BoxProps) => {
+const HeadingWithDecoration = ({ title, ...rest }: { title: string | JSX.Element } & Omit<BoxProps, 'title'>) => {
   return (
     <Box position={'relative'} {...rest}>
       <Box marginBottom="4rem" zIndex={2}>
