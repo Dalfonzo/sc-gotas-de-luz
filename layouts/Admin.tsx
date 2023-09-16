@@ -221,7 +221,15 @@ const PageHeading = ({ title }: { title: string }) => {
   )
 }
 
-export const AdminLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
+export const AdminLayout = ({
+  children,
+  title,
+  variant = 'bg',
+}: {
+  children: React.ReactNode
+  title: string
+  variant?: 'no-bg' | 'bg'
+}) => {
   const [opened, setOpened] = useState(true)
   const { data } = useSession()
   const { loadUser, isLoadingUserData } = useUserStore(({ loadUser, isLoadingUserData }) => ({
@@ -269,7 +277,14 @@ export const AdminLayout = ({ children, title }: { children: React.ReactNode; ti
       <Container size="lg" px="lg" py="md">
         <PageHeading title={title} />
       </Container>
-      <Container size="lg" bg="white" px="lg" py="md" mih="350px" pos="relative">
+      <Container
+        size="lg"
+        bg={variant === 'no-bg' ? 'transparent' : 'white'}
+        px="lg"
+        py="md"
+        mih="350px"
+        pos="relative"
+      >
         <UiFeedback isLoading={isLoadingUserData} minH={350} pt={100}>
           {children}
         </UiFeedback>
