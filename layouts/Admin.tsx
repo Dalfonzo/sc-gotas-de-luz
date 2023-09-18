@@ -92,18 +92,39 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const linksRows = [
-  { link: '/admin/dashboard', label: 'inicio', icon: IconHome },
-  { link: '/admin/roles', label: 'roles', icon: IconLock },
-  { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup },
-  { link: '/admin/donations', label: 'donaciones', icon: IconHeartHandshake, swr: SWR_KEYS.PENDING_DONATIONS },
-  { link: '/admin/volunteers', label: 'voluntarios', icon: IconUserHeart, swr: SWR_KEYS.PENDING_VOLUNTEERS },
-  { link: '/admin/inventory', label: 'inventario', icon: IconBuildingWarehouse, swr: SWR_KEYS.EXPIRING_INVENTORY },
-  { link: '/admin/events', label: 'calendario', icon: IconCalendar },
-  { link: '/admin/news', label: 'noticias', icon: IconNews },
+  { link: '/admin/dashboard', label: 'inicio', icon: IconHome, key: 'INICIO' },
+  { link: '/admin/roles', label: 'roles', icon: IconLock, key: 'ROLES' },
+  { link: '/admin/users', label: 'usuarios', icon: IconUsersGroup, key: 'USUARIOS' },
+  {
+    link: '/admin/donations',
+    label: 'donaciones',
+    icon: IconHeartHandshake,
+    swr: SWR_KEYS.PENDING_DONATIONS,
+    key: 'DONACIONES',
+  },
+  {
+    link: '/admin/volunteers',
+    label: 'voluntarios',
+    icon: IconUserHeart,
+    swr: SWR_KEYS.PENDING_VOLUNTEERS,
+    key: 'VOLUNTARIOS',
+  },
+  {
+    link: '/admin/inventory',
+    label: 'inventario',
+    icon: IconBuildingWarehouse,
+    swr: SWR_KEYS.EXPIRING_INVENTORY,
+    key: 'INVENTORIO',
+  },
+  { link: '/admin/events', label: 'calendario', icon: IconCalendar, key: 'EVENTOS (CALENDARIO)' },
+  { link: '/admin/news', label: 'noticias', icon: IconNews, key: 'NOTICIAS' },
 ]
+
+const FREE_ROUTES = ['INICIO']
 
 export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> & { isOpen: boolean }) {
   const { classes, cx } = useStyles()
+  const { permissions } = useUserStore(({ permissions }) => ({ permissions }))
   const router = useRouter()
   const { fetcher } = useFetcher<{ pending: number }>()
   const { data: volunteerData } = useSWR<{ pending: number }>(SWR_KEYS.PENDING_VOLUNTEERS, fetcher)
@@ -115,7 +136,11 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
     [SWR_KEYS.EXPIRING_INVENTORY]: inventoryData,
     [SWR_KEYS.PENDING_DONATIONS]: donationData,
   }
-  const links = linksRows.map((item) => (
+
+  const readPermissions = Object.keys(permissions).filter((element) => permissions[element].READ === true)
+  const allowedLinks = linksRows.filter((link) => readPermissions.includes(link.key) || FREE_ROUTES.includes(link.key))
+
+  const links = allowedLinks.map((item) => (
     <Link
       className={cx(classes.link, { [classes.linkActive]: router.asPath.startsWith(item.link) })}
       href={item.link}
@@ -150,8 +175,8 @@ export function NavbarSimpleColored({ isOpen, ...props }: Partial<NavbarProps> &
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Image
-            src="/assets/svg/logo-footer.svg"
-            alt="asd"
+            src="/assets/svg/gotas_de_luz.svg"
+            alt="logo"
             width={isOpen ? 60 : 40}
             height={isOpen ? 60 : 40}
             mx="auto"
@@ -196,7 +221,15 @@ const PageHeading = ({ title }: { title: string }) => {
   )
 }
 
-export const AdminLayout = ({ children, title }: { children: React.ReactNode; title: string }) => {
+export const AdminLayout = ({
+  children,
+  title,
+  variant = 'bg',
+}: {
+  children: React.ReactNode
+  title: string
+  variant?: 'no-bg' | 'bg'
+}) => {
   const [opened, setOpened] = useState(true)
   const { data } = useSession()
   const { loadUser, isLoadingUserData } = useUserStore(({ loadUser, isLoadingUserData }) => ({
@@ -244,7 +277,14 @@ export const AdminLayout = ({ children, title }: { children: React.ReactNode; ti
       <Container size="lg" px="lg" py="md">
         <PageHeading title={title} />
       </Container>
-      <Container size="lg" bg="white" px="lg" py="md" mih="350px" pos="relative">
+      <Container
+        size="lg"
+        bg={variant === 'no-bg' ? 'transparent' : 'white'}
+        px="lg"
+        py="md"
+        mih="350px"
+        pos="relative"
+      >
         <UiFeedback isLoading={isLoadingUserData} minH={350} pt={100}>
           {children}
         </UiFeedback>

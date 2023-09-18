@@ -1,11 +1,12 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
-import { Alert, Button, Container, Paper, Text, Title } from '@mantine/core'
+import { Alert, Button, Paper, Text } from '@mantine/core'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import * as Yup from 'yup'
 import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
+import AuthLayout from '~/layouts/Auth'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 
 type ResetPasswordProps = {
@@ -18,7 +19,7 @@ function ResetPassword() {
   const customFetcher = useFetcherInstance()
   const { id, token } = router.query
   const { fetcher } = useFetcher<{ message: string; status: string }>()
-  const { data, isLoading } = useSWR<{ message: string; status: string }>(
+  const { data } = useSWR<{ message: string; status: string; cause?: string }>(
     () => {
       if (!id || !token) return null
       return [`/api/reset-password/${id}/${token}`]
@@ -29,7 +30,7 @@ function ResetPassword() {
     }
   )
   const isFreshAccount = !!router.query.firstTime
-  const isInvalid = data?.status === 'error'
+  const isInvalid = data?.status === 'error' || !!data?.cause
 
   const formik = useFormik<ResetPasswordProps>({
     initialValues: {
@@ -61,71 +62,62 @@ function ResetPassword() {
   })
 
   return (
-    <Container w="100%" h="100vh" fluid bg="cyan.4">
-      <Container size={420} py={40}>
-        <Title
-          align="center"
-          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-          color="white"
+    <AuthLayout title={isFreshAccount ? '¡Bienvenido a bordo!' : 'Cambiar Contraseña'}>
+      {isInvalid && (
+        <Alert color="red" title="Error" my="md" variant="filled">
+          {data?.message || data?.cause}
+        </Alert>
+      )}
+      <Paper p={30} mt={30} radius="md" withBorder shadow="md">
+        <Text color="dimmed" align="center">
+          {isFreshAccount
+            ? 'Por favor, indique la contraseña con la que desea ingresar a su cuenta'
+            : 'Por favor, introduzca su nueva contraseña'}
+        </Text>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            onSubmit()
+          }}
         >
-          {isFreshAccount ? '¡Bienvenido a bordo!' : 'Cambiar Contraseña'}
-        </Title>
-        {isInvalid && (
-          <Alert color="red" title="Error" my="md" variant="filled">
-            {data?.message}
-          </Alert>
-        )}
-        <Paper p={30} mt={30} radius="md" withBorder shadow="md">
-          <Text color="dimmed" align="center">
-            {isFreshAccount
-              ? 'Por favor, indique la contraseña con la que desea ingresar a su cuenta'
-              : 'Por favor, introduzca su nueva contraseña'}
-          </Text>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              onSubmit()
-            }}
-          >
-            <FormControl variant="floating" isInvalid={Boolean(formik.errors.password)} my="1rem">
-              <Input
-                placeholder=" "
-                name="password"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                type="password"
-                disabled={isInvalid}
-              />
-              <FormLabel htmlFor="password">Contraseña</FormLabel>
-              <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-            </FormControl>
-            <FormControl variant="floating" isInvalid={Boolean(formik.errors.passwordConfirmation)} my="1rem">
-              <Input
-                placeholder=" "
-                name="passwordConfirmation"
-                onChange={formik.handleChange}
-                value={formik.values.passwordConfirmation}
-                type="password"
-                disabled={isInvalid}
-              />
-              <FormLabel htmlFor="passwordConfirmation">Confirmación de contraseña</FormLabel>
-              <FormErrorMessage>{formik.errors.passwordConfirmation}</FormErrorMessage>
-            </FormControl>
-            <Button
-              fullWidth
-              mt="xl"
-              size="md"
-              type="submit"
-              loading={formik.isSubmitting || loadingSubmit}
-              color="cyan.4"
+          <FormControl variant="floating" isInvalid={Boolean(formik.errors.password)} my="1rem">
+            <Input
+              placeholder=" "
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              type="password"
               disabled={isInvalid}
-            >
-              {isFreshAccount ? 'Registrar contraseña' : 'Cambiar contraseña'}
-            </Button>
-          </form>
-        </Paper>
-      </Container>
-    </Container>
+            />
+            <FormLabel htmlFor="password">Contraseña</FormLabel>
+            <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+          </FormControl>
+          <FormControl variant="floating" isInvalid={Boolean(formik.errors.passwordConfirmation)} my="1rem">
+            <Input
+              placeholder=" "
+              name="passwordConfirmation"
+              onChange={formik.handleChange}
+              value={formik.values.passwordConfirmation}
+              type="password"
+              disabled={isInvalid}
+            />
+            <FormLabel htmlFor="passwordConfirmation">Confirmación de contraseña</FormLabel>
+            <FormErrorMessage>{formik.errors.passwordConfirmation}</FormErrorMessage>
+          </FormControl>
+          <Button
+            fullWidth
+            mt="xl"
+            size="md"
+            type="submit"
+            loading={formik.isSubmitting || loadingSubmit}
+            color="cyan.4"
+            disabled={isInvalid}
+          >
+            {isFreshAccount ? 'Registrar contraseña' : 'Cambiar contraseña'}
+          </Button>
+        </form>
+      </Paper>
+    </AuthLayout>
   )
 }
 

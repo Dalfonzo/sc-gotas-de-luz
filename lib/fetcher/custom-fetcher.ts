@@ -23,8 +23,10 @@ export class CustomFetcher {
     })
 
     if (!res.ok) {
-      throw new ApiError(`Request failed `, res.status)
+      const response = await res.json()
+      throw new ApiError(response.cause || response.message || `Request failed `, res.status)
     }
+
     const contentType = res.headers.get('Content-Type')
     if (!contentType?.includes('json')) {
       return

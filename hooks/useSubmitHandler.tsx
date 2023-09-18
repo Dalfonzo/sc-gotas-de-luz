@@ -35,12 +35,20 @@ export default function useSubmitHandler<T>({
       }
       setLoadingSubmit(false)
       return result
-    } catch (error) {
+    } catch (error: any) {
       // TODO: see error parsing const parsedError = parseError(error)
-      setSubmitError('Ha ocurrido un error inesperado')
+      let errorMsg = 'Ha ocurrido un error inesperado'
+      let errorDescription = 'Intenta nuevamente'
+
+      if (error?.cause || error?.message) {
+        errorMsg = 'Ha ocurrido un error'
+        errorDescription = error.cause || error.message
+      }
+
+      setSubmitError(errorMsg)
       toast({
-        description: 'Intenta nuevamente',
-        title: 'Ha ocurrido un error inesperado',
+        description: errorDescription,
+        title: errorMsg,
         status: 'error',
       })
     }

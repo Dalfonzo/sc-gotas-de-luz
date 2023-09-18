@@ -2,11 +2,12 @@ import { ActionIcon, Button, Flex, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 import Table from '~/components/admin/common/table/Table'
 import BasicModal from '~/components/common/Modal'
-import { useFetcher, useFetcherParams } from '~/hooks/fetcher'
+import { useFetcher, useFetcherParams, usePaginationFetcherParams, usePaginationFetcherResponse } from '~/hooks/fetcher'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -16,27 +17,46 @@ import { User } from '~/ts/User'
 import { RESOURCES } from '~/utils/constants'
 import Form from './Form'
 
+type FetcherResponse = usePaginationFetcherResponse<User[]>
+const PER_PAGE = 10
+
 const UserMain = () => {
   const { fetcher } = useFetcher<User[]>()
   const { fetcher: rolesFetcher } = useFetcher<Roles[]>()
   const [selected, setSelected] = useState<User | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
   const { user } = useUserStore(({ user }) => ({ user }))
+  const router = useRouter()
 
   const {
     data: users,
     isLoading,
     mutate,
     isValidating,
-  } = useSWR<User[]>([`/api/admin/users`], ([url, dto]: useFetcherParams<User[]>) => fetcher(url, dto), {
-    revalidateOnFocus: false,
-  })
+  } = useSWR<FetcherResponse>(
+    [
+      `/api/admin/users`,
+      {
+        usePagination: true,
+        query: {
+          page: router.query.page,
+          size: PER_PAGE,
+          sortBy: router.query.sortBy,
+          dir: router.query.dir,
+        },
+      },
+    ],
+    ([url, dto]: usePaginationFetcherParams<User[]>) => fetcher(url, dto),
+    {
+      revalidateOnFocus: false,
+    }
+  )
 
   const { data: roles } = useSWR<Roles[]>([`/api/admin/roles`], ([url, dto]: useFetcherParams<Roles[]>) =>
     rolesFetcher(url, dto)
   )
 
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.USERS })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.USERS })
 
   const fetcherInstance = useFetcherInstance()
 
@@ -65,24 +85,27 @@ const UserMain = () => {
 
   return (
     <>
-      <Button
-        leftIcon={<IconPlus />}
-        color="green"
-        ml="auto"
-        display="block"
-        my="lg"
-        onClick={() => {
-          toggleCreateModal()
-          setSelected(undefined)
-        }}
-      >
-        Agregar
-      </Button>
+      {canCreate && (
+        <Button
+          leftIcon={<IconPlus />}
+          color="green"
+          ml="auto"
+          display="block"
+          my="lg"
+          onClick={() => {
+            toggleCreateModal()
+            setSelected(undefined)
+          }}
+        >
+          Agregar
+        </Button>
+      )}
       <Table
         fetching={isLoading || isValidating}
         idAccessor="id"
-        records={users}
-        totalRecords={users?.length}
+        recordsPerPage={PER_PAGE}
+        records={users?.records}
+        totalRecords={users?.total}
         columns={[
           {
             accessor: 'name',

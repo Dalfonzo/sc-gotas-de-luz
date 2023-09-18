@@ -39,7 +39,7 @@ export default function EventsManager() {
     ],
     ([url, dto]: usePaginationFetcherParams<Event[]>) => fetcher(url, dto)
   )
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.EVENTS })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.EVENTS })
   const fetcherInstance = useFetcherInstance()
   const [selected, setSelected] = useState<(Event & { img: any }) | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
@@ -68,19 +68,21 @@ export default function EventsManager() {
     })
   return (
     <>
-      <Button
-        leftIcon={<IconPlus />}
-        onClick={() => {
-          setSelected(undefined)
-          toggleCreateModal()
-        }}
-        color="green"
-        ml="auto"
-        display="block"
-        my="lg"
-      >
-        Agregar
-      </Button>
+      {canCreate && (
+        <Button
+          leftIcon={<IconPlus />}
+          onClick={() => {
+            setSelected(undefined)
+            toggleCreateModal()
+          }}
+          color="green"
+          ml="auto"
+          display="block"
+          my="lg"
+        >
+          Agregar
+        </Button>
+      )}
       <Table
         fetching={isLoading}
         idAccessor="id"
