@@ -144,3 +144,9 @@ model Donation {
   methodId   Int
   createdAt  DateTime       @default(now())
 }
+
+model DonationSubscriber{
+  id      String    @id @default(uuid())
+  email   String    @unique
+  name    String
+}

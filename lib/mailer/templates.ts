@@ -19,4 +19,8 @@ export const MAIL_TEMPLATES = {
     subject: '¡Hemos confirmado tu donativo!',
     templatePath: 'donation-approved.hbs',
   },
+  DONATION_RECEIVED: {
+    subject: () => `Se ha recibido un nuevo donativo - ${new Date().toLocaleString()}`,
+    templatePath: 'donation-received.hbs',
+  },
 }

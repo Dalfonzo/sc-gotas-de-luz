@@ -24,7 +24,7 @@ interface Props {
 export default function DonationMain({ pending }: Props) {
   const router = useRouter()
   const { fetcher } = useFetcher<FetcherResponse>()
-  const [verifiedOnly, setVerifiedOnly] = useState<string>('all')
+  const [verifiedOnly, setVerifiedOnly] = useState<string>(String(router.query.filter || 'all'))
   const {
     data: methods,
     error,

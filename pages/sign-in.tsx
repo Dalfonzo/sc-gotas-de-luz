@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import * as Yup from 'yup'
 import Captcha, { useCaptcha } from '~/components/common/captcha/Captcha'
+import { joinAbsoluteUrlPath } from '~/lib/fetcher/custom-fetcher'
 type LoginForm = {
   email: string
   password: string
@@ -27,7 +28,9 @@ function SignIn() {
     })
       .then((res) => {
         if (res?.ok) {
-          router.push('/admin/dashboard')
+          const goTo = String(router.query.goto || 'dashboard')
+          console.log({ goTo })
+          router.push(joinAbsoluteUrlPath('/admin', goTo))
         } else {
           setError('Usuario o contraseña incorrectos. Por favor, intente de nuevo.')
           setIsLoading(false)
