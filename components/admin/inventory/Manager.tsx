@@ -50,7 +50,7 @@ export default function InventoryManager() {
     ],
     ([url, dto]: usePaginationFetcherParams<FetchResult>) => fetcher(url, dto)
   )
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.INVENTORY })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.INVENTORY })
   const fetcherInstance = useFetcherInstance()
   const [selected, setSelected] = useState<Inventory | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
@@ -115,16 +115,18 @@ export default function InventoryManager() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <Button
-          leftIcon={<IconPlus />}
-          onClick={() => {
-            setSelected(undefined)
-            toggleCreateModal()
-          }}
-          color="green"
-        >
-          Agregar
-        </Button>
+        {canCreate && (
+          <Button
+            leftIcon={<IconPlus />}
+            onClick={() => {
+              setSelected(undefined)
+              toggleCreateModal()
+            }}
+            color="green"
+          >
+            Agregar
+          </Button>
+        )}
       </Group>
       <Group spacing="xs" position="center" mb="md">
         <Text size="sm" component="div" color="dimmed">

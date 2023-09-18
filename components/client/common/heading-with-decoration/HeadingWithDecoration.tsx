@@ -1,8 +1,8 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Text } from '@chakra-ui/react'
 
-const HeadingWithDecoration = ({ title }: { title: string | JSX.Element }) => {
+const HeadingWithDecoration = ({ title, ...rest }: { title: string | JSX.Element } & Omit<BoxProps, 'title'>) => {
   return (
-    <Box position={'relative'}>
+    <Box position={'relative'} {...rest}>
       <Box marginBottom="4rem" zIndex={2}>
         {typeof title === 'string' ? (
           <Text as="h1" variant="title" textAlign="center">
@@ -13,7 +13,7 @@ const HeadingWithDecoration = ({ title }: { title: string | JSX.Element }) => {
         )}
       </Box>
       <Box
-        bgImage="url('/assets/svg/test.svg')"
+        bgImage="url('/assets/svg/landing-bg.svg')"
         bgPosition="center"
         bgRepeat="no-repeat"
         bgSize="contain"

@@ -12,7 +12,7 @@ const Hero = () => {
       maxH={720}
     >
       <Box
-        bgImage="url('/assets/svg/test.svg')"
+        bgImage="url('/assets/svg/landing-bg.svg')"
         bgPosition="center"
         bgRepeat="no-repeat"
         bgSize="contain"

@@ -37,7 +37,7 @@ export default function CategoriesMain() {
     ],
     ([url, dto]: usePaginationFetcherParams<FetchResult>) => fetcher(url, dto)
   )
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.INVENTORY })
+  const { canUpdate, canDelete, canCreate } = useAccessGuard({ resource: RESOURCES.INVENTORY })
   const fetcherInstance = useFetcherInstance()
   const [selected, setSelected] = useState<Category | undefined>(undefined)
   const [createModal, { toggle: toggleCreateModal }] = useDisclosure(false)
@@ -81,19 +81,21 @@ export default function CategoriesMain() {
         })
   return (
     <>
-      <Button
-        leftIcon={<IconPlus />}
-        onClick={() => {
-          setSelected(undefined)
-          toggleCreateModal()
-        }}
-        color="green"
-        ml="auto"
-        display="block"
-        my="lg"
-      >
-        Agregar
-      </Button>
+      {canCreate && (
+        <Button
+          leftIcon={<IconPlus />}
+          onClick={() => {
+            setSelected(undefined)
+            toggleCreateModal()
+          }}
+          color="green"
+          ml="auto"
+          display="block"
+          my="lg"
+        >
+          Agregar
+        </Button>
+      )}
       <Table
         fetching={isLoading}
         idAccessor="id"

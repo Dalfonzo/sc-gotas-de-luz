@@ -44,9 +44,13 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
       canBeDeleted: initialState?.canBeDeleted ?? true,
     },
     validationSchema: Yup.object({
-      name: Yup.string().trim().required('El nombre es requerido').max(20, 'Máximo 20 caracteres'),
-      lastName: Yup.string().trim().required('El apellido es requerido').max(20, 'Máximo 20 caracteres'),
-      email: Yup.string().trim().required('El correo es requerido').max(20, 'Máximo 20 caracteres'),
+      name: Yup.string().trim().required('El nombre es requerido').max(100, 'Máximo 100 caracteres'),
+      lastName: Yup.string().trim().required('El apellido es requerido').max(100, 'Máximo 100 caracteres'),
+      email: Yup.string()
+        .trim()
+        .required('El correo es requerido')
+        .max(200, 'Máximo 200 caracteres')
+        .email('Inserte un correo válido'),
       fkRole: Yup.string().trim().required('El nombre del rol es requerido'),
     }),
     onSubmit: async (values) => {
@@ -58,7 +62,7 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
       onSuccess()
       return true
     },
-    validateOnChange: false,
+    validateOnBlur: true,
   })
 
   const { onSubmit, loadingSubmit } = useSubmitHandler<void>({
@@ -81,22 +85,26 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
             Datos
           </AbsoluteCenter>
         </Box>
-        <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.name)}>
+        <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.name && formik.touched.name)}>
           <Input placeholder=" " name="name" onChange={formik.handleChange} value={formik.values.name} />
           <FormLabel htmlFor="name">Nombre</FormLabel>
           <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
         </FormControl>
-        <FormControl variant="floating" isInvalid={Boolean(formik.errors.lastName)} my="1rem">
+        <FormControl
+          variant="floating"
+          isInvalid={Boolean(formik.errors.lastName && formik.touched.lastName)}
+          my="1rem"
+        >
           <Input placeholder=" " name="lastName" onChange={formik.handleChange} value={formik.values.lastName} />
           <FormLabel htmlFor="lastName">Apellido</FormLabel>
           <FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
         </FormControl>
-        <FormControl variant="floating" isInvalid={Boolean(formik.errors.email)} my="1rem">
-          <Input placeholder=" " name="email" onChange={formik.handleChange} value={formik.values.email} />
+        <FormControl variant="floating" isInvalid={Boolean(formik.errors.email && formik.touched.email)} my="1rem">
+          <Input placeholder=" " name="email" onChange={formik.handleChange} value={formik.values.email} type="email" />
           <FormLabel htmlFor="email">Correo</FormLabel>
           <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={Boolean(formik.errors.fkRole)} mt="1">
+        <FormControl isInvalid={Boolean(formik.errors.fkRole && formik.touched.fkRole)} mt="1">
           <Box position="relative" padding="2" mb={3}>
             <Divider />
             <AbsoluteCenter bg="white" px="4">
@@ -126,7 +134,6 @@ export default function Form({ onSuccess, roles, initialState }: Props) {
           onClick={() => {
             onSubmit()
           }}
-          disabled={!formik.isValid || !formik.dirty}
           loading={loadingSubmit}
           color="cyan"
           mt="lg"
