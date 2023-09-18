@@ -12,7 +12,7 @@ import { IncludeDonation } from '~/prisma/types'
 import { RESOURCES } from '~/utils/constants'
 import Table from '../common/table/Table'
 import { DonationDetails } from './Detail'
-import { useDonationActions } from './use-donation-actions'
+import { ConfirmModal, useDonationActions } from './use-donation-actions'
 
 type FetcherResponse = IncludeDonation[]
 const PER_PAGE = 10
@@ -24,7 +24,7 @@ interface Props {
 export default function DonationMain({ pending }: Props) {
   const router = useRouter()
   const { fetcher } = useFetcher<FetcherResponse>()
-  const [verifiedOnly, setVerifiedOnly] = useState<string>('all')
+  const [verifiedOnly, setVerifiedOnly] = useState<string>(String(router.query.filter || 'all'))
   const {
     data: methods,
     error,
@@ -50,8 +50,13 @@ export default function DonationMain({ pending }: Props) {
   const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.DONATIONS })
   const [selected, setSelected] = useState<IncludeDonation | undefined>(undefined)
   const [isOpen, { toggle }] = useDisclosure(false)
+  const [isConfirmOpen, { toggle: toggleConfirm }] = useDisclosure(false)
+  const [isAbortOpen, { toggle: toggleAbort }] = useDisclosure(false)
 
-  const { onApprove, onDelete } = useDonationActions({ afterDelete: () => mutate(), afterUpdate: () => mutate() })
+  const { onUpdate, loadingUpdate, onDelete } = useDonationActions({
+    afterDelete: () => mutate(),
+    afterUpdate: () => mutate(),
+  })
   return (
     <>
       <Chip.Group multiple={false} value={verifiedOnly} onChange={setVerifiedOnly}>
@@ -75,7 +80,6 @@ export default function DonationMain({ pending }: Props) {
         records={methods?.records}
         totalRecords={methods?.total}
         recordsPerPage={PER_PAGE}
-  
         columns={[
           {
             accessor: 'name',
@@ -111,7 +115,7 @@ export default function DonationMain({ pending }: Props) {
           {
             accessor: 'createdAt',
             title: 'Recibida el',
-            width: 100,
+            width: 110,
             ellipsis: true,
             sortable: true,
             render: ({ createdAt }) => <Text> {formatDate(createdAt)}</Text>,
@@ -134,7 +138,7 @@ export default function DonationMain({ pending }: Props) {
                 </ActionIcon>
                 {canUpdate && (
                   <ActionIcon
-                    onClick={() => onApprove(item)}
+                    onClick={() => (item.isVerified ? toggleAbort() : toggleConfirm())}
                     variant="light"
                     color={item.isVerified ? 'orange' : 'green'}
                   >
@@ -155,8 +159,32 @@ export default function DonationMain({ pending }: Props) {
         title={'Detalle del donativo'}
         visible={isOpen}
         onClose={toggle}
-        size="2xl"
+        size="3xl"
         body={<>{selected && <DonationDetails donation={selected} />}</>}
+      />
+      <ConfirmModal
+        item={selected}
+        confirm
+        open={isConfirmOpen}
+        toggle={toggleConfirm}
+        loading={loadingUpdate}
+        onSubmit={async (values) => {
+          if (await onUpdate(values)) {
+            toggleConfirm()
+          }
+        }}
+      />
+      <ConfirmModal
+        item={selected}
+        confirm={false}
+        open={isAbortOpen}
+        toggle={toggleAbort}
+        loading={loadingUpdate}
+        onSubmit={async (values) => {
+          if (await onUpdate(values)) {
+            toggleAbort()
+          }
+        }}
       />
     </>
   )

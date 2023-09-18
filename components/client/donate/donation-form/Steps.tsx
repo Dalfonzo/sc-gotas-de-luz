@@ -4,14 +4,17 @@ import { IconArrowLeft, IconArrowRight, IconInfoCircle } from '@tabler/icons-rea
 import { format, formatISO, isDate, parse } from 'date-fns'
 import { useFormik } from 'formik'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 import * as Yup from 'yup'
+import Captcha, { useCaptcha } from '~/components/common/captcha/Captcha'
 import UiFeedback from '~/components/common/feedback/UiFeedback'
 import { useCloudUpload } from '~/hooks/useCloudUpload'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
 import { CreateDonation } from '~/prisma/types'
 import { MethodSelect } from '../donate-method/MethodSelect'
+import { DonationConfirm } from './DonationConfirm'
 import DonationForm from './DonationForm'
 
 const StepTitle = ({ children }: { children: string }) => (
@@ -19,25 +22,47 @@ const StepTitle = ({ children }: { children: string }) => (
     {children}
   </Title>
 )
-const MAX_STEPS = 2
+const MAX_STEPS = 3
 const FORM_STEP = 1
+const SUBMIT_STEP = 2
+const BOX_ID = 'donation-box'
 interface Props {
   afterComplete?: () => any
 }
 export const DonationSteps = ({ afterComplete }: Props) => {
   const [activeStep, setActiveStep] = useState(0)
-  const canProceed: (() => boolean)[] = [() => Number.isSafeInteger(formik.values.methodId), () => true, () => false]
+  const canProceed: (() => boolean)[] = [
+    () => Number.isSafeInteger(formik.values.methodId),
+    () => true,
+    () => true,
+    () => false,
+  ]
+  const { loadingCaptcha, executeCaptcha, ...captchaRest } = useCaptcha()
+
+  const submitCallback = async () => {
+    const success = await onSubmit()
+    if (!success) return
+    setActiveStep((current) => (current < MAX_STEPS ? current + 1 : current))
+  }
+
   const nextStep = async () => {
     if (activeStep == FORM_STEP) {
-      const success = await onSubmit()
-      if (!success) return
+      await formik.validateForm()
+      formik.setTouched({ amount: true, name: true, message: true, reference: true })
+      if (!formik.isValid) return
+    }
+    if (activeStep == SUBMIT_STEP) {
+      executeCaptcha(async () => {
+        submitCallback()
+      })
+      return
     }
     setActiveStep((current) => (current < MAX_STEPS ? current + 1 : current))
   }
   const prevStep = () => {
     setActiveStep((current) => (current > 0 ? current - 1 : current))
   }
-  const { onFileUpload } = useCloudUpload({ fileKey: 'donation' })
+  const { onFileUpload } = useCloudUpload({ fileKey: 'donation', optional: true })
   const customFetcher = useFetcherInstance()
   const formik = useFormik<CreateDonation>({
     initialValues: {
@@ -49,6 +74,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
       reference: '',
       donation: undefined,
       methodId: NaN,
+      email: '',
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -64,12 +90,6 @@ export const DonationSteps = ({ afterComplete }: Props) => {
         .trim()
         .required('Por favor, ingresa la referencia para comprobar tu donación')
         .min(3, 'El campo ingresado es muy corto'),
-      donation: Yup.string().test('img test', function (value: any) {
-        if (!value) {
-          return this.createError({ path: this.path, message: 'La imagen del comprobante es requerida' })
-        }
-        return true
-      }),
       date: Yup.date()
         .transform((_, originalValue) =>
           isDate(originalValue) ? originalValue : parse(originalValue, 'yyyy-MM-dd', new Date())
@@ -78,6 +98,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
         .required()
         .min('1920-11-13', 'La fecha ingresada no es válida'),
       amount: Yup.number().min(1, 'El monto ingresado es inválido').required('Este campo es requerido'),
+      email: Yup.string().email('Por favor ingresa un correo válido').optional(),
     }),
     onSubmit: async (values) => {
       const prepared = { ...values, date: formatISO(new Date(values.date)) }
@@ -85,6 +106,7 @@ export const DonationSteps = ({ afterComplete }: Props) => {
       if (!parsed) {
         return false
       }
+
       await customFetcher.post('/api/donation', parsed)
       return true
     },
@@ -128,7 +150,9 @@ export const DonationSteps = ({ afterComplete }: Props) => {
     </Transition>
   )
   return (
-    <Box>
+    <Box id={BOX_ID}>
+      <Captcha callback={submitCallback} {...captchaRest} />
+
       <Stepper active={activeStep}>
         <Stepper.Step>
           <StepTitle>Selecciona un medio para donar:</StepTitle>
@@ -143,11 +167,15 @@ export const DonationSteps = ({ afterComplete }: Props) => {
         </Stepper.Step>
         <Stepper.Step>
           <StepTitle>Registra tu donación:</StepTitle>
+          <DonationForm formik={formik} />
+        </Stepper.Step>
+        <Stepper.Step>
+          <StepTitle>Confirma tu donación:</StepTitle>
           <UiFeedback loadingItems={4} loadingType="skeleton" isLoading={loadingSubmit}>
-            <DonationForm formik={formik} />
+            <DonationConfirm formik={formik} donation={formik.values} />
           </UiFeedback>
         </Stepper.Step>
-        <Stepper.Step>{ThankYou}</Stepper.Step>
+        <Stepper.Completed>{ThankYou}</Stepper.Completed>
       </Stepper>
       {activeStep < MAX_STEPS && (
         <Group my="md" position="right">
@@ -164,19 +192,20 @@ export const DonationSteps = ({ afterComplete }: Props) => {
           >
             Atrás
           </Button>
-          <Button
-            onClick={nextStep}
-            disabled={!canProceed[activeStep]()}
-            size="lg"
-            rightIcon={<IconArrowRight />}
-            display="flex"
-            variant="filled"
-            color="cyan.4"
-            maw="50%"
-            loading={loadingSubmit}
-          >
-            Siguiente
-          </Button>
+          <Link href={`/donate#${BOX_ID}`} style={{ maxWidth: '50%' }}>
+            <Button
+              onClick={nextStep}
+              disabled={!canProceed[activeStep]()}
+              size="lg"
+              rightIcon={<IconArrowRight />}
+              display="flex"
+              variant="filled"
+              color="cyan.4"
+              loading={loadingSubmit || loadingCaptcha}
+            >
+              Siguiente
+            </Button>
+          </Link>
         </Group>
       )}
     </Box>

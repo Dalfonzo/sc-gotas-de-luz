@@ -6,7 +6,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import * as Yup from 'yup'
+import Captcha, { useCaptcha } from '~/components/common/captcha/Captcha'
+import { joinAbsoluteUrlPath } from '~/lib/fetcher/custom-fetcher'
 import AuthLayout from '~/layouts/Auth'
+
 type LoginForm = {
   email: string
   password: string
@@ -16,6 +19,29 @@ function SignIn() {
   const [error, setError] = useState<null | string>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { loadingCaptcha, executeCaptcha, ...captchaRest } = useCaptcha()
+  const onSignIn = (values: LoginForm) => {
+    setError(null)
+    setIsLoading(true)
+    signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    })
+      .then((res) => {
+        if (res?.ok) {
+          const goTo = String(router.query.goto || 'dashboard')
+          console.log({ goTo })
+          router.push(joinAbsoluteUrlPath('/admin', goTo))
+        } else {
+          setError('Usuario o contraseña incorrectos. Por favor, intente de nuevo.')
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
+  }
   const formik = useFormik<LoginForm>({
     initialValues: {
       email: '',
@@ -30,30 +56,14 @@ function SignIn() {
       password: Yup.string().trim().required('Este campo es requerido').min(3, 'El campo ingresado es muy corto'),
     }),
     onSubmit: async (values: LoginForm) => {
-      setError(null)
-      setIsLoading(true)
-      signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      })
-        .then((res) => {
-          if (res?.ok) {
-            router.push('/admin/dashboard')
-          } else {
-            setError('Usuario o contraseña incorrectos. Por favor, intente de nuevo.')
-            setIsLoading(false)
-          }
-        })
-        .catch(() => {
-          setIsLoading(false)
-        })
+      executeCaptcha(() => onSignIn(values))
     },
     validateOnChange: false,
   })
 
   return (
     <AuthLayout title="Iniciar sesión">
+       <Captcha callback={async () => onSignIn(formik.values)} {...captchaRest} />
       <Paper p={30} mt={30} radius="md" withBorder shadow="md">
         <Text color="dimmed" align="center">
           Por favor, introduzca sus credenciales
@@ -87,7 +97,7 @@ function SignIn() {
             </Alert>
           )}
 
-          <Button fullWidth mt="xl" size="md" type="submit" loading={isLoading} color="cyan.4">
+          <Button fullWidth mt="xl" size="md" type="submit" loading={isLoading || loadingCaptcha} color="cyan.4">
             Iniciar sesión
           </Button>
         </form>

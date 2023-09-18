@@ -1,33 +1,35 @@
 import { Box, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react'
 import { Button } from '@mantine/core'
-import { Category } from '@prisma/client'
+import { DonationSubscriber } from '@prisma/client'
 import { IconPlus } from '@tabler/icons-react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
-import { CreateCategory } from '~/prisma/types'
+import { CreateSubscriber } from '~/prisma/types'
 
-interface CategoryFormProps {
-  initialState?: Category
+interface FormProps {
+  initialState?: DonationSubscriber
   onSuccess: () => void
 }
 
-export default function CategoryForm({ initialState, onSuccess }: CategoryFormProps) {
+export default function SubscriberForm({ initialState, onSuccess }: FormProps) {
   const customFetcher = useFetcherInstance()
 
-  const formik = useFormik<CreateCategory>({
+  const formik = useFormik<CreateSubscriber>({
     initialValues: {
       name: initialState?.name || '',
+      email: initialState?.email || '',
     },
-    validationSchema: Yup.object<CreateCategory>({
+    validationSchema: Yup.object<CreateSubscriber>({
       name: Yup.string().trim().required('El nombre es requerido'),
+      email: Yup.string().trim().email('Ingresa un correo válido'),
     }),
     onSubmit: async (values) => {
       if (initialState) {
-        await customFetcher.put(`/api/admin/inventory/category/${initialState.id}`, values)
+        await customFetcher.put(`/api/admin/donation/subscriber/${initialState.id}`, values)
       } else {
-        await customFetcher.post('/api/admin/inventory/category', values)
+        await customFetcher.post('/api/admin/donation/subscriber', values)
       }
       onSuccess()
       return true
@@ -40,19 +42,34 @@ export default function CategoryForm({ initialState, onSuccess }: CategoryFormPr
       const result = await formik.submitForm()
       return !!result
     },
-    success: { message: 'Categoría añadida' },
+    success: { message: 'Subscriptor añadido' },
   })
 
   return (
     <Box>
       <Text width="100%" fontSize="sm" variant="normal" mb="5">
-        Llena los campos para agregar esta categoría para el <i>Inventario</i>.
+        Llena los campos para agregar a un subscriptor de alertas de donativos.
       </Text>
       <form>
-        <FormControl variant="floating" isRequired isInvalid={Boolean(formik.errors.name && formik.touched.name)}>
+        <FormControl
+          marginBottom="5"
+          variant="floating"
+          isRequired
+          isInvalid={Boolean(formik.errors.name && formik.touched.name)}
+        >
           <Input placeholder=" " name="name" onChange={formik.handleChange} value={formik.values.name} />
           <FormLabel htmlFor="name">Nombre</FormLabel>
           <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+        </FormControl>
+        <FormControl
+          marginBottom="5"
+          variant="floating"
+          isRequired
+          isInvalid={Boolean(formik.errors.email && formik.touched.email)}
+        >
+          <Input placeholder=" " name="email" onChange={formik.handleChange} value={formik.values.email} />
+          <FormLabel htmlFor="name">Correo</FormLabel>
+          <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
         </FormControl>
         <Button
           leftIcon={<IconPlus />}

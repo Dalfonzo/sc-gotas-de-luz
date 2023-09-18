@@ -4,37 +4,22 @@ import {
   IconClock,
   IconExternalLink,
   IconHeartHandshake,
+  IconMail,
   IconMessage,
   IconUser,
 } from '@tabler/icons-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import Link from 'next/link'
-import { mutate } from 'swr'
 import { ApiImg } from '~/components/common/api-img/ApiImg'
-import useAccessGuard from '~/hooks/useAccessGuard'
 import { formatDate } from '~/lib/mappers/map-dates'
 import { IncludeDonation } from '~/prisma/types'
-import { RESOURCES } from '~/utils/constants'
-import { useDonationActions } from './use-donation-actions'
 
 interface Props {
   donation: IncludeDonation
 }
 
 export const DonationDetails = ({ donation }: Props) => {
-  const afterAction = () => {
-    mutate('/api/admin/donation')
-  }
-  const { canUpdate, canDelete } = useAccessGuard({ resource: RESOURCES.DONATIONS })
-  const { onDelete, onApprove } = useDonationActions({
-    afterDelete: async () => {
-      afterAction()
-    },
-    afterUpdate: async () => {
-      afterAction()
-    },
-  })
   const brief = [
     {
       Icon: IconUser,
@@ -55,6 +40,11 @@ export const DonationDetails = ({ donation }: Props) => {
       Icon: IconClock,
       value: 'Hace ' + formatDistanceToNow(donation.createdAt, { locale: es }),
       label: 'Fecha de registro',
+    },
+    {
+      Icon: IconMail,
+      value: donation.email || '(vacío)',
+      label: 'Correo',
     },
     {
       Icon: IconCheckbox,
@@ -120,14 +110,16 @@ export const DonationDetails = ({ donation }: Props) => {
         </Text>
       </Group>
 
-      <Box h="auto" pos="relative" mt="md" w="100%">
-        <ActionIcon pos="absolute" right="10%" bottom="0">
-          <IconExternalLink width={32} height={32} />
-        </ActionIcon>
-        <Link href={donation.img.url} target="_blank">
-          <ApiImg alt="Comprobante" objectFit="contain" h="15rem" w="100%" url={donation.img} />
-        </Link>
-      </Box>
+      {donation.img && (
+        <Box h="auto" pos="relative" mt="md" w="100%">
+          <ActionIcon pos="absolute" right="10%" bottom="0">
+            <IconExternalLink width={32} height={32} />
+          </ActionIcon>
+          <Link href={donation.img.url} target="_blank">
+            <ApiImg alt="Comprobante" objectFit="contain" h="15rem" w="100%" url={donation.img} />
+          </Link>
+        </Box>
+      )}
     </Box>
   )
   return (

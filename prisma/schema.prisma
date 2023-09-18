@@ -133,14 +133,20 @@ model Donation {
   message    String?
   reference  String
   amount     Float
-  // TODO: TBD if email is necessary
-  //email       String
+  email      String?
+  emailSent  Boolean? 
   isAnon     Boolean        @default(false)
   isVerified Boolean        @default(false)
   date       DateTime       @default(now())
-  img        FileDb         @relation(fields: [imgId], references: [id])
-  imgId      Int            @unique
+  img        FileDb?         @relation(fields: [imgId], references: [id])
+  imgId      Int?            @unique
   method     DonationMethod @relation(fields: [methodId], references: [id])
   methodId   Int
   createdAt  DateTime       @default(now())
+}
+
+model DonationSubscriber{
+  id      String    @id @default(uuid())
+  email   String    @unique
+  name    String
 }

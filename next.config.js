@@ -28,6 +28,11 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/admin/news/edit',
+        destination: '/admin/news',
+        permanent: true,
+      },
     ]
   },
 }

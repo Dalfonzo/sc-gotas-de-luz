@@ -23,7 +23,7 @@ const SingleSkeleton = () => (
     <Skeleton height={8} mt={6} width="70%" radius="xl" />
   </Stack>
 )
-const Skeletons = ({ rows = 1 }: { rows?: number }) => {
+export const Skeletons = ({ rows = 1 }: { rows?: number }) => {
   return (
     <Stack spacing="lg">
       {Array.from({ length: rows }, (_, i) => (
