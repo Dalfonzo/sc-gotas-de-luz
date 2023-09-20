@@ -73,15 +73,17 @@ const LatestDonators = () => {
             marginLeft={{ base: 'unset', sm: '130px', lg: 'auto' }}
             position="relative"
           >
-            <Image
-              src="assets/svg/arrow.svg"
-              alt="arrow"
-              position="absolute"
-              top="50%"
-              transform="translateY(-50%)"
-              left={responsiveProperty({ mobileSize: -40, desktopSize: -30, unit: '%' })}
-              display={{ base: 'none', sm: 'unset' }}
-            />
+            {(donations?.records.length ?? 0) > 1 && (
+              <Image
+                src="assets/svg/arrow.svg"
+                alt="arrow"
+                position="absolute"
+                top="50%"
+                transform="translateY(-50%)"
+                left={responsiveProperty({ mobileSize: -40, desktopSize: -30, unit: '%' })}
+                display={{ base: 'none', sm: 'unset' }}
+              />
+            )}
             {donations?.records.map((donation, index) => (
               <DonatorCard
                 name={donation.name || 'Anónimo'}
