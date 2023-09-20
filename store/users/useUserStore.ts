@@ -24,7 +24,7 @@ export const useUserStore = create<State>((set) => ({
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/admin/users/${session?.user?.id}`, {
+      const response = await fetch(`/api/admin/users/${session?.user?.id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session?.user?.accessToken}`,
