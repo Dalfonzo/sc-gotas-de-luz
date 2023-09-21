@@ -2,13 +2,15 @@ import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/reac
 import { Alert, Button, Paper, Text } from '@mantine/core'
 import { useFormik } from 'formik'
 import { signIn } from 'next-auth/react'
+import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import * as Yup from 'yup'
+import { META } from '~/common/seo'
 import Captcha, { useCaptcha } from '~/components/common/captcha/Captcha'
-import { joinAbsoluteUrlPath } from '~/lib/fetcher/custom-fetcher'
 import AuthLayout from '~/layouts/Auth'
+import { joinAbsoluteUrlPath } from '~/lib/fetcher/custom-fetcher'
 
 type LoginForm = {
   email: string
@@ -63,7 +65,8 @@ function SignIn() {
 
   return (
     <AuthLayout title="Iniciar sesión">
-       <Captcha callback={async () => onSignIn(formik.values)} {...captchaRest} />
+      <NextSeo {...META.signIn} />
+      <Captcha callback={async () => onSignIn(formik.values)} {...captchaRest} />
       <Paper p={30} mt={30} radius="md" withBorder shadow="md">
         <Text color="dimmed" align="center">
           Por favor, introduzca sus credenciales
