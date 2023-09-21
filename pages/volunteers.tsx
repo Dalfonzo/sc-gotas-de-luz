@@ -5,12 +5,13 @@ import withAnimation from '~/hoc/withAnimation'
 import ClientLayout from '~/layouts/Client'
 
 const Volunteers = () => {
+  const VolunteersWithAnimation = withAnimation(VolunteersLayout)
   return (
     <ClientLayout>
       <NextSeo {...META.volunteers} />
-      <VolunteersLayout />
+      <VolunteersWithAnimation />
     </ClientLayout>
   )
 }
 
-export default withAnimation(Volunteers)
+export default Volunteers
