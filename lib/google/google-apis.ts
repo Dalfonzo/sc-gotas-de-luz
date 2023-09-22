@@ -2,7 +2,10 @@ import { readFileSync } from 'fs'
 import { google } from 'googleapis'
 
 export const getGoogleInstance = () => {
-  const jsonCredentials = process.env.GOOGLE_AUTH_CRENDENTIALS
+  let jsonCredentials = process.env.GOOGLE_AUTH_CRENDENTIALS
+  if (jsonCredentials?.startsWith('"') && jsonCredentials.endsWith('')) {
+    jsonCredentials = jsonCredentials.slice(1, -1)
+  }
   const auth = new google.auth.GoogleAuth({
     ...(jsonCredentials
       ? { credentials: JSON.parse(jsonCredentials) }
