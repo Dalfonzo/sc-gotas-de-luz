@@ -1,3 +1,5 @@
+import { NextSeo } from 'next-seo'
+import { META } from '~/common/seo'
 import { Unauthorized } from '~/components/admin/common/unauthorized/Unauthorized'
 import useAccessGuard from '~/hooks/useAccessGuard'
 import { AdminLayout } from '~/layouts/Admin'
@@ -17,6 +19,7 @@ export const withProtectedRoute = <TProps extends object>(
     const opIsAllowed = isOpAllowed()
     return (
       <AdminLayout title={title} variant={variant}>
+        <NextSeo {...META.admin(title.charAt(0).toUpperCase() + title.slice(1))} />
         {!opIsAllowed ? <Unauthorized /> : <Component {...props} />}
       </AdminLayout>
     )

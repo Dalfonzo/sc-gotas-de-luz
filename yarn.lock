@@ -4844,6 +4844,11 @@ next-http-proxy-middleware@^1.2.5:
     "@types/http-proxy" "1.17.3"
     http-proxy "^1.18.1"
 
+next-seo@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-6.1.0.tgz#b60b06958cc77e7ed56f0a61b2d6cd0afed88ebb"
+  integrity sha512-iMBpFoJsR5zWhguHJvsoBDxDSmdYTHtnVPB1ij+CD0NReQCP78ZxxbdL9qkKIf4oEuZEqZkrjAQLB0bkII7RYA==
+
 next-superjson-plugin@^0.5.8:
   version "0.5.8"
   resolved "https://registry.yarnpkg.com/next-superjson-plugin/-/next-superjson-plugin-0.5.8.tgz#9ee5666b5f60f6a8897a5dd2e9fcaa1ae0b8da00"

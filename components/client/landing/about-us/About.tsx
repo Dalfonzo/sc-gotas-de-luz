@@ -10,15 +10,15 @@ const firstRowList: ImageList[] = [
 ]
 
 const secondRowList: ImageList[] = [
-  { imgAlt: 'equipo de gotas de luz', imgSrc: '/assets/img/crew-img.png' },
-  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/girl-smiling.png' },
-  { imgAlt: 'Niños posando para una tomarse una fotografía', imgSrc: '/assets/img/event-activities.jpg' },
+  { imgAlt: 'Niños divirtiendose', imgSrc: '/assets/img/carousel-1.jpg' },
+  { imgAlt: 'Niños divirtiendose', imgSrc: '/assets/img/carousel-2.jpg' },
+  { imgAlt: 'Niños divirtiendose', imgSrc: '/assets/img/carousel-3.jpg' },
 ]
 
 const thirdRowList: ImageList[] = [
-  { imgAlt: 'equipo de gotas de luz', imgSrc: '/assets/img/crew-img.png' },
-  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/girl-smiling.png' },
-  { imgAlt: 'Niños posando para una tomarse una fotografía', imgSrc: '/assets/img/event-activities.jpg' },
+  { imgAlt: 'Niños divirtiendose', imgSrc: '/assets/img/carousel-4.jpg' },
+  { imgAlt: 'Niña sonriendo', imgSrc: '/assets/img/carousel-5.jpg' },
+  { imgAlt: 'Niños cientificos', imgSrc: '/assets/img/carousel-6.jpg' },
 ]
 
 const AboutUs = () => {

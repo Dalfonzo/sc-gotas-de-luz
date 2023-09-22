@@ -12,12 +12,15 @@ import theme from 'theme/theme'
 import { ContextButton } from '~/components/admin/common/context-button/ContextButton'
 import { RouterTransition } from '~/components/common/router-transition/RouterTransition'
 import '../styles/styles.css'
+import { DefaultSeo } from 'next-seo'
+import { META } from '~/common/seo'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 function MyApp({ Component, pageProps }: AppProps) {
   const ChildComponent = Component as any
   return (
     <main className={inter.className}>
+      <DefaultSeo openGraph={META.openGraph} />
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <ModalsProvider>
           <RouterTransition />

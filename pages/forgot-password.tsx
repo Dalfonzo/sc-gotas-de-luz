@@ -1,7 +1,9 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
 import { Button, Paper, Text } from '@mantine/core'
 import { useFormik } from 'formik'
+import { NextSeo } from 'next-seo'
 import * as Yup from 'yup'
+import { META } from '~/common/seo'
 import useSubmitHandler from '~/hooks/useSubmitHandler'
 import AuthLayout from '~/layouts/Auth'
 import { useFetcherInstance } from '~/lib/fetcher/fetcher-instance'
@@ -41,6 +43,7 @@ function ForgotPassword() {
 
   return (
     <AuthLayout title="Olvidé Contraseña">
+      <NextSeo {...META.forgotPassword} />
       <Paper p={30} mt={30} radius="md" withBorder shadow="md">
         <Text color="dimmed" align="center">
           Por favor, introduzca su correo.
