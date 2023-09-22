@@ -3,7 +3,7 @@ import { google } from 'googleapis'
 
 export const getGoogleInstance = () => {
   let jsonCredentials = process.env.GOOGLE_AUTH_CRENDENTIALS
-  if (jsonCredentials?.startsWith('"') && jsonCredentials.endsWith('')) {
+  if (jsonCredentials?.startsWith('"') && jsonCredentials.endsWith('"')) {
     jsonCredentials = jsonCredentials.slice(1, -1)
   }
   const auth = new google.auth.GoogleAuth({
