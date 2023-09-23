@@ -1,3 +1,4 @@
+import { ConflictError } from '~/lib/api/errors/api-error'
 import { methodRouter } from '~/lib/api/method-router'
 import prisma from '~/lib/db/prisma'
 import { RESOURCES } from '~/utils/constants'
@@ -24,6 +25,14 @@ export default apiRouteAccessGuard(async (req, res) => {
 
     if (!roleId) {
       throw new Error(`Role id can't be blank`)
+    }
+
+    const totalUsersWithTheRole = await prisma.users.count({
+      where: { fkRole: roleId },
+    })
+
+    if (totalUsersWithTheRole > 0) {
+      throw new ConflictError('Role can not be deleted because it is assigned to a user')
     }
 
     return await prisma.roles.delete({
