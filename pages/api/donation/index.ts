@@ -20,7 +20,7 @@ const alertDonation = async () => {
   mailer.sendEmail({
     to: subscribers.map((s) => s.email),
     subject: MAIL_TEMPLATES.DONATION_RECEIVED.subject(),
-    data: { appendUrl: 'admin/login?goto=donations', title: 'Alerta de Donativo' },
+    data: { appendUrl: 'admin?goto=donations', title: 'Alerta de Donativo' },
     templatePath: MAIL_TEMPLATES.DONATION_RECEIVED.templatePath,
   })
 }

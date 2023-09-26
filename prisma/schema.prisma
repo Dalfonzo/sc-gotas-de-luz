@@ -114,7 +114,7 @@ model InventoryRecord {
   date            DateTime  @default(now())
   concept         String?
   type            String    @default("input")
-  inventory       Inventory @relation(fields: [inventoryId], references: [id])
+  inventory       Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
   inventoryId     String
   expirationDate  DateTime?
   currentQuantity Float     @default(0)

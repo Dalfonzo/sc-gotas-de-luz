@@ -73,7 +73,7 @@ const LatestDonators = () => {
             marginLeft={{ base: 'unset', sm: '130px', lg: 'auto' }}
             position="relative"
           >
-            {(donations?.records.length ?? 0) > 1 && (
+            {(donations?.records.length ?? 0) > 2 && (
               <Image
                 src="assets/svg/arrow.svg"
                 alt="arrow"
